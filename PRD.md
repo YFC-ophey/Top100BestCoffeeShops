@@ -1,104 +1,127 @@
 # Product Requirement Document (PRD): Coffee Map Auto-Sync
 
 ## 1. Executive Summary
-The **Coffee Map Auto-Sync** is a personal automation tool designed to create and maintain a Google Maps "Top 100 Best Coffee Shops" list. It monitors a specific source URL for the annual release of the top coffee shops list, extracts the location data, and updates a user's Google Map list/layer. The system is designed to run with **zero maintenance costs** by utilizing free tier resources (GitHub Actions/PythonAnywhere, Google Maps Free Tier).
+The **Coffee Map Auto-Sync** is an open-source tool that scrapes the annual "Top 100 Best Coffee Shops" list, geocodes the locations (once per year, by the project owner), and publishes a **polished static website** hosted on GitHub Pages. The site features embedded Google My Maps, ranked lists with direct "Open in Google Maps" links, and KML downloads for power users. The system is designed to run with **zero cost for end users** — no API keys required.
 
 ## 2. Problem Statement
-Coffee enthusiasts want to visit the "Top 100 Best Coffee Shops" but the list is published as a static website or a shared map that doesn't integrate natively into their "Your Places" or allow for easy filtering/tracking on mobile. Users want a copy of this map in their own account that stays updated when the rankings change (annually).
+Coffee enthusiasts want to explore the "Top 100 Best Coffee Shops" but the list is published as a static website that doesn't integrate natively into Google Maps or allow for easy filtering/tracking on mobile. Users want a beautiful, browsable map with direct links to navigate to each shop — without needing API keys or technical setup.
 
 ## 3. Goals & Success Metrics
 - **Automated Extraction**: Successfully scrape/parse coffee shop names and locations from the source.
-- **Google Maps Integration**: Automatically add/update these locations in a Google Maps List or My Map.
-- **Zero Cost**: Architecture must run entirely within free tiers of all services.
-- **Timeliness**: System must capture the annual update (specifically around Feb 16) within 24 hours of release.
+- **One-Time Geocoding**: Owner geocodes ~200 shops once per year (~$3.40, covered by Google free tier). Pre-geocoded data (lat/lng, place_id) is committed to the repo.
+- **Static Site on GitHub Pages**: A polished one-pager with editorial feel — highlights the Madrid ceremony and award prestige.
+- **Zero Cost for Users**: Open-source users never need an API key. All data is pre-geocoded and committed.
+- **Timeliness**: System captures the annual update (around Feb 16) within 3-4 days of release. Ship ~Feb 21.
 
 ## 4. Functional Requirements
 
 ### 4.1 Data Source Monitoring
 - **Sources**:
     - **Main List**: `https://theworlds100bestcoffeeshops.com/top-100-coffee-shops/`
-    - **Secondary List (South)**: `https://theworlds100bestcoffeeshops.com/top-100-coffee-shops-south/`
-    - **Secondary Source (Reference/Backup)**: `https://www.atlantacoffeeshops.com/the-worlds-100-best-coffee-shops` (Unofficial blog, useful for visual verification or backup if main site is down)
-- **Frequency**:
-    - Low frequency check (e.g., Weekly) during off-season.
-    - High frequency check (Daily) during February (Target Update: Feb 16).
-    - *Update:* User confirmed next update is Feb 16.
-- **Trigger**: Change in content/list version.
+    - **Secondary List (South America)**: `https://theworlds100bestcoffeeshops.com/top-100-coffee-shops-south/`
+- **Scraping Approach**:
+    - Site is static HTML (WordPress + Elementor), BeautifulSoup works.
+    - No pagination — all 100 shops on one page per list.
+    - City data may only exist on individual detail pages — scraper must visit detail pages.
+- **Timeline**: Wait for list to update on ~Feb 16, then scrape real 2026 data.
 
 ### 4.2 Data Extraction
-- **Input**: HTML content of the source page or underlying KML/JSON if available.
+- **Input**: HTML content of the source pages + individual detail pages.
 - **Processing**:
-    - Extract Name, Address, City, Country, Rank (if available).
-    - Geocode address to Lat/Long (if not provided).
+    - Extract Name, City, Country, Rank, Detail URL from list pages.
+    - Visit detail pages to extract full address and city.
+    - Geocode using Google Places API (owner-only, one-time per year).
+    - Pre-geocoded data (lat, lng, place_id, formatted_address) committed to repo.
 
-### 4.3 Google Maps Sync
-- **Target**: Google Maps Account.
-- **Mechanism**:
-    - *Option A (Preferred for Mobile Experience)*: **Google Places API** to add items to a "Saved List" (e.g., "Want to Go" or custom list).
-    - *Option B (backup)*: **Google My Maps (KML Import)**. *Note: My Maps API is deprecated/limited; this might require generating a KML file for manual upload if automation is blocked, but we will attempt Places API first.*
-- **Action**: Add new locations; Remove dropped locations (optional/user config).
+### 4.3 Static Site (GitHub Pages)
+- **Two sections**: Main Top 100 + South America Top 100.
+- **Each section includes**:
+    - Embedded Google My Maps iframe (interactive map).
+    - Ranked list with direct "Open in Google Maps" links (uses `google.com/maps/search/` URLs — no API needed).
+    - KML download button for power users.
+- **Design**: Editorial feel — highlight the Madrid ceremony, award prestige, not just a data dump.
+- **No API key required for users**: All map links use public Google Maps search URLs.
+
+### 4.4 KML Generation
+- Generate KML files for Google My Maps import.
+- Two folders/layers: "Top 100" and "Top 100 South America".
+- Styled pins (rank 1-10 get a star, others a dot).
 
 ## 5. Technical Architecture (The "Zero Cost" Stack)
 
 ### 5.1 Infrastructure
-- **Compute**: GitHub Actions.
-    - Why: 2,000 free minutes/month is more than enough for a script that runs a few times a month.
-    - Scheduler: Cron trigger in GitHub Actions workflow (e.g., `0 9 * 2 *` for daily checks in Feb).
-- **Database**: Flat file (JSON) stored in the Git repository.
-    - State: `data/current_list.json`.
+- **Compute**: GitHub Actions for scraping and site builds.
+- **Hosting**: GitHub Pages for the static site.
+- **Database**: Flat files (JSON) stored in the Git repository.
+    - `data/raw_coffee_shops.json` — raw scraped data (name, rank, country, city, address, detail_url).
+    - `data/current_list.json` — pre-geocoded shop data with lat/lng/place_id (committed to repo).
 
-### 5.2 External APIs
-- **Google Maps Platform**:
-    - **Places API**: To find Place IDs for coffee shops.
-    - **Maps API**: To manage the list (if APIs allow write access).
-    - *Constraint*: Must strictly safeguard the API Key in GitHub Secrets.
+### 5.2 External APIs (Owner-Only)
+- **Google Places API** (owner's key only, never exposed):
+    - Used once per year to geocode ~200 shops.
+    - Cost: ~$3.40, covered by Google's $200/month free tier.
+    - API key stored in owner's local `.env` via `python-dotenv` — never committed.
+- **No API key required for end users**.
 
-### 5.3 Logic Flow
-1. **GitHub Action** triggers on schedule.
-2. **Python Script** fetches source URL.
-3. Parses list.
-4. Compares with `data/current_list.json`.
-5. If difference found:
-    - Authenticate with Google (OAuth/Service Account).
-    - For each new shop: Search Place ID -> Add to List.
-    - Update `data/current_list.json`.
-    - Commit changes to repo (keeping history).
-6. **Notify**: Send email or create Issue upon update.
+### 5.3 Key Libraries
+- `requests` + `beautifulsoup4` + `lxml` — scraping and HTML parsing.
+- `python-dotenv` — `.env` file loading for API key (owner-only).
+- `simplekml` — KML file generation with styled pins.
+- `jinja2` — HTML templating for static site generation.
+- `pytest` — test framework.
+
+### 5.4 Logic Flow
+1. **Scraper** (`src/scraper.py`) fetches source URLs, parses lists via grouped `<a>` tags, visits detail pages for city/address.
+2. **Geocoder** (`src/geocoder.py`, owner-only) enriches data with lat/lng/place_id via Google Places API Text Search. Caches by (name, category), caps at 250 API calls.
+3. **KML Generator** (`src/generator.py`) produces two KML files with styled pins (star for top 10, dot for rest).
+4. **Site Builder** (`src/site_builder.py` + `src/templates.py`) generates a polished Jinja2-templated HTML site with ranked lists and "Open in Google Maps" links.
+5. **Orchestrator** (`src/main.py`) wires all modules with CLI modes: `scrape-only`, `geocode`, `build-site`, `full`.
+6. **GitHub Actions** automates scraping, site building, and deployment to GitHub Pages.
+7. Pre-geocoded data and KML files are committed to the repo for open-source access.
 
 ## 6. Constraints & Risks
-- **Google Maps API Writes**: The API for *creating* and *modifying* user listsProgrammatically is restricted and often requires personal OAuth tokens which expire.
-    - *Mitigation*: If full automation of "Saved Lists" is blocked by API permissions, the fallback is generating a .CSV/.KML file that the user can import into "My Maps" in one click.
+- **No User-Facing API**: Google Places API is only used by the project owner for geocoding. Users interact with the static site and public Google Maps URLs only.
 - **Scraping Reliability**: Source site DOM changes could break the scraper.
-    - *Mitigation*: Robust error handling and "Need Help" notification.
+    - *Mitigation*: Robust error handling and notification on failure.
+- **City Data on Detail Pages**: City info may only be available on individual shop pages, requiring extra requests.
+    - *Mitigation*: Discovery prompt to validate selectors before full scrape.
+- **Google My Maps Iframes**: Embedded maps require a published My Maps layer (created once per year by the owner).
 
 ## 7. Timeline / Roadmap
-- **Phase 1 (Setup)**: Repo setup, API Key generation, basic scraper.
-- **Phase 2 (Core)**: Geocoding and List generation (KML/CSV output).
-- **Phase 3 (Optimization)**: Direct API integration (if feasible) or optimized manual import flow.
-- **Phase 4 (Automation)**: GitHub Actions scheduler set for Feb.
+- **Phase 1 (Scraper)**: COMPLETE. Scraper validated against live site DOM, extracts name/rank/country from list pages and city/address from detail pages. 45 tests passing.
+- **Phase 2 (Geocoding + Site Generation)**: Geocoder, KML generator, site builder, and orchestrator. Owner geocodes with personal API key. Static site built with Jinja2.
+- **Phase 3 (Testing)**: Per-module test files for geocoder, generator, and site builder (~30 additional tests).
+- **Phase 4 (CI/CD + Deployment)**: GitHub Actions with `actions/deploy-pages@v4` for automated scraping, site build, and GitHub Pages deployment.
+- **Target Ship Date**: ~Feb 21, 2026 (3-4 days after list publishes on ~Feb 16).
 
 ## 8. User Workflow Diagram
 
 ```mermaid
 sequenceDiagram
     participant User
+    participant Site as GitHub Pages Site
+    participant Owner
     participant GitHub as GitHub Actions
     participant Source as Source Website
-    participant Google as Google Maps Platform
+    participant Google as Google Places API
 
-    Note over GitHub: Daily Check (Feb)
-    GitHub->>Source: Fetch Top 100 Lists
+    Note over Source: ~Feb 16: List Updates
+    Owner->>GitHub: Trigger scraper manually
+    GitHub->>Source: Fetch Top 100 Lists + Detail Pages
     Source-->>GitHub: HTML Content
-    GitHub->>GitHub: Compare with previous version
-    
-    alt Content Changed
-        GitHub->>Google: Geocode New Locations
-        GitHub->>GitHub: Generate KML File (coffee_shops.kml)
-        GitHub->>User: Notify "New Map Update Ready!"
-    end
+    GitHub->>GitHub: Parse & extract shop data
+    GitHub-->>Owner: Raw scraped data (JSON)
 
-    User->>GitHub: Download coffee_shops.kml
-    User->>Google: Import KML to "My Maps"
-    Note right of User: Only required once/year
-    Google-->>User: Map Updated on Mobile/Desktop
+    Owner->>Google: Geocode ~200 shops (one-time, ~$3.40)
+    Google-->>Owner: lat/lng, place_id, formatted_address
+    Owner->>GitHub: Commit pre-geocoded data + KML files
+
+    GitHub->>GitHub: Build static site
+    GitHub->>Site: Deploy to GitHub Pages
+
+    User->>Site: Visit site
+    Note right of User: Browse ranked lists,
+    Note right of User: view embedded maps,
+    Note right of User: click "Open in Google Maps",
+    Note right of User: or download KML
 ```
