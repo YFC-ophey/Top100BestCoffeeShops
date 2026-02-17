@@ -1,7 +1,5 @@
 # Top100BestCoffeeShops
 
-> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
-
 **Goal:** Maintain a zero-cost, open-source pipeline that scrapes the 2026 coffee-shop rankings, generates map artifacts, and publishes a static site with public Google Maps links.
 
 **Architecture:** The project uses a Python scrape/enrich/generate pipeline. It ingests list pages and detail pages, stores normalized output in `data/current_list.json`, produces `CSV/KML`, and builds a static site in `site/`. CI executes tests, runs scrape/build commands, commits generated artifacts, deploys via GitHub Pages, and opens a reminder issue when owner-only geocoding refresh is needed.
