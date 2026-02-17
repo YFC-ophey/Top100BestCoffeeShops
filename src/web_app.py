@@ -1,3 +1,4 @@
+import os
 from collections import Counter
 from pathlib import Path
 from urllib.parse import urlencode
@@ -32,6 +33,8 @@ def create_app(data_file: Path, csv_file: Path, kml_file: Path) -> FastAPI:
         category_counts = Counter(shop.category for shop in shops)
         top_100_links = _build_ordered_links(shops, "Top 100")
         south_links = _build_ordered_links(shops, "South")
+        map_shops, missing_coords_count = _build_map_shops(shops)
+        map_country_aggregates = _build_country_aggregates(map_shops)
         context = {
             "request": request,
             "shops": sorted(shops, key=lambda value: (value.rank, value.category, value.name)),
@@ -39,8 +42,14 @@ def create_app(data_file: Path, csv_file: Path, kml_file: Path) -> FastAPI:
             "category_counts": dict(sorted(category_counts.items())),
             "csv_available": app.state.csv_file.exists(),
             "kml_available": app.state.kml_file.exists(),
+            "csv_url": "/artifacts/csv",
+            "kml_url": "/artifacts/kml",
             "top_100_links": top_100_links,
             "south_links": south_links,
+            "google_maps_js_api_key": os.getenv("GOOGLE_MAPS_JS_API_KEY", "").strip(),
+            "map_shops": map_shops,
+            "map_country_aggregates": map_country_aggregates,
+            "map_missing_coords_count": missing_coords_count,
         }
         return TEMPLATES.TemplateResponse(request=request, name="index.html", context=context)
 
@@ -85,6 +94,84 @@ def _google_maps_link(shop: CoffeeShop) -> str:
     if shop.place_id:
         params["query_place_id"] = shop.place_id
     return f"https://www.google.com/maps/search/?{urlencode(params)}"
+
+
+def _build_map_shops(shops: list[CoffeeShop]) -> tuple[list[dict[str, object]], int]:
+    map_shops: list[dict[str, object]] = []
+    missing = 0
+    for shop in shops:
+        if shop.lat is None or shop.lng is None:
+            missing += 1
+            continue
+        map_shops.append(
+            {
+                "name": shop.name,
+                "city": shop.city,
+                "country": shop.country,
+                "rank": shop.rank,
+                "category": shop.category,
+                "lat": shop.lat,
+                "lng": shop.lng,
+                "place_id": shop.place_id or "",
+                "address": shop.formatted_address or shop.address or "",
+                "source_url": shop.source_url or "",
+                "google_maps_url": _google_maps_link(shop),
+            }
+        )
+    return map_shops, missing
+
+
+COUNTRY_COLOR_MAP: dict[str, str] = {
+    "Argentina": "#6EC1FF",
+    "Australia": "#2F4B9C",
+    "Brazil": "#45B649",
+    "Colombia": "#FFD030",
+    "Japan": "#E24B5B",
+    "Peru": "#FF7600",
+    "United States": "#E2ACB7",
+    "USA": "#E2ACB7",
+}
+
+
+def _build_country_aggregates(map_shops: list[dict[str, object]]) -> list[dict[str, object]]:
+    grouped: dict[str, dict[str, object]] = {}
+    for item in map_shops:
+        country = str(item.get("country") or "Unknown")
+        bucket = grouped.setdefault(
+            country,
+            {
+                "country": country,
+                "count": 0,
+                "top_count": 0,
+                "south_count": 0,
+                "lat_sum": 0.0,
+                "lng_sum": 0.0,
+            },
+        )
+        bucket["count"] = int(bucket["count"]) + 1
+        if item.get("category") == "Top 100":
+            bucket["top_count"] = int(bucket["top_count"]) + 1
+        if item.get("category") == "South":
+            bucket["south_count"] = int(bucket["south_count"]) + 1
+        bucket["lat_sum"] = float(bucket["lat_sum"]) + float(item["lat"])
+        bucket["lng_sum"] = float(bucket["lng_sum"]) + float(item["lng"])
+
+    aggregates: list[dict[str, object]] = []
+    for country, bucket in grouped.items():
+        count = int(bucket["count"])
+        aggregates.append(
+            {
+                "country": country,
+                "count": count,
+                "top_count": int(bucket["top_count"]),
+                "south_count": int(bucket["south_count"]),
+                "lat": float(bucket["lat_sum"]) / count,
+                "lng": float(bucket["lng_sum"]) / count,
+                "color": COUNTRY_COLOR_MAP.get(country, "#888899"),
+            }
+        )
+
+    return sorted(aggregates, key=lambda row: (-int(row["count"]), str(row["country"])))
 
 
 app = create_app(

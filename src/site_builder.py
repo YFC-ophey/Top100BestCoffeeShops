@@ -1,8 +1,21 @@
+import html
 import json
+import os
 from pathlib import Path
 from urllib.parse import urlencode
 
 from src.models import CoffeeShop
+
+COUNTRY_COLOR_MAP: dict[str, str] = {
+    "Argentina": "#6EC1FF",
+    "Australia": "#2F4B9C",
+    "Brazil": "#45B649",
+    "Colombia": "#FFD030",
+    "Japan": "#E24B5B",
+    "Peru": "#FF7600",
+    "United States": "#E2ACB7",
+    "USA": "#E2ACB7",
+}
 
 
 def build_static_site(
@@ -16,20 +29,31 @@ def build_static_site(
     assets_dir.mkdir(parents=True, exist_ok=True)
 
     shops = _load_shops(data_file)
-    top_100 = sorted((shop for shop in shops if shop.category == "Top 100"), key=lambda value: value.rank)
-    south = sorted((shop for shop in shops if shop.category == "South"), key=lambda value: value.rank)
+    top_100 = sorted((shop for shop in shops if shop.category == "Top 100"), key=lambda value: (value.rank, value.name))
+    south = sorted((shop for shop in shops if shop.category == "South"), key=lambda value: (value.rank, value.name))
+    all_shops = sorted(shops, key=lambda value: (value.rank, value.category, value.name))
+
+    map_shops, missing_coords_count = _build_map_shops(all_shops)
+    map_country_aggregates = _build_country_aggregates(map_shops)
+
+    csv_url = "../output/coffee_shops.csv" if csv_file.exists() else ""
+    kml_url = "../output/coffee_shops.kml" if kml_file.exists() else ""
+
+    html_output = _index_html(
+        all_shops=all_shops,
+        top_100=top_100,
+        south=south,
+        map_shops=map_shops,
+        map_country_aggregates=map_country_aggregates,
+        missing_coords_count=missing_coords_count,
+        total_count=len(all_shops),
+        csv_url=csv_url,
+        kml_url=kml_url,
+        google_maps_key=os.getenv("GOOGLE_MAPS_JS_API_KEY", "").strip(),
+    )
 
     (assets_dir / "style.css").write_text(_style_css(), encoding="utf-8")
-    (site_dir / "index.html").write_text(
-        _index_html(
-            top_100=top_100,
-            south=south,
-            csv_exists=csv_file.exists(),
-            kml_exists=kml_file.exists(),
-            total_count=len(shops),
-        ),
-        encoding="utf-8",
-    )
+    (site_dir / "index.html").write_text(html_output, encoding="utf-8")
 
 
 def _load_shops(data_file: Path) -> list[CoffeeShop]:
@@ -52,68 +76,147 @@ def _maps_link(shop: CoffeeShop) -> str:
     return f"https://www.google.com/maps/search/?{urlencode(params)}"
 
 
-def _rows_html(shops: list[CoffeeShop]) -> str:
-    rows = []
+def _build_map_shops(shops: list[CoffeeShop]) -> tuple[list[dict[str, object]], int]:
+    map_shops: list[dict[str, object]] = []
+    missing = 0
+    for shop in shops:
+        if shop.lat is None or shop.lng is None:
+            missing += 1
+            continue
+        map_shops.append(
+            {
+                "name": shop.name,
+                "city": shop.city,
+                "country": shop.country,
+                "rank": shop.rank,
+                "category": shop.category,
+                "lat": shop.lat,
+                "lng": shop.lng,
+                "place_id": shop.place_id or "",
+                "address": shop.formatted_address or shop.address or "",
+                "source_url": shop.source_url or "",
+                "google_maps_url": _maps_link(shop),
+            }
+        )
+    return map_shops, missing
+
+
+def _build_country_aggregates(map_shops: list[dict[str, object]]) -> list[dict[str, object]]:
+    grouped: dict[str, dict[str, object]] = {}
+    for item in map_shops:
+        country = str(item.get("country") or "Unknown")
+        bucket = grouped.setdefault(
+            country,
+            {
+                "country": country,
+                "count": 0,
+                "top_count": 0,
+                "south_count": 0,
+                "lat_sum": 0.0,
+                "lng_sum": 0.0,
+            },
+        )
+        bucket["count"] = int(bucket["count"]) + 1
+        if item.get("category") == "Top 100":
+            bucket["top_count"] = int(bucket["top_count"]) + 1
+        if item.get("category") == "South":
+            bucket["south_count"] = int(bucket["south_count"]) + 1
+        bucket["lat_sum"] = float(bucket["lat_sum"]) + float(item["lat"])
+        bucket["lng_sum"] = float(bucket["lng_sum"]) + float(item["lng"])
+
+    result: list[dict[str, object]] = []
+    for country, bucket in grouped.items():
+        count = int(bucket["count"])
+        result.append(
+            {
+                "country": country,
+                "count": count,
+                "top_count": int(bucket["top_count"]),
+                "south_count": int(bucket["south_count"]),
+                "lat": float(bucket["lat_sum"]) / count,
+                "lng": float(bucket["lng_sum"]) / count,
+                "color": COUNTRY_COLOR_MAP.get(country, "#888899"),
+            }
+        )
+
+    return sorted(result, key=lambda row: (-int(row["count"]), str(row["country"])))
+
+
+def _table_rows_html(shops: list[CoffeeShop]) -> str:
+    rows: list[str] = []
     for shop in shops:
         rows.append(
-            f"""
-            <tr>
-              <td>{shop.rank}</td>
-              <td>{shop.name}</td>
-              <td>{shop.city}</td>
-              <td>{shop.country}</td>
-              <td>{shop.category}</td>
-            </tr>
-            """
+            "<tr>"
+            f"<td>{shop.rank}</td>"
+            f"<td>{html.escape(shop.name)}</td>"
+            f"<td>{html.escape(shop.city)}</td>"
+            f"<td>{html.escape(shop.country)}</td>"
+            f"<td>{html.escape(shop.category)}</td>"
+            "</tr>"
         )
     return "".join(rows)
 
 
-def _section_html(panel_id: str, title: str, shops: list[CoffeeShop], map_query: str, active: bool = False) -> str:
-    rows = []
+def _ordered_links_html(shops: list[CoffeeShop]) -> str:
+    items: list[str] = []
     for shop in shops:
-        top10_class = "top10" if shop.rank <= 10 else ""
-        rows.append(
-            f"""
-            <li class="shop-row {top10_class}">
-              <span class="rank">#{shop.rank}</span>
-              <div class="meta">
-                <strong>{shop.name}</strong>
-                <small>{shop.city + ", " if shop.city else ""}{shop.country}</small>
-              </div>
-              <a href="{_maps_link(shop)}" target="_blank" rel="noopener">Open in Google Maps</a>
-            </li>
-            """
+        top10_class = " top10" if shop.rank <= 10 else ""
+        label = html.escape(f"{shop.rank}. {shop.name}")
+        url = html.escape(_maps_link(shop), quote=True)
+        subtitle = html.escape((f"{shop.city}, " if shop.city else "") + shop.country)
+        items.append(
+            "<li class=\"shop-row" + top10_class + "\">"
+            f"<span class=\"rank\">#{shop.rank}</span>"
+            "<div class=\"meta\">"
+            f"<strong>{html.escape(shop.name)}</strong>"
+            f"<small>{subtitle}</small>"
+            "</div>"
+            f"<a href=\"{url}\" target=\"_blank\" rel=\"noopener\">Open in Google Maps</a>"
+            "</li>"
         )
-
-    active_class = " active" if active else ""
-    return f"""
-    <section id="{panel_id}" class="tab-panel panel{active_class}">
-      <h2>{title}</h2>
-      <div class="embed-wrap">
-        <iframe
-          title="{title} map preview"
-          loading="lazy"
-          src="https://www.google.com/maps?q={map_query}&output=embed"
-        ></iframe>
-      </div>
-      <ol class="shop-list">
-        {''.join(rows)}
-      </ol>
-    </section>
-    """
+    return "".join(items)
 
 
-def _index_html(top_100: list[CoffeeShop], south: list[CoffeeShop], csv_exists: bool, kml_exists: bool, total_count: int) -> str:
-    download_links = []
-    if csv_exists:
-        download_links.append('<a href="../output/coffee_shops.csv">CSV</a>')
-    if kml_exists:
-        download_links.append('<a href="../output/coffee_shops.kml">KML</a>')
+def _index_html(
+    all_shops: list[CoffeeShop],
+    top_100: list[CoffeeShop],
+    south: list[CoffeeShop],
+    map_shops: list[dict[str, object]],
+    map_country_aggregates: list[dict[str, object]],
+    missing_coords_count: int,
+    total_count: int,
+    csv_url: str,
+    kml_url: str,
+    google_maps_key: str,
+) -> str:
+    html_output = _html_template()
+    replacements = {
+        "TOTAL_SHOPS": str(total_count),
+        "TOP_100_COUNT": str(len(top_100)),
+        "SOUTH_COUNT": str(len(south)),
+        "MISSING_COORDS_COUNT": str(missing_coords_count),
+        "TABLE_ROWS": _table_rows_html(all_shops),
+        "TOP100_LINKS": _ordered_links_html(top_100),
+        "SOUTH_LINKS": _ordered_links_html(south),
+        "MAP_SHOPS_JSON": json.dumps(map_shops),
+        "MAP_COUNTRIES_JSON": json.dumps(map_country_aggregates),
+        "GOOGLE_MAPS_KEY_JSON": json.dumps(google_maps_key),
+        "CSV_BUTTON": (
+            f'<a class="btn-secondary" href="{html.escape(csv_url, quote=True)}">Download CSV</a>' if csv_url else ""
+        ),
+        "KML_BUTTON": (
+            f'<a class="btn-secondary" href="{html.escape(kml_url, quote=True)}">Download KML</a>' if kml_url else ""
+        ),
+    }
 
-    all_rows = top_100 + south
+    for key, value in replacements.items():
+        html_output = html_output.replace(f"__{key}__", value)
 
-    return f"""<!doctype html>
+    return html_output
+
+
+def _html_template() -> str:
+    return """<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -125,15 +228,26 @@ def _index_html(top_100: list[CoffeeShop], south: list[CoffeeShop], csv_exists: 
     <div class="app-shell">
       <header class="shell-topbar">
         <div class="brand-wrap">
-          <span class="brand-dot" aria-hidden="true"></span>
+          <div class="brand-icon">☕</div>
           <div>
-            <div class="brand-title">ROAST. | Global Coffee Explorer</div>
-            <div class="brand-sub">Top100BestCoffeeShops Preview</div>
+            <p class="brand-title">ROAST.</p>
+            <p class="brand-sub">Top100BestCoffeeShops Preview</p>
           </div>
         </div>
+
+        <div class="collection-toggle" aria-label="Collection toggles">
+          <button class="category-chip active" data-category="Top 100">Top 100 World</button>
+          <button class="category-chip active" data-category="South">South America</button>
+        </div>
+
         <div class="topbar-actions">
-          <span class="status-pill">Public Static Site</span>
-          {' '.join(download_links)}
+          <div class="view-toggle">
+            <button class="view-btn active" data-overview-view="map">Map</button>
+            <button class="view-btn" data-overview-view="list">List</button>
+          </div>
+          <div class="profile-badge" title="Global Explorer">🌍</div>
+          __CSV_BUTTON__
+          __KML_BUTTON__
         </div>
       </header>
 
@@ -142,12 +256,13 @@ def _index_html(top_100: list[CoffeeShop], south: list[CoffeeShop], csv_exists: 
           <div class="workspace-head">
             <div>
               <h1>Top 100 Best Coffee Shops 2026</h1>
-              <p>Data-driven map workspace with ranked shops and shareable Google Maps links.</p>
+              <p>Interactive map of Top 100 World + South America coffee shops.</p>
             </div>
             <div class="meta-chips">
-              <span class="chip">Total shops: {total_count}</span>
-              <span class="chip">Top 100: {len(top_100)}</span>
-              <span class="chip">South: {len(south)}</span>
+              <span class="chip">Total shops: __TOTAL_SHOPS__</span>
+              <span class="chip">Top 100: __TOP_100_COUNT__</span>
+              <span class="chip">South: __SOUTH_COUNT__</span>
+              <span class="chip">Map skipped: __MISSING_COORDS_COUNT__</span>
             </div>
           </div>
 
@@ -157,98 +272,365 @@ def _index_html(top_100: list[CoffeeShop], south: list[CoffeeShop], csv_exists: 
             <button class="tab-btn" data-tab="south-links" role="tab" aria-selected="false">South America</button>
           </div>
 
-          <section id="overview" class="tab-panel panel active" role="tabpanel">
-            <div class="layout-3">
-              <article class="tile">
-                <h3>Chat conversation history</h3>
-                <p>Track sync decisions and yearly update notes for rankings.</p>
-              </article>
-              <article class="tile">
-                <h3>Project canvas and components</h3>
-                <p>Map previews, ordered map links, and export artifacts in one shell.</p>
-              </article>
-              <article class="tile">
-                <h3>Live preview</h3>
-                <p>Dark-first layout ready for GitHub Pages public hosting.</p>
-              </article>
+          <section id="overview" class="tab-panel active" role="tabpanel">
+            <div class="overview-panel" id="overview-map-region">
+              <div class="overview-stage">
+                <div id="overview-map" aria-label="Global coffee shops map"></div>
+                <div id="map-unavailable" class="map-unavailable hidden"></div>
+
+                <aside class="detail-panel" id="shop-detail-panel">
+                  <div class="hero-image">
+                    <img
+                      id="shop-hero-img"
+                      src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1200&auto=format&fit=crop"
+                      alt="Coffee shop interior"
+                    />
+                    <div class="hero-overlay"></div>
+                    <div class="badge-row">
+                      <span class="badge rank" id="shop-rank-badge">#1 South America</span>
+                      <span class="badge type">Historic Site</span>
+                    </div>
+                  </div>
+
+                  <div class="detail-content">
+                    <div>
+                      <h2 class="shop-title" id="shop-name">Choose a marker</h2>
+                      <p class="shop-rating" id="shop-rating">★★★★☆ 4.9 · curated rank</p>
+                      <p class="shop-address" id="shop-address">Select a coffee shop marker to inspect details.</p>
+                    </div>
+
+                    <div class="action-grid">
+                      <a class="btn-primary" id="shop-directions" href="#" target="_blank" rel="noopener">Get Directions</a>
+                      <a class="btn-secondary" id="shop-website" href="#" target="_blank" rel="noopener">Website</a>
+                      <a class="btn-secondary" id="shop-call" href="tel:+10000000000">Call</a>
+                    </div>
+
+                    <section class="detail-section">
+                      <p class="section-title">Menu Highlights</p>
+                      <div class="menu-item">
+                        <img class="menu-thumb" src="https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=300&auto=format&fit=crop" alt="Espresso" />
+                        <div>
+                          <p class="menu-name">Espresso Double</p>
+                          <p class="menu-desc">Rich dark roast with chocolate and caramel notes.</p>
+                        </div>
+                        <span class="menu-price">$4.50</span>
+                      </div>
+                    </section>
+
+                    <button class="book-btn" type="button">Book a Table</button>
+                  </div>
+                </aside>
+
+                <div class="map-help">
+                  Zoom out for country-level density markers. Zoom in to reveal individual coffee shops.
+                </div>
+              </div>
             </div>
 
-            <table>
-              <thead>
-                <tr>
-                  <th>Rank</th>
-                  <th>Name</th>
-                  <th>City</th>
-                  <th>Country</th>
-                  <th>Category</th>
-                </tr>
-              </thead>
-              <tbody>
-                {_rows_html(all_rows)}
-              </tbody>
-            </table>
+            <div class="overview-list is-hidden" id="overview-list-region">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>City</th>
+                    <th>Country</th>
+                    <th>Category</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  __TABLE_ROWS__
+                </tbody>
+              </table>
+            </div>
           </section>
 
-          {_section_html("top100-links", "Main Top 100", top_100, "Top+100+coffee+shops")}
-          {_section_html("south-links", "South America", south, "Top+South+America+coffee+shops")}
+          <section id="top100-links" class="tab-panel panel" role="tabpanel">
+            <h2>Main Top 100</h2>
+            <ol class="shop-list">
+              __TOP100_LINKS__
+            </ol>
+          </section>
+
+          <section id="south-links" class="tab-panel panel" role="tabpanel">
+            <h2>South America</h2>
+            <ol class="shop-list">
+              __SOUTH_LINKS__
+            </ol>
+          </section>
         </section>
-
-        <aside class="utility-panel" aria-label="Session and map helper panel">
-          <div class="utility-head">
-            <h2>Initial Session</h2>
-            <span>History</span>
-          </div>
-          <div class="utility-scroll">
-            <article class="util-card">
-              <h3>Session / History</h3>
-              <p>This static shell mirrors the live workspace style used in app preview mode.</p>
-              <div class="chat-row">
-                <span class="chat-badge you">You</span>
-                <p>Need global and South America coffee lists in one dashboard.</p>
-              </div>
-              <div class="chat-row">
-                <span class="chat-badge ai">AI</span>
-                <p>Built with map previews, rank ordering, and direct map links.</p>
-              </div>
-            </article>
-
-            <article class="util-card">
-              <h3>Artifacts</h3>
-              <p>Export data for Google Maps and external tools.</p>
-              <div class="artifact-links">
-                {'<a href="../output/coffee_shops.csv">Download CSV</a>' if csv_exists else ''}
-                {'<a href="../output/coffee_shops.kml">Download KML</a>' if kml_exists else ''}
-              </div>
-            </article>
-
-            <article class="util-card">
-              <h3>Map Usage Notes</h3>
-              <ul class="util-list">
-                <li>Open each ranked entry in Google Maps and save to your own map lists.</li>
-                <li>The Top 100 and South tabs preserve rank order.</li>
-                <li>Where available, place IDs are embedded for direct match quality.</li>
-              </ul>
-            </article>
-          </div>
-          <div class="footer-note">Data source: theworlds100bestcoffeeshops.com</div>
-        </aside>
       </main>
     </div>
 
     <script>
-      const tabButtons = document.querySelectorAll('.tab-btn');
-      const tabPanels = document.querySelectorAll('.tab-panel');
-      tabButtons.forEach((button) => {{
-        button.addEventListener('click', () => {{
+      const mapShops = __MAP_SHOPS_JSON__;
+      const mapCountries = __MAP_COUNTRIES_JSON__;
+      const googleMapsKey = __GOOGLE_MAPS_KEY_JSON__;
+      const mapMissingCoordsCount = __MISSING_COORDS_COUNT__;
+
+      const tabButtons = document.querySelectorAll(".tab-btn");
+      const tabPanels = document.querySelectorAll(".tab-panel");
+      tabButtons.forEach((button) => {
+        button.addEventListener("click", () => {
           const target = button.dataset.tab;
-          tabButtons.forEach((item) => {{
+          tabButtons.forEach((item) => {
             const active = item === button;
-            item.classList.toggle('active', active);
-            item.setAttribute('aria-selected', String(active));
-          }});
-          tabPanels.forEach((panel) => panel.classList.toggle('active', panel.id === target));
-        }});
-      }});
+            item.classList.toggle("active", active);
+            item.setAttribute("aria-selected", String(active));
+          });
+          tabPanels.forEach((panel) => panel.classList.toggle("active", panel.id === target));
+        });
+      });
+
+      const mapRegion = document.getElementById("overview-map-region");
+      const listRegion = document.getElementById("overview-list-region");
+      document.querySelectorAll(".view-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          const mode = button.dataset.overviewView;
+          document.querySelectorAll(".view-btn").forEach((item) => item.classList.toggle("active", item === button));
+          if (mode === "list") {
+            mapRegion.classList.add("is-hidden");
+            listRegion.classList.remove("is-hidden");
+          } else {
+            mapRegion.classList.remove("is-hidden");
+            listRegion.classList.add("is-hidden");
+          }
+        });
+      });
+
+      const markerState = {
+        activeCategories: new Set(["Top 100", "South"]),
+        countryMarkers: [],
+        shopMarkers: [],
+        selectedShop: null,
+        infoWindow: null,
+        map: null,
+      };
+
+      function normalizeCategory(category) {
+        return category === "South" ? "South" : "Top 100";
+      }
+
+      function getVisibleShops() {
+        return mapShops.filter((shop) => markerState.activeCategories.has(normalizeCategory(shop.category)));
+      }
+
+      function showMapMessage(message) {
+        const messageBox = document.getElementById("map-unavailable");
+        messageBox.textContent = message;
+        messageBox.classList.remove("hidden");
+      }
+
+      function hideMapMessage() {
+        document.getElementById("map-unavailable").classList.add("hidden");
+      }
+
+      function colorForCategory(category) {
+        return normalizeCategory(category) === "South" ? "#FF7600" : "#FFD030";
+      }
+
+      function iconForShop(shop, active) {
+        return {
+          path: google.maps.SymbolPath.CIRCLE,
+          fillColor: active ? "#ff7600" : colorForCategory(shop.category),
+          fillOpacity: active ? 1 : 0.95,
+          strokeColor: "#ffffff",
+          strokeWeight: active ? 2.6 : 1.8,
+          scale: active ? 9 : 6,
+        };
+      }
+
+      function iconForCountry(color, scale) {
+        return {
+          path: google.maps.SymbolPath.CIRCLE,
+          fillColor: color,
+          fillOpacity: 0.88,
+          strokeColor: "#ffffff",
+          strokeWeight: 2,
+          scale,
+        };
+      }
+
+      function updateDetailPanel(shop) {
+        if (!shop) return;
+        document.getElementById("shop-name").textContent = shop.name;
+        document.getElementById("shop-rank-badge").textContent = `#${shop.rank} ${shop.category}`;
+        document.getElementById("shop-rating").textContent = "★★★★☆ 4.9 · curated rank";
+        const location = [shop.address, shop.city, shop.country].filter(Boolean).join(", ");
+        document.getElementById("shop-address").textContent = location || "Address unavailable";
+        document.getElementById("shop-directions").href = shop.google_maps_url;
+        document.getElementById("shop-website").href = shop.source_url || shop.google_maps_url;
+      }
+
+      function clearMarkers(markers) {
+        markers.forEach((marker) => marker.setMap(null));
+        markers.length = 0;
+      }
+
+      function openShopInfo(marker, shop) {
+        markerState.selectedShop = shop;
+        updateDetailPanel(shop);
+        markerState.infoWindow.setContent(
+          `<div style="min-width:190px;color:#101217;font-family:system-ui,sans-serif">` +
+            `<strong>#${shop.rank} ${shop.name}</strong><br/>` +
+            `<span>${shop.city ? shop.city + ", " : ""}${shop.country}</span><br/>` +
+            `<span>${shop.category}</span><br/>` +
+            `<a href="${shop.google_maps_url}" target="_blank" rel="noopener">Open in Google Maps</a>` +
+          `</div>`
+        );
+        markerState.infoWindow.open({ map: markerState.map, anchor: marker });
+      }
+
+      function renderCountryMarkers() {
+        clearMarkers(markerState.countryMarkers);
+        const visibleShops = getVisibleShops();
+        if (!visibleShops.length) return;
+
+        const counts = new Map();
+        visibleShops.forEach((shop) => {
+          const key = shop.country || "Unknown";
+          const value = counts.get(key) || { count: 0, sample: shop };
+          value.count += 1;
+          if (shop.rank < value.sample.rank) value.sample = shop;
+          counts.set(key, value);
+        });
+
+        const maxCount = Math.max(...Array.from(counts.values()).map((row) => row.count));
+
+        mapCountries.forEach((countryRow) => {
+          const match = counts.get(countryRow.country);
+          if (!match) return;
+
+          const ratio = match.count / Math.max(1, maxCount);
+          const marker = new google.maps.Marker({
+            position: { lat: countryRow.lat, lng: countryRow.lng },
+            map: markerState.map,
+            icon: iconForCountry(countryRow.color, 16 + ratio * 24),
+            title: `${countryRow.country} - ${match.count} shops`,
+            label: {
+              text: String(match.count),
+              color: "#111318",
+              fontSize: "11px",
+              fontWeight: "700",
+            },
+          });
+
+          marker.addListener("click", () => {
+            markerState.map.setZoom(5);
+            markerState.map.panTo(marker.getPosition());
+            openShopInfo(marker, match.sample);
+          });
+
+          markerState.countryMarkers.push(marker);
+        });
+      }
+
+      function renderShopMarkers() {
+        clearMarkers(markerState.shopMarkers);
+        const visibleShops = getVisibleShops();
+        visibleShops.forEach((shop) => {
+          const active = markerState.selectedShop && markerState.selectedShop.name === shop.name;
+          const marker = new google.maps.Marker({
+            position: { lat: shop.lat, lng: shop.lng },
+            map: markerState.map,
+            icon: iconForShop(shop, active),
+            title: `${shop.rank}. ${shop.name}`,
+          });
+
+          marker.addListener("click", () => {
+            markerState.selectedShop = shop;
+            renderShopMarkers();
+            openShopInfo(marker, shop);
+          });
+
+          markerState.shopMarkers.push(marker);
+        });
+      }
+
+      function refreshMapLayers() {
+        if (!markerState.map) return;
+        const zoom = markerState.map.getZoom() || 2;
+        if (zoom < 4) {
+          clearMarkers(markerState.shopMarkers);
+          renderCountryMarkers();
+        } else {
+          clearMarkers(markerState.countryMarkers);
+          renderShopMarkers();
+        }
+      }
+
+      function wireCategoryChips() {
+        document.querySelectorAll(".category-chip").forEach((chip) => {
+          chip.addEventListener("click", () => {
+            const category = chip.dataset.category;
+            if (markerState.activeCategories.has(category) && markerState.activeCategories.size === 1) return;
+            if (markerState.activeCategories.has(category)) {
+              markerState.activeCategories.delete(category);
+              chip.classList.remove("active");
+            } else {
+              markerState.activeCategories.add(category);
+              chip.classList.add("active");
+            }
+            markerState.selectedShop = null;
+            refreshMapLayers();
+            const visible = getVisibleShops();
+            if (visible.length) updateDetailPanel(visible[0]);
+          });
+        });
+      }
+
+      function initOverviewMap() {
+        if (!window.google || !window.google.maps) {
+          showMapMessage("Google Maps failed to load.");
+          return;
+        }
+        if (!mapShops.length) {
+          showMapMessage("No mapped coordinates are currently available.");
+          return;
+        }
+
+        hideMapMessage();
+        markerState.map = new google.maps.Map(document.getElementById("overview-map"), {
+          center: { lat: 10, lng: 0 },
+          zoom: 2,
+          mapTypeControl: false,
+          streetViewControl: false,
+          styles: [
+            { elementType: "geometry", stylers: [{ color: "#202022" }] },
+            { elementType: "labels.text.stroke", stylers: [{ color: "#202022" }] },
+            { elementType: "labels.text.fill", stylers: [{ color: "#928f86" }] },
+            { featureType: "road", stylers: [{ visibility: "off" }] },
+            { featureType: "water", elementType: "geometry", stylers: [{ color: "#1a1d24" }] },
+          ],
+        });
+
+        markerState.infoWindow = new google.maps.InfoWindow();
+        markerState.selectedShop = getVisibleShops()[0] || mapShops[0];
+        updateDetailPanel(markerState.selectedShop);
+        markerState.map.addListener("zoom_changed", refreshMapLayers);
+        refreshMapLayers();
+
+        if (mapMissingCoordsCount > 0) {
+          document.querySelector(".map-help").textContent = `${mapMissingCoordsCount} shops were skipped due to missing coordinates.`;
+        }
+      }
+
+      function loadGoogleMapsScript() {
+        if (!googleMapsKey) {
+          showMapMessage("Google Maps API key is not configured. Add GOOGLE_MAPS_JS_API_KEY to enable map view.");
+          return;
+        }
+        window.initOverviewMap = initOverviewMap;
+        const script = document.createElement("script");
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(googleMapsKey)}&callback=initOverviewMap`;
+        script.async = true;
+        script.defer = true;
+        script.onerror = () => showMapMessage("Google Maps failed to load. Verify API key restrictions.");
+        document.head.appendChild(script);
+      }
+
+      wireCategoryChips();
+      loadGoogleMapsScript();
     </script>
   </body>
 </html>
@@ -258,234 +640,429 @@ def _index_html(top_100: list[CoffeeShop], south: list[CoffeeShop], csv_exists: 
 def _style_css() -> str:
     return """
 :root {
-  --bg: #0e1117;
-  --surface-1: #141a24;
-  --surface-2: #1a2230;
-  --surface-3: #212b3c;
-  --line: #2f3b50;
-  --text-1: #eef3ff;
-  --text-2: #aebad2;
-  --accent: #0f83fd;
-  --accent-soft: rgba(15, 131, 253, 0.18);
+  --brand-gold: #ffd030;
+  --brand-orange: #ff7600;
+  --brand-dark: #0b0c10;
+  --brand-surface: #18191e;
+  --brand-card: #24252c;
+  --brand-gray: #888899;
+  --brand-white: #f8f8ff;
+  --line: rgba(255, 255, 255, 0.09);
 }
 * { box-sizing: border-box; }
-html, body { height: 100%; }
 body {
   margin: 0;
+  color: var(--brand-white);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background:
-    radial-gradient(1200px 500px at 20% -10%, #1d2940 0%, transparent 60%),
-    radial-gradient(900px 450px at 95% 5%, #19243a 0%, transparent 60%),
-    var(--bg);
-  color: var(--text-1);
+  background: radial-gradient(circle at 20% -10%, #2a1f1b 0%, transparent 40%),
+    radial-gradient(circle at 90% 8%, #2e2118 0%, transparent 38%),
+    var(--brand-dark);
 }
 .app-shell {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 12px;
   gap: 10px;
+  padding: 12px;
 }
 .shell-topbar {
-  height: 52px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
   border: 1px solid var(--line);
-  background: rgba(20, 26, 36, 0.88);
-  backdrop-filter: blur(8px);
-  border-radius: 12px;
-  padding: 0 12px;
+  background: rgba(24, 25, 30, 0.88);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 10px 12px;
 }
 .brand-wrap {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-.brand-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 6px rgba(15, 131, 253, 0.12);
+.brand-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--brand-gold);
+  color: var(--brand-dark);
+  display: grid;
+  place-items: center;
+  font-size: 1rem;
+  font-weight: 900;
 }
 .brand-title {
-  font-size: 0.92rem;
-  font-weight: 700;
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
 }
 .brand-sub {
-  font-size: 0.78rem;
-  color: var(--text-2);
+  margin: 0;
+  color: var(--brand-gray);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.collection-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 4px;
+}
+.category-chip {
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #cbccd6;
+  padding: 6px 12px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.category-chip.active {
+  background: var(--brand-gold);
+  color: var(--brand-dark);
 }
 .topbar-actions {
   display: flex;
   align-items: center;
   gap: 8px;
 }
-.status-pill {
-  border: 1px solid #33557a;
-  background: #132033;
-  color: #9bc7ff;
-  padding: 5px 10px;
-  border-radius: 999px;
-  font-size: 0.74rem;
-  font-weight: 600;
-}
-.topbar-actions a {
-  color: var(--text-2);
-  text-decoration: none;
+.view-toggle {
+  display: flex;
+  align-items: center;
+  gap: 3px;
   border: 1px solid var(--line);
-  background: var(--surface-2);
-  border-radius: 8px;
-  padding: 6px 9px;
-  font-size: 0.76rem;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 3px;
 }
-.topbar-actions a:hover,
-.topbar-actions a:focus-visible {
-  border-color: #3f5f86;
-  color: var(--text-1);
-  outline: none;
+.view-btn {
+  border: 0;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #aeb0bc;
+  background: transparent;
+  cursor: pointer;
+}
+.view-btn.active {
+  background: #f4f5fa;
+  color: var(--brand-dark);
+}
+.profile-badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background: linear-gradient(145deg, #2b2b32, #1a1a20);
+  display: grid;
+  place-items: center;
+  font-size: 0.82rem;
+}
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  padding: 8px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.04);
+  color: #e8ebf7;
 }
 .shell-body {
   flex: 1;
   min-height: 0;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 360px;
-  gap: 10px;
+  grid-template-columns: 1fr;
 }
 .workspace-main {
   border: 1px solid var(--line);
-  border-radius: 12px;
-  background: linear-gradient(180deg, rgba(26, 34, 48, 0.94), rgba(20, 26, 36, 0.94));
+  border-radius: 16px;
+  background: rgba(24, 25, 30, 0.78);
+  backdrop-filter: blur(8px);
+  padding: 10px;
   min-height: 0;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
 }
 .workspace-head {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  justify-content: space-between;
+  gap: 10px;
   flex-wrap: wrap;
   margin-bottom: 10px;
 }
 .workspace-head h1 {
   margin: 0;
-  font-size: clamp(1.1rem, 2vw, 1.45rem);
-  letter-spacing: -0.01em;
+  font-size: 1.15rem;
+  line-height: 1.2;
 }
 .workspace-head p {
-  margin: 3px 0 0;
-  color: var(--text-2);
-  font-size: 0.86rem;
+  margin: 4px 0 0;
+  font-size: 0.82rem;
+  color: #9fa3b1;
 }
 .meta-chips {
   display: flex;
-  align-items: center;
-  gap: 7px;
+  gap: 6px;
   flex-wrap: wrap;
 }
 .chip {
   border: 1px solid var(--line);
-  background: var(--surface-3);
   border-radius: 999px;
-  padding: 5px 10px;
-  color: #dbe6fb;
-  font-size: 0.77rem;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 5px 9px;
+  font-size: 0.72rem;
 }
 .tabs {
   display: flex;
-  gap: 8px;
   flex-wrap: wrap;
-  margin: 0 0 10px;
+  gap: 6px;
+  margin-bottom: 10px;
 }
 .tab-btn {
   border: 1px solid var(--line);
-  background: var(--surface-2);
-  color: var(--text-2);
   border-radius: 9px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #c7cbd9;
   padding: 7px 11px;
   font-size: 0.8rem;
+  font-weight: 600;
   cursor: pointer;
 }
-.tab-btn:hover,
-.tab-btn:focus-visible {
-  border-color: #3f5f86;
-  color: var(--text-1);
-  outline: none;
-}
 .tab-btn.active {
-  border-color: #3f5f86;
-  background: var(--accent-soft);
-  color: var(--text-1);
+  border-color: rgba(255, 208, 48, 0.4);
+  background: rgba(255, 208, 48, 0.16);
+  color: #ffe8a2;
 }
-.tab-panel {
-  display: none;
-  animation: panelIn 150ms ease;
-}
+.tab-panel { display: none; }
 .tab-panel.active { display: block; }
-@keyframes panelIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.panel {
+.overview-panel {
+  position: relative;
   border: 1px solid var(--line);
-  border-radius: 10px;
-  background: rgba(20, 26, 36, 0.82);
-  padding: 10px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(5, 5, 8, 0.55);
 }
-.layout-3 {
+.overview-stage {
+  position: relative;
+  min-height: clamp(520px, 70vh, 760px);
+}
+#overview-map {
+  position: absolute;
+  inset: 0;
+}
+.map-unavailable {
+  position: absolute;
+  inset: 0;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  margin-bottom: 10px;
+  place-items: center;
+  background: rgba(8, 8, 12, 0.9);
+  color: #f2f3fc;
+  text-align: center;
+  padding: 24px;
+  font-size: 0.9rem;
 }
-.tile {
+.map-unavailable.hidden { display: none; }
+.map-help {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 5;
   border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--surface-2);
+  border-radius: 12px;
+  background: rgba(24, 25, 30, 0.88);
+  padding: 8px 10px;
+  font-size: 0.72rem;
+  color: #dbdeea;
+  max-width: 260px;
+}
+.detail-panel {
+  position: absolute;
+  inset: 10px auto 10px 10px;
+  width: min(350px, calc(100% - 20px));
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(9, 10, 14, 0.92);
+  backdrop-filter: blur(12px);
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+}
+.hero-image {
+  position: relative;
+  height: 154px;
+  overflow: hidden;
+}
+.hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.75);
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 30%, rgba(0, 0, 0, 0.8) 100%);
+}
+.badge-row {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  gap: 6px;
+}
+.badge {
+  border-radius: 8px;
+  padding: 4px 7px;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+.badge.rank {
+  background: var(--brand-orange);
+  color: #0d0d10;
+}
+.badge.type {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.detail-content {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  overflow: auto;
+}
+.shop-title {
+  margin: 0;
+  line-height: 1.1;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+.shop-rating {
+  margin: 3px 0 0;
+  color: #ffd769;
+  font-size: 0.73rem;
+  font-weight: 700;
+}
+.shop-address {
+  margin: 0;
+  color: var(--brand-gray);
+  font-size: 0.74rem;
+}
+.action-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 208, 48, 0.45);
+  padding: 8px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  grid-column: 1 / -1;
+  background: var(--brand-gold);
+  color: #0f1116;
+}
+.detail-section {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 8px;
+}
+.section-title {
+  margin: 0 0 8px;
+  color: #d7b84e;
+  font-size: 0.63rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 800;
+}
+.menu-item {
+  display: grid;
+  grid-template-columns: 42px 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+.menu-thumb {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+.menu-name {
+  margin: 0;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+.menu-desc {
+  margin: 2px 0 0;
+  color: var(--brand-gray);
+  font-size: 0.67rem;
+  line-height: 1.35;
+}
+.menu-price {
+  color: var(--brand-orange);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.book-btn {
+  width: 100%;
+  border: 0;
+  border-radius: 9px;
+  padding: 9px;
+  background: #f4f5fa;
+  color: #0b0c10;
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+.overview-list {
   padding: 10px;
 }
-.tile h3 {
-  margin: 0 0 5px;
-  font-size: 0.83rem;
-}
-.tile p {
-  margin: 0;
-  color: var(--text-2);
-  font-size: 0.76rem;
-  line-height: 1.45;
+.overview-list.is-hidden {
+  display: none;
 }
 table {
   width: 100%;
   border-collapse: collapse;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
-  background: #111723;
+  background: rgba(10, 10, 14, 0.75);
 }
 th,
 td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   padding: 8px 7px;
   text-align: left;
-  border-bottom: 1px solid #263349;
-  font-size: 0.78rem;
+  font-size: 0.73rem;
 }
 th {
-  color: #a5b6d6;
-  background: #182131;
-  letter-spacing: 0.04em;
+  color: #f1d36a;
   text-transform: uppercase;
-  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  font-size: 0.66rem;
+  background: rgba(255, 255, 255, 0.05);
 }
-td { color: #e6efff; }
-.embed-wrap iframe {
-  width: 100%;
-  min-height: 260px;
-  border: 0;
-  border-radius: 10px;
-  margin-bottom: 10px;
+.panel {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(9, 10, 14, 0.65);
+  padding: 10px;
 }
 .shop-list {
   list-style: none;
@@ -500,139 +1077,71 @@ td { color: #e6efff; }
   gap: 12px;
   align-items: center;
   padding: 10px;
-  border: 1px solid #263349;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 9px;
-  background: #111723;
+  background: rgba(10, 10, 14, 0.75);
 }
 .shop-row .rank {
   font-weight: 800;
-  color: #8bc1ff;
+  color: #ffdca1;
 }
 .shop-row .meta small {
-  color: var(--text-2);
+  color: var(--brand-gray);
   display: block;
   margin-top: 2px;
 }
 .shop-row a {
-  color: #8cc1ff;
+  color: #ffdca1;
   font-weight: 600;
   text-decoration: none;
 }
 .shop-row a:hover,
 .shop-row a:focus-visible {
-  color: #d1e6ff;
+  color: #ffb458;
   outline: none;
 }
 .shop-row.top10 {
-  border-color: #3f5f86;
-  background: #15243a;
+  border-color: rgba(255, 208, 48, 0.35);
+  background: rgba(255, 208, 48, 0.08);
 }
-.utility-panel {
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  background: rgba(20, 26, 36, 0.92);
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
+.is-hidden {
+  display: none !important;
 }
-.utility-head {
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--line);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.utility-head h2 {
-  margin: 0;
-  font-size: 0.82rem;
-}
-.utility-head span {
-  color: var(--text-2);
-  font-size: 0.74rem;
-}
-.utility-scroll {
-  min-height: 0;
-  overflow: auto;
-  padding: 10px;
-  display: grid;
-  gap: 9px;
-}
-.util-card {
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--surface-2);
-  padding: 10px;
-}
-.util-card h3 {
-  margin: 0 0 5px;
-  font-size: 0.8rem;
-}
-.util-card p,
-.util-card li {
-  margin: 0;
-  color: var(--text-2);
-  font-size: 0.76rem;
-  line-height: 1.5;
-}
-.util-list {
-  margin: 6px 0 0;
-  padding-left: 18px;
-}
-.artifact-links {
-  margin-top: 8px;
-  display: grid;
-  gap: 6px;
-}
-.artifact-links a {
-  display: inline-block;
-  color: #9dcbff;
-  text-decoration: none;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 6px 8px;
-  background: #162133;
-  width: fit-content;
-  font-size: 0.76rem;
-}
-.artifact-links a:hover,
-.artifact-links a:focus-visible {
-  border-color: #3f5f86;
-  color: #d1e6ff;
-  outline: none;
-}
-.chat-row {
-  display: flex;
-  gap: 8px;
-  margin-top: 8px;
-}
-.chat-badge {
-  width: 20px;
-  height: 20px;
-  border-radius: 6px;
-  display: grid;
-  place-items: center;
-  font-size: 0.64rem;
-  font-weight: 700;
-}
-.chat-badge.you { background: #294870; color: #cbe4ff; }
-.chat-badge.ai { background: #28354c; color: #d6e4ff; }
-.footer-note {
-  padding: 8px 12px 10px;
-  border-top: 1px solid var(--line);
-  color: #93a4c3;
-  font-size: 0.7rem;
-}
-@media (max-width: 1060px) {
-  .shell-body { grid-template-columns: 1fr; }
-  .utility-panel { min-height: 300px; }
+@media (max-width: 1080px) {
+  .collection-toggle {
+    display: none;
+  }
+  .detail-panel {
+    position: static;
+    width: 100%;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    border-top: 1px solid var(--line);
+    max-height: 360px;
+  }
+  .overview-stage {
+    min-height: 650px;
+  }
 }
 @media (max-width: 760px) {
-  .layout-3 { grid-template-columns: 1fr; }
-  th,
-  td { font-size: 0.72rem; }
-  .topbar-actions { display: none; }
-  .shop-row { grid-template-columns: 48px 1fr; }
-  .shop-row a { grid-column: 2; }
+  .shell-topbar {
+    flex-wrap: wrap;
+  }
+  .topbar-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .workspace-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .shop-row {
+    grid-template-columns: 48px 1fr;
+  }
+  .shop-row a {
+    grid-column: 2;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   *,
