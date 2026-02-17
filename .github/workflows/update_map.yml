@@ -1,0 +1,96 @@
+name: Update Map and Deploy Site
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+    - cron: "0 9 10-20 2 *"
+  workflow_dispatch:
+
+jobs:
+  update-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+      issues: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Run tests
+        run: |
+          pytest
+
+      - name: Scrape-only sync (no API key needed)
+        run: |
+          python src/main.py scrape-only
+
+      - name: Build static site
+        run: |
+          python src/main.py build-site
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/current_list.json output/coffee_shops.kml output/coffee_shops.csv site
+          git diff --staged --quiet || git commit -m "chore: update coffee shops map data"
+          git push
+
+      - name: Count shops missing place IDs
+        id: geocode_gap
+        run: |
+          MISSING=$(python - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path("data/current_list.json").read_text(encoding="utf-8"))
+          print(sum(1 for row in data if not row.get("place_id")))
+          PY
+          )
+          echo "missing=$MISSING" >> "$GITHUB_OUTPUT"
+
+      - name: Create owner geocode reminder issue
+        if: steps.geocode_gap.outputs.missing != '0'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const missing = ${{ steps.geocode_gap.outputs.missing }};
+            const title = `Owner geocode refresh needed (${missing} shops missing place_id)`;
+            const body = [
+              "Automated reminder from `update_map.yml`.",
+              "",
+              `Missing place_id count: **${missing}**`,
+              "",
+              "Run locally with owner key:",
+              "```bash",
+              "python src/main.py owner-geocode --api-key \"$GOOGLE_MAPS_API_KEY\"",
+              "```",
+            ].join("\\n");
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body
+            });
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
