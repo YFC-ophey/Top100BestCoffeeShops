@@ -55,3 +55,8 @@ coverage.xml
 
 # Git worktrees
 .worktrees/
+
+# Secrets / local environment
+.env
+.env.*
+!.env.example
