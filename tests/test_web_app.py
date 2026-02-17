@@ -54,6 +54,10 @@ def test_home_page_renders_summary_and_rows(tmp_path: Path) -> None:
     assert "Total shops: 2" in response.text
     assert "Top 100: 1" in response.text
     assert "South: 1" in response.text
+    assert 'id="overview-map"' in response.text
+    assert "Chat conversation history" not in response.text
+    assert "Project canvas and components" not in response.text
+    assert "Live preview" not in response.text
     assert "Coffee Collective" in response.text
     assert "Proud Mary" in response.text
 

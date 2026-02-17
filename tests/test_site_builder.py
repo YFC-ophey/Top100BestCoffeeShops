@@ -23,8 +23,12 @@ def test_build_static_site_generates_index_and_styles(tmp_path: Path) -> None:
 
     index = (site_dir / "index.html").read_text(encoding="utf-8")
     style = (site_dir / "assets" / "style.css").read_text(encoding="utf-8")
+    assert 'id="overview-map"' in index
     assert "Main Top 100" in index
     assert "South America" in index
+    assert "Chat conversation history" not in index
+    assert "Project canvas and components" not in index
+    assert "Live preview" not in index
     assert "Open in Google Maps" in index
     assert "Download CSV" in index
     assert "top10" in style
