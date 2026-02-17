@@ -7,6 +7,7 @@ if __package__ in (None, ""):
     sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from src.generator import generate_csv, generate_kml
+from src.env_utils import load_env_file
 from src.geocoder import GooglePlacesGeocoder
 from src.models import CoffeeShop
 from src.scraper import SOURCE_URLS, enrich_shops_with_details, fetch_html, parse_coffee_shops
@@ -14,6 +15,7 @@ from src.site_builder import build_static_site
 from src.state import has_shop_changes, load_previous_state
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_env_file(BASE_DIR)
 DATA_FILE = BASE_DIR / "data" / "current_list.json"
 KML_FILE = BASE_DIR / "output" / "coffee_shops.kml"
 CSV_FILE = BASE_DIR / "output" / "coffee_shops.csv"

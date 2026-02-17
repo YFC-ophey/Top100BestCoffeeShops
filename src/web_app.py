@@ -7,10 +7,12 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.templating import Jinja2Templates
 
+from src.env_utils import load_env_file
 from src.models import CoffeeShop
 from src.state import load_previous_state
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_env_file(BASE_DIR)
 DEFAULT_DATA_FILE = BASE_DIR / "data" / "current_list.json"
 DEFAULT_CSV_FILE = BASE_DIR / "output" / "coffee_shops.csv"
 DEFAULT_KML_FILE = BASE_DIR / "output" / "coffee_shops.kml"
