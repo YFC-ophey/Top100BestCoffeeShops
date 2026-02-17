@@ -2,6 +2,10 @@
 
 Zero-cost automation for scraping the yearly Top 100 coffee shop list, generating map artifacts, and publishing a static site to GitHub Pages.
 
+## Project Summary
+
+- Plan summary: `docs/plans/2026-02-17-project-summary.md`
+
 ## User Workflow (No API Key Required)
 
 Open-source users do **not** need Google Places credentials.
