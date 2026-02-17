@@ -95,13 +95,31 @@ def _index_html(top_100: list[CoffeeShop], south: list[CoffeeShop], csv_exists: 
     <link rel="stylesheet" href="./assets/style.css" />
   </head>
   <body>
-    <header>
-      <h1>Top 100 Best Coffee Shops 2026</h1>
-      <p>Static map companion built for zero-cost GitHub Pages hosting.</p>
-      <nav class="downloads">{' | '.join(download_links)}</nav>
-    </header>
-    {_section_html("Main Top 100", top_100, "Top+100+coffee+shops")}
-    {_section_html("South America", south, "Top+South+America+coffee+shops")}
+    <main class="page">
+      <header class="hero">
+        <h1>Top 100 Best Coffee Shops 2026</h1>
+        <p>Frontend Design V1 for zero-cost GitHub Pages hosting with map-ready link lists.</p>
+        <nav class="downloads">{' | '.join(download_links)}</nav>
+      </header>
+
+      <section class="overview">
+        <article class="tile">
+          <h3>Chat conversation history</h3>
+          <p>Decisions and sync notes for ranking refreshes and publishing flow.</p>
+        </article>
+        <article class="tile">
+          <h3>Project canvas and components</h3>
+          <p>Data table, category splits, and route-level artifacts for map export.</p>
+        </article>
+        <article class="tile">
+          <h3>Live preview</h3>
+          <p>Public page ready for quick validation before deeper UI/UX polish.</p>
+        </article>
+      </section>
+
+      {_section_html("Main Top 100", top_100, "Top+100+coffee+shops")}
+      {_section_html("South America", south, "Top+South+America+coffee+shops")}
+    </main>
   </body>
 </html>
 """
@@ -110,25 +128,54 @@ def _index_html(top_100: list[CoffeeShop], south: list[CoffeeShop], csv_exists: 
 def _style_css() -> str:
     return """
 :root {
-  --bg: #f4eee4;
+  --bg: #efe8de;
   --surface: #fffdf8;
-  --ink: #2b1f18;
+  --ink: #221812;
   --muted: #6f6257;
-  --accent: #8a5a2b;
+  --accent: #9a5f28;
+  --line: #dfd1bf;
 }
 * { box-sizing: border-box; }
 body {
-  margin: 0 auto;
-  max-width: 1100px;
-  padding: 24px;
-  background: linear-gradient(150deg, #f4eee4, #f8f5ef);
+  margin: 0;
+  background:
+    radial-gradient(circle at 84% 4%, #f7e8d6 0, transparent 22%),
+    radial-gradient(circle at 6% 10%, #f3dbc2 0, transparent 26%),
+    linear-gradient(150deg, #efe8de, #f8f5ef);
   color: var(--ink);
   font-family: "Avenir Next", "Segoe UI", sans-serif;
 }
-header { margin-bottom: 24px; }
-h1 { margin: 0 0 8px 0; }
+.page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+}
+.hero {
+  background: linear-gradient(130deg, #fff8ef, #fffefb);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 14px 38px rgba(53, 35, 19, 0.08);
+}
+h1 { margin: 0 0 8px; }
+.hero p { margin: 0; color: var(--muted); }
 .downloads a { color: var(--accent); text-decoration: none; font-weight: 600; }
-.section { background: var(--surface); border: 1px solid #dfd1bf; border-radius: 14px; padding: 16px; margin-bottom: 20px; }
+.downloads { margin-top: 10px; }
+.overview {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+.tile {
+  background: #fff;
+  border: 1px solid #e8dbc9;
+  border-radius: 12px;
+  padding: 12px;
+}
+.tile h3 { margin: 0 0 6px; font-size: 1rem; }
+.tile p { margin: 0; color: var(--muted); font-size: 0.93rem; line-height: 1.45; }
+.section { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 20px; }
 .embed-wrap iframe { width: 100%; min-height: 280px; border: 0; border-radius: 10px; margin-bottom: 14px; }
 .shop-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
 .shop-row { display: grid; grid-template-columns: 56px 1fr auto; gap: 12px; align-items: center; padding: 10px; border-bottom: 1px solid #eee4d7; }
@@ -137,7 +184,8 @@ h1 { margin: 0 0 8px 0; }
 .shop-row a { color: var(--accent); font-weight: 600; text-decoration: none; }
 .shop-row.top10 { background: #fff2df; border-radius: 8px; }
 @media (max-width: 720px) {
-  body { padding: 14px; }
+  .overview { grid-template-columns: 1fr; }
+  .page { padding: 14px; }
   .shop-row { grid-template-columns: 48px 1fr; }
   .shop-row a { grid-column: 2; }
 }
