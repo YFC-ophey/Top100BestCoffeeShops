@@ -36,6 +36,7 @@ def create_app(data_file: Path, csv_file: Path, kml_file: Path) -> FastAPI:
         top_100_links = _build_ordered_links(shops, "Top 100")
         south_links = _build_ordered_links(shops, "South")
         map_shops, missing_coords_count = _build_map_shops(shops)
+        sidebar_shops = _build_sidebar_shops(shops)
         map_country_aggregates = _build_country_aggregates(map_shops)
         context = {
             "request": request,
@@ -50,6 +51,7 @@ def create_app(data_file: Path, csv_file: Path, kml_file: Path) -> FastAPI:
             "south_links": south_links,
             "google_maps_js_api_key": os.getenv("GOOGLE_MAPS_JS_API_KEY", "").strip(),
             "map_shops": map_shops,
+            "sidebar_shops": sidebar_shops,
             "map_country_aggregates": map_country_aggregates,
             "map_missing_coords_count": missing_coords_count,
         }
@@ -121,6 +123,26 @@ def _build_map_shops(shops: list[CoffeeShop]) -> tuple[list[dict[str, object]], 
             }
         )
     return map_shops, missing
+
+
+def _build_sidebar_shops(shops: list[CoffeeShop]) -> list[dict[str, object]]:
+    ordered = sorted(shops, key=lambda value: (value.rank, value.category, value.name))
+    return [
+        {
+            "name": shop.name,
+            "city": shop.city,
+            "country": shop.country,
+            "rank": shop.rank,
+            "category": shop.category,
+            "lat": shop.lat,
+            "lng": shop.lng,
+            "place_id": shop.place_id or "",
+            "address": shop.formatted_address or shop.address or "",
+            "source_url": shop.source_url or "",
+            "google_maps_url": _google_maps_link(shop),
+        }
+        for shop in ordered
+    ]
 
 
 COUNTRY_COLOR_MAP: dict[str, str] = {

@@ -34,6 +34,7 @@ def build_static_site(
     all_shops = sorted(shops, key=lambda value: (value.rank, value.category, value.name))
 
     map_shops, missing_coords_count = _build_map_shops(all_shops)
+    sidebar_shops = _build_sidebar_shops(all_shops)
     map_country_aggregates = _build_country_aggregates(map_shops)
 
     csv_url = "../output/coffee_shops.csv" if csv_file.exists() else ""
@@ -44,6 +45,7 @@ def build_static_site(
         top_100=top_100,
         south=south,
         map_shops=map_shops,
+        sidebar_shops=sidebar_shops,
         map_country_aggregates=map_country_aggregates,
         missing_coords_count=missing_coords_count,
         total_count=len(all_shops),
@@ -99,6 +101,29 @@ def _build_map_shops(shops: list[CoffeeShop]) -> tuple[list[dict[str, object]], 
             }
         )
     return map_shops, missing
+
+
+def _build_sidebar_shops(shops: list[CoffeeShop]) -> list[dict[str, object]]:
+    return [
+        {
+            "name": shop.name,
+            "city": shop.city,
+            "country": shop.country,
+            "rank": shop.rank,
+            "category": shop.category,
+            "lat": shop.lat,
+            "lng": shop.lng,
+            "place_id": shop.place_id or "",
+            "address": shop.formatted_address or shop.address or "",
+            "source_url": shop.source_url or "",
+            "google_maps_url": _maps_link(shop),
+        }
+        for shop in shops
+    ]
+
+
+def _json_script_literal(value: object) -> str:
+    return json.dumps(value).replace("</", "<\\/")
 
 
 def _build_country_aggregates(map_shops: list[dict[str, object]]) -> list[dict[str, object]]:
@@ -182,6 +207,7 @@ def _index_html(
     top_100: list[CoffeeShop],
     south: list[CoffeeShop],
     map_shops: list[dict[str, object]],
+    sidebar_shops: list[dict[str, object]],
     map_country_aggregates: list[dict[str, object]],
     missing_coords_count: int,
     total_count: int,
@@ -198,9 +224,10 @@ def _index_html(
         "TABLE_ROWS": _table_rows_html(all_shops),
         "TOP100_LINKS": _ordered_links_html(top_100),
         "SOUTH_LINKS": _ordered_links_html(south),
-        "MAP_SHOPS_JSON": json.dumps(map_shops),
-        "MAP_COUNTRIES_JSON": json.dumps(map_country_aggregates),
-        "GOOGLE_MAPS_KEY_JSON": json.dumps(google_maps_key),
+        "MAP_SHOPS_JSON": _json_script_literal(map_shops),
+        "SIDEBAR_SHOPS_JSON": _json_script_literal(sidebar_shops),
+        "MAP_COUNTRIES_JSON": _json_script_literal(map_country_aggregates),
+        "GOOGLE_MAPS_KEY_JSON": _json_script_literal(google_maps_key),
         "CSV_BUTTON": (
             f'<a class="btn-secondary" href="{html.escape(csv_url, quote=True)}">Download CSV</a>' if csv_url else ""
         ),
@@ -295,29 +322,37 @@ def _html_template() -> str:
                   <div class="detail-content">
                     <div>
                       <h2 class="shop-title" id="shop-name">Choose a marker</h2>
-                      <p class="shop-rating" id="shop-rating">★★★★☆ 4.9 · curated rank</p>
+                      <p class="shop-rating" id="shop-rating">Rank and category appear after selection.</p>
                       <p class="shop-address" id="shop-address">Select a coffee shop marker to inspect details.</p>
                     </div>
 
                     <div class="action-grid">
                       <a class="btn-primary" id="shop-directions" href="#" target="_blank" rel="noopener">Get Directions</a>
-                      <a class="btn-secondary" id="shop-website" href="#" target="_blank" rel="noopener">Website</a>
-                      <a class="btn-secondary" id="shop-call" href="tel:+10000000000">Call</a>
+                      <a class="btn-secondary" id="shop-website" href="#" target="_blank" rel="noopener">Source Page</a>
+                      <a class="btn-secondary" id="shop-map-link" href="#" target="_blank" rel="noopener">Google Maps</a>
                     </div>
 
                     <section class="detail-section">
-                      <p class="section-title">Menu Highlights</p>
-                      <div class="menu-item">
-                        <img class="menu-thumb" src="https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=300&auto=format&fit=crop" alt="Espresso" />
-                        <div>
-                          <p class="menu-name">Espresso Double</p>
-                          <p class="menu-desc">Rich dark roast with chocolate and caramel notes.</p>
+                      <p class="section-title">Scraped Details</p>
+                      <div class="details-grid">
+                        <div class="details-card">
+                          <p class="details-label">Category</p>
+                          <p class="details-value" id="shop-category">-</p>
                         </div>
-                        <span class="menu-price">$4.50</span>
+                        <div class="details-card">
+                          <p class="details-label">City / Country</p>
+                          <p class="details-value" id="shop-city-country">-</p>
+                        </div>
+                        <div class="details-card">
+                          <p class="details-label">Coordinates</p>
+                          <p class="details-value" id="shop-coordinates">-</p>
+                        </div>
+                        <div class="details-card">
+                          <p class="details-label">Google Place ID</p>
+                          <p class="details-value" id="shop-place-id">-</p>
+                        </div>
                       </div>
                     </section>
-
-                    <button class="book-btn" type="button">Book a Table</button>
                   </div>
                 </aside>
 
@@ -364,6 +399,7 @@ def _html_template() -> str:
 
     <script>
       const mapShops = __MAP_SHOPS_JSON__;
+      const sidebarShops = __SIDEBAR_SHOPS_JSON__;
       const mapCountries = __MAP_COUNTRIES_JSON__;
       const googleMapsKey = __GOOGLE_MAPS_KEY_JSON__;
       const mapMissingCoordsCount = __MISSING_COORDS_COUNT__;
@@ -415,6 +451,10 @@ def _html_template() -> str:
         return mapShops.filter((shop) => markerState.activeCategories.has(normalizeCategory(shop.category)));
       }
 
+      function getVisibleSidebarShops() {
+        return sidebarShops.filter((shop) => markerState.activeCategories.has(normalizeCategory(shop.category)));
+      }
+
       function showMapMessage(message) {
         const messageBox = document.getElementById("map-unavailable");
         messageBox.textContent = message;
@@ -427,6 +467,19 @@ def _html_template() -> str:
 
       function colorForCategory(category) {
         return normalizeCategory(category) === "South" ? "#FF7600" : "#FFD030";
+      }
+
+      function shopKey(shop) {
+        return `${shop.rank}|${shop.category}|${shop.name}`;
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#39;");
       }
 
       function iconForShop(shop, active) {
@@ -455,11 +508,22 @@ def _html_template() -> str:
         if (!shop) return;
         document.getElementById("shop-name").textContent = shop.name;
         document.getElementById("shop-rank-badge").textContent = `#${shop.rank} ${shop.category}`;
-        document.getElementById("shop-rating").textContent = "★★★★☆ 4.9 · curated rank";
+        document.getElementById("shop-rating").textContent = `Rank #${shop.rank} · ${shop.category}`;
         const location = [shop.address, shop.city, shop.country].filter(Boolean).join(", ");
         document.getElementById("shop-address").textContent = location || "Address unavailable";
         document.getElementById("shop-directions").href = shop.google_maps_url;
-        document.getElementById("shop-website").href = shop.source_url || shop.google_maps_url;
+        const website = document.getElementById("shop-website");
+        website.href = shop.source_url || shop.google_maps_url;
+        website.textContent = shop.source_url ? "Source Page" : "Source Unavailable";
+        document.getElementById("shop-map-link").href = shop.google_maps_url;
+        const cityCountry = [shop.city, shop.country].filter(Boolean).join(", ");
+        document.getElementById("shop-category").textContent = shop.category || "Unknown";
+        document.getElementById("shop-city-country").textContent = cityCountry || "Unknown";
+        const hasCoords = Number.isFinite(shop.lat) && Number.isFinite(shop.lng);
+        document.getElementById("shop-coordinates").textContent = hasCoords
+          ? `${Number(shop.lat).toFixed(4)}, ${Number(shop.lng).toFixed(4)}`
+          : "Unavailable";
+        document.getElementById("shop-place-id").textContent = shop.place_id || "Unavailable";
       }
 
       function clearMarkers(markers) {
@@ -470,11 +534,14 @@ def _html_template() -> str:
       function openShopInfo(marker, shop) {
         markerState.selectedShop = shop;
         updateDetailPanel(shop);
+        const shopName = escapeHtml(shop.name);
+        const cityCountry = escapeHtml(`${shop.city ? `${shop.city}, ` : ""}${shop.country || ""}`);
+        const category = escapeHtml(shop.category || "");
         markerState.infoWindow.setContent(
           `<div style="min-width:190px;color:#101217;font-family:system-ui,sans-serif">` +
-            `<strong>#${shop.rank} ${shop.name}</strong><br/>` +
-            `<span>${shop.city ? shop.city + ", " : ""}${shop.country}</span><br/>` +
-            `<span>${shop.category}</span><br/>` +
+            `<strong>#${shop.rank} ${shopName}</strong><br/>` +
+            `<span>${cityCountry}</span><br/>` +
+            `<span>${category}</span><br/>` +
             `<a href="${shop.google_maps_url}" target="_blank" rel="noopener">Open in Google Maps</a>` +
           `</div>`
         );
@@ -529,7 +596,7 @@ def _html_template() -> str:
         clearMarkers(markerState.shopMarkers);
         const visibleShops = getVisibleShops();
         visibleShops.forEach((shop) => {
-          const active = markerState.selectedShop && markerState.selectedShop.name === shop.name;
+          const active = markerState.selectedShop && shopKey(markerState.selectedShop) === shopKey(shop);
           const marker = new google.maps.Marker({
             position: { lat: shop.lat, lng: shop.lng },
             map: markerState.map,
@@ -573,7 +640,7 @@ def _html_template() -> str:
             }
             markerState.selectedShop = null;
             refreshMapLayers();
-            const visible = getVisibleShops();
+            const visible = getVisibleSidebarShops();
             if (visible.length) updateDetailPanel(visible[0]);
           });
         });
@@ -584,17 +651,6 @@ def _html_template() -> str:
           showMapMessage("Google Maps failed to load.");
           return;
         }
-        if (!mapShops.length) {
-          showMapMessage(
-            "No mapped coordinates are available yet. Run owner geocoding first: python src/main.py owner-geocode --api-key \"$GOOGLE_MAPS_JS_API_KEY\""
-          );
-          document.getElementById("shop-name").textContent = "No geocoded shop data";
-          document.getElementById("shop-address").textContent =
-            "Map markers appear after lat/lng values are populated in data/current_list.json.";
-          return;
-        }
-
-        hideMapMessage();
         markerState.map = new google.maps.Map(document.getElementById("overview-map"), {
           center: { lat: 10, lng: 0 },
           zoom: 2,
@@ -610,9 +666,20 @@ def _html_template() -> str:
         });
 
         markerState.infoWindow = new google.maps.InfoWindow();
-        markerState.selectedShop = getVisibleShops()[0] || mapShops[0];
+        markerState.selectedShop = getVisibleSidebarShops()[0] || sidebarShops[0] || null;
         updateDetailPanel(markerState.selectedShop);
         markerState.map.addListener("zoom_changed", refreshMapLayers);
+        if (!mapShops.length) {
+          showMapMessage(
+            "No mapped coordinates are available yet. Run owner geocoding first: python src/main.py owner-geocode --api-key $GOOGLE_MAPS_JS_API_KEY"
+          );
+          document.getElementById("shop-name").textContent = "No geocoded map markers";
+          document.getElementById("shop-address").textContent =
+            "Map is available, but markers need lat/lng values in data/current_list.json.";
+          return;
+        }
+
+        hideMapMessage();
         refreshMapLayers();
 
         if (mapMissingCoordsCount > 0) {
