@@ -23,8 +23,20 @@ def test_build_static_site_generates_index_and_styles(tmp_path: Path) -> None:
 
     index = (site_dir / "index.html").read_text(encoding="utf-8")
     style = (site_dir / "assets" / "style.css").read_text(encoding="utf-8")
+    assert 'id="overview-map"' in index
     assert "Main Top 100" in index
     assert "South America" in index
+    assert "Chat conversation history" not in index
+    assert "Project canvas and components" not in index
+    assert "Live preview" not in index
+    assert "Menu Highlights" not in index
+    assert "Open Today" not in index
+    assert "WiFi Speed" not in index
+    assert "Recent Review" not in index
+    assert "Book a Table" not in index
     assert "Open in Google Maps" in index
     assert "Download CSV" in index
+    assert "--api-key $GOOGLE_MAPS_JS_API_KEY" in index
+    assert '"$GOOGLE_MAPS_JS_API_KEY"' not in index
+    assert index.index("markerState.map = new google.maps.Map") < index.index("if (!mapShops.length)")
     assert "top10" in style

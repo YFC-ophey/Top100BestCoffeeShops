@@ -54,6 +54,16 @@ def test_home_page_renders_summary_and_rows(tmp_path: Path) -> None:
     assert "Total shops: 2" in response.text
     assert "Top 100: 1" in response.text
     assert "South: 1" in response.text
+    assert 'id="overview-map"' in response.text
+    assert "Chat conversation history" not in response.text
+    assert "Project canvas and components" not in response.text
+    assert "Live preview" not in response.text
+    assert "Menu Highlights" not in response.text
+    assert "Open Today" not in response.text
+    assert "WiFi Speed" not in response.text
+    assert "Recent Review" not in response.text
+    assert "Book a Table" not in response.text
+    assert response.text.index("markerState.map = new google.maps.Map") < response.text.index("if (!mapShops.length)")
     assert "Coffee Collective" in response.text
     assert "Proud Mary" in response.text
 
