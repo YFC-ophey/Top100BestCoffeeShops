@@ -147,7 +147,7 @@
     <script>
       const mapShops = [];
       const mapCountries = [];
-      const googleMapsKey = "";
+      const googleMapsKey = "AIzaSyDwkE4RJTpghLN_ibBHG_88oh3cAu_H47E";
       const mapMissingCoordsCount = 200;
 
       const tabButtons = document.querySelectorAll(".tab-btn");
@@ -367,7 +367,12 @@
           return;
         }
         if (!mapShops.length) {
-          showMapMessage("No mapped coordinates are currently available.");
+          showMapMessage(
+            "No mapped coordinates are available yet. Run owner geocoding first: python src/main.py owner-geocode --api-key "$GOOGLE_MAPS_JS_API_KEY""
+          );
+          document.getElementById("shop-name").textContent = "No geocoded shop data";
+          document.getElementById("shop-address").textContent =
+            "Map markers appear after lat/lng values are populated in data/current_list.json.";
           return;
         }
 
@@ -399,7 +404,9 @@
 
       function loadGoogleMapsScript() {
         if (!googleMapsKey) {
-          showMapMessage("Google Maps API key is not configured. Add GOOGLE_MAPS_JS_API_KEY to enable map view.");
+          showMapMessage(
+            "Google Maps API key is not configured in environment. Add GOOGLE_MAPS_JS_API_KEY to .env and rebuild/restart."
+          );
           return;
         }
         window.initOverviewMap = initOverviewMap;
