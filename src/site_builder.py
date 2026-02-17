@@ -1,6 +1,5 @@
 import html
 import json
-import os
 from pathlib import Path
 from urllib.parse import urlencode
 
@@ -51,7 +50,8 @@ def build_static_site(
         total_count=len(all_shops),
         csv_url=csv_url,
         kml_url=kml_url,
-        google_maps_key=os.getenv("GOOGLE_MAPS_JS_API_KEY", "").strip(),
+        # Never embed API keys into committed static artifacts.
+        google_maps_key="",
     )
 
     (assets_dir / "style.css").write_text(_style_css(), encoding="utf-8")
