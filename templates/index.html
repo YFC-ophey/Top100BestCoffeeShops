@@ -5,87 +5,259 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Top100BestCoffeeShops Preview</title>
     <style>
-      body { font-family: "Iowan Old Style", "Georgia", serif; margin: 24px; background: #f8f4ee; color: #2f241d; }
-      h1 { margin-bottom: 4px; }
-      .meta { display: flex; gap: 16px; flex-wrap: wrap; margin: 16px 0; }
-      .card { background: #fffdf8; border: 1px solid #d7cab5; border-radius: 10px; padding: 10px 14px; }
-      table { width: 100%; border-collapse: collapse; background: #fffdf8; }
-      th, td { border-bottom: 1px solid #e4d8c6; padding: 10px 8px; text-align: left; }
-      th { background: #efe4d3; }
-      .links { margin: 14px 0; display: flex; gap: 12px; }
-      .tabs { display: flex; gap: 10px; margin: 14px 0; }
-      .tab-btn { border: 1px solid #b9a98f; background: #fffdf8; border-radius: 8px; padding: 8px 12px; cursor: pointer; }
-      .tab-btn.active { background: #3f2d20; color: #fff; border-color: #3f2d20; }
+      :root {
+        --bg: #efe8de;
+        --paper: #fffdf9;
+        --ink: #201711;
+        --muted: #6b5f55;
+        --accent: #b06f2f;
+        --accent-dark: #6a3d16;
+        --line: #dccdbc;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Avenir Next", "Segoe UI", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 85% 2%, #f9efe2 0, transparent 22%),
+          radial-gradient(circle at 6% 12%, #f3dbc2 0, transparent 24%),
+          linear-gradient(140deg, #efe8de, #f8f3ec 45%, #ede4d8);
+      }
+      .page {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 30px 18px 42px;
+      }
+      .hero {
+        background: linear-gradient(130deg, #fff8ef, #fffefb);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 22px;
+        box-shadow: 0 14px 38px rgba(53, 35, 19, 0.08);
+      }
+      .hero h1 {
+        margin: 0 0 8px;
+        font-size: clamp(1.7rem, 2.7vw, 2.4rem);
+        letter-spacing: -0.02em;
+      }
+      .hero p {
+        margin: 0;
+        color: var(--muted);
+        max-width: 760px;
+      }
+      .meta {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
+        margin-top: 16px;
+      }
+      .card {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-weight: 600;
+      }
+      .links {
+        margin: 14px 0 0;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .links a {
+        color: var(--accent-dark);
+        text-decoration: none;
+        font-weight: 700;
+      }
+      .tabs {
+        margin: 20px 0 14px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .tab-btn {
+        border: 1px solid #bba993;
+        background: rgba(255, 251, 245, 0.8);
+        border-radius: 10px;
+        padding: 9px 13px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .tab-btn.active {
+        background: var(--accent-dark);
+        color: #fff;
+        border-color: var(--accent-dark);
+      }
       .tab-panel { display: none; }
       .tab-panel.active { display: block; }
-      ol.link-list { background: #fffdf8; border: 1px solid #d7cab5; border-radius: 10px; padding: 14px 26px; }
+      .panel {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 12px;
+      }
+      .layout-3 {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+      .tile {
+        border: 1px solid #e8dbc9;
+        border-radius: 12px;
+        background: #fff;
+        padding: 12px;
+      }
+      .tile h3 {
+        margin: 0 0 8px;
+        font-size: 0.98rem;
+      }
+      .tile p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.92rem;
+        line-height: 1.45;
+      }
+      .dot-list { margin: 8px 0 0; padding-left: 18px; color: var(--muted); }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        border: 1px solid #eadfce;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      th, td {
+        border-bottom: 1px solid #efe5d8;
+        padding: 9px 8px;
+        text-align: left;
+        font-size: 0.95rem;
+      }
+      th {
+        background: #f8f0e5;
+        font-size: 0.83rem;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+      }
+      ol.link-list {
+        margin: 0;
+        background: #fff;
+        border: 1px solid #eadfce;
+        border-radius: 10px;
+        padding: 14px 22px;
+      }
       ol.link-list li { margin: 6px 0; }
+      ol.link-list a {
+        color: var(--accent-dark);
+        text-decoration: none;
+        font-weight: 600;
+      }
+      @media (max-width: 920px) {
+        .layout-3 { grid-template-columns: 1fr; }
+      }
     </style>
   </head>
   <body>
-    <h1>Top100BestCoffeeShops Preview</h1>
-    <p>Generated artifact overview from the latest local sync state.</p>
-
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="overview">Overview</button>
-      <button class="tab-btn" data-tab="top100-links">Top 100 Links</button>
-      <button class="tab-btn" data-tab="south-links">South Links</button>
-    </div>
-
-    <section id="overview" class="tab-panel active">
-      <div class="meta">
-        <div class="card">Total shops: {{ total_shops }}</div>
-        {% for category, count in category_counts.items() %}
-        <div class="card">{{ category }}: {{ count }}</div>
-        {% endfor %}
-      </div>
-
-      <div class="links">
-        {% if csv_available %}<a href="/artifacts/csv">Download CSV</a>{% endif %}
-        {% if kml_available %}<a href="/artifacts/kml">Download KML</a>{% endif %}
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>Name</th>
-            <th>City</th>
-            <th>Country</th>
-            <th>Category</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for shop in shops %}
-          <tr>
-            <td>{{ shop.rank }}</td>
-            <td>{{ shop.name }}</td>
-            <td>{{ shop.city }}</td>
-            <td>{{ shop.country }}</td>
-            <td>{{ shop.category }}</td>
-          </tr>
+    <main class="page">
+      <section class="hero">
+        <h1>Top100BestCoffeeShops Preview</h1>
+        <p>
+          Frontend Design V1: a preview-first workspace that surfaces ranking data,
+          Google Maps links, and publish-ready artifacts for GitHub-hosted updates.
+        </p>
+        <div class="meta">
+          <div class="card">Total shops: {{ total_shops }}</div>
+          {% for category, count in category_counts.items() %}
+          <div class="card">{{ category }}: {{ count }}</div>
           {% endfor %}
-        </tbody>
-      </table>
-    </section>
+        </div>
+        <div class="links">
+          {% if csv_available %}<a href="/artifacts/csv">Download CSV</a>{% endif %}
+          {% if kml_available %}<a href="/artifacts/kml">Download KML</a>{% endif %}
+        </div>
+      </section>
 
-    <section id="top100-links" class="tab-panel">
-      <h2>Top 100 Map Links</h2>
-      <ol class="link-list">
-        {% for item in top_100_links %}
-        <li><a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.label }}</a></li>
-        {% endfor %}
-      </ol>
-    </section>
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="overview">Overview</button>
+        <button class="tab-btn" data-tab="top100-links">Top 100 Links</button>
+        <button class="tab-btn" data-tab="south-links">South Links</button>
+      </div>
 
-    <section id="south-links" class="tab-panel">
-      <h2>South Map Links</h2>
-      <ol class="link-list">
-        {% for item in south_links %}
-        <li><a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.label }}</a></li>
-        {% endfor %}
-      </ol>
-    </section>
+      <section id="overview" class="tab-panel active panel">
+        <div class="layout-3">
+          <article class="tile">
+            <h3>Chat conversation history</h3>
+            <p>Track decisions, source notes, and update cadence for the yearly ranking refresh.</p>
+            <ul class="dot-list">
+              <li>Source sync and parsing</li>
+              <li>Geocode verification</li>
+              <li>Release notes tracking</li>
+            </ul>
+          </article>
+          <article class="tile">
+            <h3>Project canvas and components</h3>
+            <p>Organized views for list data, map links, CSV/KML artifacts, and deployment readiness.</p>
+            <ul class="dot-list">
+              <li>Top 100 + South categories</li>
+              <li>Ordered map links</li>
+              <li>Download artifacts</li>
+            </ul>
+          </article>
+          <article class="tile">
+            <h3>Live preview</h3>
+            <p>Functional render of the app’s first release UI before final UX polish.</p>
+            <ul class="dot-list">
+              <li>Tab-based navigation</li>
+              <li>Data table and link lists</li>
+              <li>Map-ready outputs</li>
+            </ul>
+          </article>
+        </div>
+
+        <div style="margin-top: 12px;">
+          <table>
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>City</th>
+                <th>Country</th>
+                <th>Category</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for shop in shops %}
+              <tr>
+                <td>{{ shop.rank }}</td>
+                <td>{{ shop.name }}</td>
+                <td>{{ shop.city }}</td>
+                <td>{{ shop.country }}</td>
+                <td>{{ shop.category }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="top100-links" class="tab-panel panel">
+        <h2>Top 100 Map Links</h2>
+        <ol class="link-list">
+          {% for item in top_100_links %}
+          <li><a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.label }}</a></li>
+          {% endfor %}
+        </ol>
+      </section>
+
+      <section id="south-links" class="tab-panel panel">
+        <h2>South Map Links</h2>
+        <ol class="link-list">
+          {% for item in south_links %}
+          <li><a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.label }}</a></li>
+          {% endfor %}
+        </ol>
+      </section>
+    </main>
 
     <script>
       const tabButtons = document.querySelectorAll(".tab-btn");
