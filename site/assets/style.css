@@ -1,0 +1,33 @@
+
+:root {
+  --bg: #f4eee4;
+  --surface: #fffdf8;
+  --ink: #2b1f18;
+  --muted: #6f6257;
+  --accent: #8a5a2b;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0 auto;
+  max-width: 1100px;
+  padding: 24px;
+  background: linear-gradient(150deg, #f4eee4, #f8f5ef);
+  color: var(--ink);
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+}
+header { margin-bottom: 24px; }
+h1 { margin: 0 0 8px 0; }
+.downloads a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.section { background: var(--surface); border: 1px solid #dfd1bf; border-radius: 14px; padding: 16px; margin-bottom: 20px; }
+.embed-wrap iframe { width: 100%; min-height: 280px; border: 0; border-radius: 10px; margin-bottom: 14px; }
+.shop-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.shop-row { display: grid; grid-template-columns: 56px 1fr auto; gap: 12px; align-items: center; padding: 10px; border-bottom: 1px solid #eee4d7; }
+.shop-row .rank { font-weight: 800; color: var(--accent); }
+.shop-row .meta small { color: var(--muted); display: block; margin-top: 2px; }
+.shop-row a { color: var(--accent); font-weight: 600; text-decoration: none; }
+.shop-row.top10 { background: #fff2df; border-radius: 8px; }
+@media (max-width: 720px) {
+  body { padding: 14px; }
+  .shop-row { grid-template-columns: 48px 1fr; }
+  .shop-row a { grid-column: 2; }
+}

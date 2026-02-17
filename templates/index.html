@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Top100BestCoffeeShops Preview</title>
+    <style>
+      body { font-family: "Iowan Old Style", "Georgia", serif; margin: 24px; background: #f8f4ee; color: #2f241d; }
+      h1 { margin-bottom: 4px; }
+      .meta { display: flex; gap: 16px; flex-wrap: wrap; margin: 16px 0; }
+      .card { background: #fffdf8; border: 1px solid #d7cab5; border-radius: 10px; padding: 10px 14px; }
+      table { width: 100%; border-collapse: collapse; background: #fffdf8; }
+      th, td { border-bottom: 1px solid #e4d8c6; padding: 10px 8px; text-align: left; }
+      th { background: #efe4d3; }
+      .links { margin: 14px 0; display: flex; gap: 12px; }
+      .tabs { display: flex; gap: 10px; margin: 14px 0; }
+      .tab-btn { border: 1px solid #b9a98f; background: #fffdf8; border-radius: 8px; padding: 8px 12px; cursor: pointer; }
+      .tab-btn.active { background: #3f2d20; color: #fff; border-color: #3f2d20; }
+      .tab-panel { display: none; }
+      .tab-panel.active { display: block; }
+      ol.link-list { background: #fffdf8; border: 1px solid #d7cab5; border-radius: 10px; padding: 14px 26px; }
+      ol.link-list li { margin: 6px 0; }
+    </style>
+  </head>
+  <body>
+    <h1>Top100BestCoffeeShops Preview</h1>
+    <p>Generated artifact overview from the latest local sync state.</p>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="overview">Overview</button>
+      <button class="tab-btn" data-tab="top100-links">Top 100 Links</button>
+      <button class="tab-btn" data-tab="south-links">South Links</button>
+    </div>
+
+    <section id="overview" class="tab-panel active">
+      <div class="meta">
+        <div class="card">Total shops: {{ total_shops }}</div>
+        {% for category, count in category_counts.items() %}
+        <div class="card">{{ category }}: {{ count }}</div>
+        {% endfor %}
+      </div>
+
+      <div class="links">
+        {% if csv_available %}<a href="/artifacts/csv">Download CSV</a>{% endif %}
+        {% if kml_available %}<a href="/artifacts/kml">Download KML</a>{% endif %}
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>City</th>
+            <th>Country</th>
+            <th>Category</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for shop in shops %}
+          <tr>
+            <td>{{ shop.rank }}</td>
+            <td>{{ shop.name }}</td>
+            <td>{{ shop.city }}</td>
+            <td>{{ shop.country }}</td>
+            <td>{{ shop.category }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <section id="top100-links" class="tab-panel">
+      <h2>Top 100 Map Links</h2>
+      <ol class="link-list">
+        {% for item in top_100_links %}
+        <li><a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.label }}</a></li>
+        {% endfor %}
+      </ol>
+    </section>
+
+    <section id="south-links" class="tab-panel">
+      <h2>South Map Links</h2>
+      <ol class="link-list">
+        {% for item in south_links %}
+        <li><a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.label }}</a></li>
+        {% endfor %}
+      </ol>
+    </section>
+
+    <script>
+      const tabButtons = document.querySelectorAll(".tab-btn");
+      const panels = document.querySelectorAll(".tab-panel");
+      tabButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const target = button.dataset.tab;
+          tabButtons.forEach((b) => b.classList.toggle("active", b === button));
+          panels.forEach((panel) => panel.classList.toggle("active", panel.id === target));
+        });
+      });
+    </script>
+  </body>
+</html>
