@@ -685,60 +685,37 @@
                   <div class="detail-content">
                     <div>
                       <h2 class="shop-title" id="shop-name">Choose a marker</h2>
-                      <p class="shop-rating" id="shop-rating">★★★★☆ 4.9 · 3.4k reviews</p>
+                      <p class="shop-rating" id="shop-rating">Rank and category appear after selection.</p>
                       <p class="shop-address" id="shop-address">Select a coffee shop marker to inspect details.</p>
                     </div>
 
                     <div class="action-grid">
                       <a class="btn-primary" id="shop-directions" href="#" target="_blank" rel="noopener">Get Directions</a>
-                      <a class="btn-secondary" id="shop-website" href="#" target="_blank" rel="noopener">Website</a>
-                      <a class="btn-secondary" id="shop-call" href="tel:+10000000000">Call</a>
+                      <a class="btn-secondary" id="shop-website" href="#" target="_blank" rel="noopener">Source Page</a>
+                      <a class="btn-secondary" id="shop-map-link" href="#" target="_blank" rel="noopener">Google Maps</a>
                     </div>
 
                     <section class="detail-section">
-                      <p class="section-title">Menu Highlights</p>
-                      <div class="menu-item">
-                        <img class="menu-thumb" src="https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=300&auto=format&fit=crop" alt="Espresso" />
-                        <div>
-                          <p class="menu-name">Espresso Double</p>
-                          <p class="menu-desc">Rich dark roast with chocolate and caramel notes.</p>
-                        </div>
-                        <span class="menu-price">$4.50</span>
-                      </div>
-                      <div class="menu-item">
-                        <img class="menu-thumb" src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=300&auto=format&fit=crop" alt="Medialuna" />
-                        <div>
-                          <p class="menu-name">Medialunas</p>
-                          <p class="menu-desc">Warm laminated pastry with honey glaze.</p>
-                        </div>
-                        <span class="menu-price">$3.00</span>
-                      </div>
-                    </section>
-
-                    <section class="detail-section">
-                      <p class="section-title">Details</p>
+                      <p class="section-title">Scraped Details</p>
                       <div class="details-grid">
                         <div class="details-card">
-                          <p class="details-label">Open Today</p>
-                          <p class="details-value">08:00 - 22:00</p>
+                          <p class="details-label">Category</p>
+                          <p class="details-value" id="shop-category">-</p>
                         </div>
                         <div class="details-card">
-                          <p class="details-label">WiFi Speed</p>
-                          <p class="details-value">120 Mbps</p>
+                          <p class="details-label">City / Country</p>
+                          <p class="details-value" id="shop-city-country">-</p>
+                        </div>
+                        <div class="details-card">
+                          <p class="details-label">Coordinates</p>
+                          <p class="details-value" id="shop-coordinates">-</p>
+                        </div>
+                        <div class="details-card">
+                          <p class="details-label">Google Place ID</p>
+                          <p class="details-value" id="shop-place-id">-</p>
                         </div>
                       </div>
                     </section>
-
-                    <section class="detail-section">
-                      <p class="section-title">Recent Review</p>
-                      <div class="review-card">
-                        <p>
-                          "Absolutely stunning architecture and a warm atmosphere. Coffee quality is consistently excellent."
-                        </p>
-                      </div>
-                    </section>
-
-                    <button class="book-btn" type="button">Book a Table</button>
                   </div>
                 </aside>
 
@@ -797,6 +774,7 @@
 
     <script>
       const mapShops = {{ map_shops | tojson }};
+      const sidebarShops = {{ sidebar_shops | tojson }};
       const mapCountries = {{ map_country_aggregates | tojson }};
       const googleMapsKey = {{ google_maps_js_api_key | tojson }};
       const mapMissingCoordsCount = {{ map_missing_coords_count }};
@@ -848,6 +826,10 @@
         return mapShops.filter((shop) => markerState.activeCategories.has(normalizeCategory(shop.category)));
       }
 
+      function getVisibleSidebarShops() {
+        return sidebarShops.filter((shop) => markerState.activeCategories.has(normalizeCategory(shop.category)));
+      }
+
       function showMapMessage(message) {
         const messageBox = document.getElementById("map-unavailable");
         messageBox.textContent = message;
@@ -888,14 +870,26 @@
         return shop.country || "Unknown";
       }
 
+      function shopKey(shop) {
+        return `${shop.rank}|${shop.category}|${shop.name}`;
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#39;");
+      }
+
       function updateDetailPanel(shop) {
         if (!shop) {
           return;
         }
         document.getElementById("shop-name").textContent = shop.name;
         document.getElementById("shop-rank-badge").textContent = `#${shop.rank} ${shop.category}`;
-        const rating = (5 - Math.min(2, Math.floor(shop.rank / 30))).toFixed(1);
-        document.getElementById("shop-rating").textContent = `★★★★☆ ${rating} · curated rank`;
+        document.getElementById("shop-rating").textContent = `Rank #${shop.rank} · ${shop.category}`;
 
         const location = [shop.address, shop.city, shop.country].filter(Boolean).join(", ");
         document.getElementById("shop-address").textContent = location || "Address unavailable";
@@ -905,6 +899,19 @@
 
         const website = document.getElementById("shop-website");
         website.href = shop.source_url || shop.google_maps_url;
+        website.textContent = shop.source_url ? "Source Page" : "Source Unavailable";
+
+        const mapLink = document.getElementById("shop-map-link");
+        mapLink.href = shop.google_maps_url;
+
+        const cityCountry = [shop.city, shop.country].filter(Boolean).join(", ");
+        document.getElementById("shop-category").textContent = shop.category || "Unknown";
+        document.getElementById("shop-city-country").textContent = cityCountry || "Unknown";
+        const hasCoords = Number.isFinite(shop.lat) && Number.isFinite(shop.lng);
+        document.getElementById("shop-coordinates").textContent = hasCoords
+          ? `${Number(shop.lat).toFixed(4)}, ${Number(shop.lng).toFixed(4)}`
+          : "Unavailable";
+        document.getElementById("shop-place-id").textContent = shop.place_id || "Unavailable";
 
         const hero = document.getElementById("shop-hero-img");
         hero.alt = `${shop.name} interior`;
@@ -919,11 +926,14 @@
         markerState.selectedShop = shop;
         updateDetailPanel(shop);
 
+        const shopName = escapeHtml(shop.name);
+        const cityCountry = escapeHtml(`${shop.city ? `${shop.city}, ` : ""}${shop.country || ""}`);
+        const category = escapeHtml(shop.category || "");
         markerState.infoWindow.setContent(
           `<div style="min-width:190px;color:#101217;font-family:system-ui,sans-serif">` +
-            `<strong>#${shop.rank} ${shop.name}</strong><br/>` +
-            `<span>${shop.city ? shop.city + ", " : ""}${shop.country}</span><br/>` +
-            `<span>${shop.category}</span><br/>` +
+            `<strong>#${shop.rank} ${shopName}</strong><br/>` +
+            `<span>${cityCountry}</span><br/>` +
+            `<span>${category}</span><br/>` +
             `<a href="${shop.google_maps_url}" target="_blank" rel="noopener">Open in Google Maps</a>` +
           `</div>`
         );
@@ -989,7 +999,7 @@
         const visibleShops = getVisibleShops();
 
         visibleShops.forEach((shop) => {
-          const active = markerState.selectedShop && markerState.selectedShop.name === shop.name;
+          const active = markerState.selectedShop && shopKey(markerState.selectedShop) === shopKey(shop);
           const marker = new google.maps.Marker({
             position: { lat: shop.lat, lng: shop.lng },
             map: markerState.map,
@@ -1040,7 +1050,7 @@
             markerState.selectedShop = null;
             refreshMapLayers();
 
-            const visible = getVisibleShops();
+            const visible = getVisibleSidebarShops();
             if (visible.length) {
               updateDetailPanel(visible[0]);
             }
@@ -1053,17 +1063,6 @@
           showMapMessage("Google Maps failed to load. Check your key or network settings.");
           return;
         }
-        if (!mapShops.length) {
-          showMapMessage(
-            "No mapped coordinates are available yet. Run owner geocoding first: python src/main.py owner-geocode --api-key \"$GOOGLE_MAPS_JS_API_KEY\""
-          );
-          document.getElementById("shop-name").textContent = "No geocoded shop data";
-          document.getElementById("shop-address").textContent =
-            "Map markers appear after lat/lng values are populated in data/current_list.json.";
-          return;
-        }
-
-        hideMapMessage();
 
         markerState.map = new google.maps.Map(document.getElementById("overview-map"), {
           center: { lat: 10, lng: 0 },
@@ -1084,10 +1083,21 @@
         });
 
         markerState.infoWindow = new google.maps.InfoWindow();
-        markerState.selectedShop = getVisibleShops()[0] || mapShops[0];
+        markerState.selectedShop = getVisibleSidebarShops()[0] || sidebarShops[0] || null;
         updateDetailPanel(markerState.selectedShop);
 
         markerState.map.addListener("zoom_changed", refreshMapLayers);
+        if (!mapShops.length) {
+          showMapMessage(
+            "No mapped coordinates are available yet. Run owner geocoding first: python src/main.py owner-geocode --api-key $GOOGLE_MAPS_JS_API_KEY"
+          );
+          document.getElementById("shop-name").textContent = "No geocoded map markers";
+          document.getElementById("shop-address").textContent =
+            "Map is available, but markers need lat/lng values in data/current_list.json.";
+          return;
+        }
+
+        hideMapMessage();
         refreshMapLayers();
 
         if (mapMissingCoordsCount > 0) {
