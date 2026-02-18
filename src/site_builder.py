@@ -262,17 +262,13 @@ def _html_template() -> str:
           </div>
         </div>
 
-        <div class="collection-toggle" aria-label="Collection toggles">
-          <button class="category-chip active" data-category="Top 100">Top 100 World</button>
-          <button class="category-chip active" data-category="South">South America</button>
-        </div>
+        <p class="banner-title">Top 100 Best Coffee Shops 2026</p>
 
         <div class="topbar-actions">
           <div class="view-toggle">
             <button class="view-btn active" data-overview-view="map">Map</button>
             <button class="view-btn" data-overview-view="list">List</button>
           </div>
-          <div class="profile-badge" title="Global Explorer">🌍</div>
           __CSV_BUTTON__
           __KML_BUTTON__
         </div>
@@ -282,7 +278,6 @@ def _html_template() -> str:
         <section class="workspace-main">
           <div class="workspace-head">
             <div>
-              <h1>Top 100 Best Coffee Shops 2026</h1>
               <p>Interactive map of Top 100 World + South America coffee shops.</p>
             </div>
             <div class="meta-chips">
@@ -779,14 +774,13 @@ body {
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
-.collection-toggle {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 4px;
+.banner-title {
+  margin: 0;
+  flex: 1;
+  text-align: center;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
 }
 .category-chip {
   border: 0;
@@ -829,16 +823,6 @@ body {
 .view-btn.active {
   background: #f4f5fa;
   color: var(--brand-dark);
-}
-.profile-badge {
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  border: 2px solid transparent;
-  background: linear-gradient(145deg, #2b2b32, #1a1a20);
-  display: grid;
-  place-items: center;
-  font-size: 0.82rem;
 }
 .btn-secondary {
   display: inline-flex;
@@ -1182,8 +1166,10 @@ th {
   display: none !important;
 }
 @media (max-width: 1080px) {
-  .collection-toggle {
-    display: none;
+  .banner-title {
+    order: 3;
+    flex-basis: 100%;
+    text-align: left;
   }
   .detail-panel {
     position: static;

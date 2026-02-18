@@ -51,6 +51,11 @@ def test_home_page_renders_summary_and_rows(tmp_path: Path) -> None:
 
     assert response.status_code == 200
     assert "Top100BestCoffeeShops Preview" in response.text
+    assert '<p class="banner-title">Top 100 Best Coffee Shops 2026</p>' in response.text
+    assert response.text.index('class="banner-title"') < response.text.index('class="workspace-head"')
+    assert 'data-category="Top 100"' not in response.text
+    assert 'data-category="South"' not in response.text
+    assert 'class="profile-badge"' not in response.text
     assert "Total shops: 2" in response.text
     assert "Top 100: 1" in response.text
     assert "South: 1" in response.text
