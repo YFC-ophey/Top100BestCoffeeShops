@@ -17,7 +17,7 @@ Coffee enthusiasts want to visit the "Top 100 Best Coffee Shops" but the list is
 ### 4.1 Data Source Monitoring
 - **Sources**:
     - **Main List**: `https://theworlds100bestcoffeeshops.com/top-100-coffee-shops/`
-    - **Secondary List (South)**: `https://theworlds100bestcoffeeshops.com/top-100-coffee-shops-south/`
+    - **Secondary List (South America)**: `https://theworlds100bestcoffeeshops.com/top-100-coffee-shops-south/`
     - **Secondary Source (Reference/Backup)**: `https://www.atlantacoffeeshops.com/the-worlds-100-best-coffee-shops` (Unofficial blog, useful for visual verification or backup if main site is down)
 - **Frequency**:
     - Low frequency check (e.g., Weekly) during off-season.

@@ -91,21 +91,25 @@ def create_app(data_file: Path, csv_file: Path, kml_file: Path) -> FastAPI:
 
 
 def _google_maps_js_key() -> str:
-    env_value = os.getenv("GOOGLE_MAPS_JS_API_KEY", "").strip()
-    if env_value:
-        return env_value
+    for env_key in ("GOOGLE_MAPS_JS_API_KEY", "GOOGLE_MAPS_API_KEY"):
+        env_value = os.getenv(env_key, "").strip()
+        if env_value:
+            return env_value
 
-    env_path = BASE_DIR / ".env"
-    if not env_path.exists():
-        return ""
+    env_candidates = [BASE_DIR / ".env"]
+    if BASE_DIR.parent.name == ".worktrees":
+        env_candidates.append(BASE_DIR.parent.parent / ".env")
 
-    for line in env_path.read_text(encoding="utf-8").splitlines():
-        cleaned = line.strip()
-        if not cleaned or cleaned.startswith("#") or "=" not in cleaned:
+    for env_path in env_candidates:
+        if not env_path.exists():
             continue
-        key, value = cleaned.split("=", 1)
-        if key.strip() == "GOOGLE_MAPS_JS_API_KEY":
-            return value.strip().strip('"').strip("'")
+        for line in env_path.read_text(encoding="utf-8").splitlines():
+            cleaned = line.strip()
+            if not cleaned or cleaned.startswith("#") or "=" not in cleaned:
+                continue
+            key, value = cleaned.split("=", 1)
+            if key.strip() in {"GOOGLE_MAPS_JS_API_KEY", "GOOGLE_MAPS_API_KEY"}:
+                return value.strip().strip('"').strip("'")
     return ""
 
 
@@ -185,6 +189,8 @@ def _build_overview_shops(shops: list[CoffeeShop]) -> tuple[list[dict[str, objec
             "google_maps_url": _google_maps_link(shop),
             "rank_band": _rank_band(shop.rank),
             "formatted_address": shop.formatted_address or "",
+            "lat": shop.lat,
+            "lng": shop.lng,
         }
         payload.append(item)
 

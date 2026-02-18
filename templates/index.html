@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>ROAST. | Global Coffee Explorer</title>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
     <link
       rel="stylesheet"
       href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,700,800&f[]=general-sans@400,500,600,700&display=swap"
@@ -39,25 +40,39 @@
 
       .app-shell {
         min-height: 100vh;
-        padding: 16px;
+        padding: 18px;
         display: grid;
-        gap: 12px;
+        gap: 14px;
+        position: relative;
+      }
+
+      .app-shell::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background:
+          radial-gradient(circle at 15% 85%, rgba(255, 118, 0, 0.12), transparent 38%),
+          radial-gradient(circle at 85% 15%, rgba(226, 172, 183, 0.08), transparent 34%);
+        z-index: -1;
       }
 
       .glass-panel {
-        background: rgba(24, 25, 30, 0.85);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(26, 29, 46, 0.9);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 208, 48, 0.15);
       }
 
       .topbar {
+        position: relative;
         border-radius: 18px;
-        padding: 12px 14px;
+        padding: 12px 16px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 10px;
+        gap: 12px;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
       }
 
       .brand {
@@ -75,6 +90,10 @@
         display: grid;
         place-items: center;
         font-size: 1.1rem;
+      }
+
+      .brand-icon iconify-icon {
+        font-size: 1.2rem;
       }
 
       .brand h1 {
@@ -100,6 +119,11 @@
         gap: 4px;
         padding: 4px;
         border-radius: 999px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
       }
 
       .collection-toggle button {
@@ -133,6 +157,7 @@
         display: flex;
         align-items: center;
         gap: 8px;
+        margin-left: auto;
       }
 
       .view-toggle {
@@ -151,11 +176,19 @@
         font-weight: 700;
         padding: 8px 11px;
         cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
       }
 
       .view-toggle button.active {
         background: #f3f4fa;
         color: #111217;
+      }
+
+      .view-toggle button:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.08);
       }
 
       .avatar {
@@ -167,6 +200,13 @@
         place-items: center;
         background: linear-gradient(145deg, #2d2f38, #16171d);
         font-size: 0.85rem;
+        overflow: hidden;
+      }
+
+      .avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
 
       .download-btn {
@@ -293,7 +333,7 @@
       .canvas-head h2 {
         margin: 0;
         font-family: "Cabinet Grotesk", "General Sans", sans-serif;
-        font-size: 1.45rem;
+        font-size: clamp(1.35rem, 2vw, 1.9rem);
         line-height: 1.1;
       }
 
@@ -341,6 +381,10 @@
         color: #ffe69a;
       }
 
+      .tab-btn:hover {
+        border-color: rgba(255, 208, 48, 0.28);
+      }
+
       .tab-panel {
         display: none;
       }
@@ -356,6 +400,38 @@
         overflow: hidden;
         border: 1px solid var(--line);
         background: rgba(8, 9, 13, 0.9);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04), 0 12px 28px rgba(0, 0, 0, 0.35);
+      }
+
+      .overview-map-panel::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 2;
+        background:
+          linear-gradient(to top, rgba(7, 8, 12, 0.45), transparent 16%),
+          linear-gradient(to bottom, rgba(7, 8, 12, 0.35), transparent 12%);
+      }
+
+      .overview-map-panel::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
+        opacity: 0.2;
+        background-image: linear-gradient(
+          45deg,
+          rgba(255, 255, 255, 0.04) 25%,
+          transparent 25%,
+          transparent 50%,
+          rgba(255, 255, 255, 0.04) 50%,
+          rgba(255, 255, 255, 0.04) 75%,
+          transparent 75%,
+          transparent
+        );
+        background-size: 48px 48px;
       }
 
       #overview-map {
@@ -389,7 +465,43 @@
         line-height: 1.35;
         max-width: 260px;
         padding: 8px 9px;
+        z-index: 4;
+        border: 1px solid rgba(255, 208, 48, 0.18);
+      }
+
+      .map-legend {
+        position: absolute;
+        left: 10px;
+        bottom: 10px;
         z-index: 3;
+        border-radius: 10px;
+        padding: 8px 10px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.66rem;
+        color: #dce0f0;
+        display: grid;
+        gap: 5px;
+      }
+
+      .legend-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .legend-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.45);
+      }
+
+      .legend-dot.country {
+        background: var(--brand-orange);
+      }
+
+      .legend-dot.shop {
+        background: var(--brand-gold);
       }
 
       .overview-list {
@@ -428,6 +540,35 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
+        position: relative;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 30%),
+          rgba(26, 29, 46, 0.9);
+      }
+
+      .drawer-toggle {
+        display: none;
+        border: 0;
+        background: transparent;
+        color: #f5f6fb;
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 11px 14px 8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+
+      .drawer-toggle::before {
+        content: "";
+        width: 36px;
+        height: 4px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.28);
       }
 
       .hero {
@@ -483,6 +624,29 @@
         border: 1px solid rgba(255, 255, 255, 0.18);
       }
 
+      .hero-save {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        z-index: 2;
+        width: 34px;
+        height: 34px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(0, 0, 0, 0.48);
+        color: #ffffff;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .hero-save:hover {
+        background: var(--brand-orange);
+        color: #1f1406;
+        border-color: rgba(255, 118, 0, 0.75);
+      }
+
       .detail-body {
         padding: 14px;
         display: grid;
@@ -525,6 +689,11 @@
         background: var(--brand-orange);
         color: #1d1306;
         border-color: rgba(255, 118, 0, 0.7);
+      }
+
+      .actions a:hover {
+        transform: translateY(-1px);
+        border-color: rgba(255, 208, 48, 0.38);
       }
 
       .details-grid {
@@ -590,16 +759,18 @@
 
       @keyframes pulse-ring {
         0% {
-          opacity: 0.95;
-          transform: scale(1);
+          transform: scale(0.8);
+          opacity: 0.8;
+          box-shadow: 0 0 0 0 rgba(255, 208, 48, 0.7);
         }
         70% {
-          opacity: 0.55;
-          transform: scale(1.12);
+          transform: scale(1);
+          opacity: 0;
+          box-shadow: 0 0 0 15px rgba(255, 208, 48, 0);
         }
         100% {
-          opacity: 0.95;
-          transform: scale(1);
+          transform: scale(0.8);
+          opacity: 0;
         }
       }
 
@@ -629,6 +800,10 @@
 
         .collection-toggle {
           order: 3;
+          position: static;
+          left: auto;
+          top: auto;
+          transform: none;
           width: 100%;
           justify-content: center;
         }
@@ -643,6 +818,28 @@
 
         .sidebar-right {
           order: 3;
+          position: fixed;
+          left: 12px;
+          right: 12px;
+          bottom: 10px;
+          z-index: 20;
+          max-height: min(78vh, 560px);
+          border-radius: 16px;
+          box-shadow: 0 16px 34px rgba(0, 0, 0, 0.45);
+          transition: transform 0.28s ease;
+        }
+
+        .drawer-toggle {
+          display: inline-flex;
+        }
+
+        .sidebar-right.is-collapsed .hero,
+        .sidebar-right.is-collapsed .detail-body {
+          display: none;
+        }
+
+        .app-shell {
+          padding-bottom: 110px;
         }
 
         .canvas {
@@ -665,10 +862,10 @@
     <div class="app-shell">
       <header class="topbar glass-panel">
         <div class="brand">
-          <div class="brand-icon">☕</div>
+          <div class="brand-icon"><iconify-icon icon="ph:coffee-bean-fill"></iconify-icon></div>
           <div>
             <h1>ROAST<span style="color: var(--brand-orange)">.</span></h1>
-            <p>Global Explorer</p>
+            <p>GLOBAL EXPLORER</p>
           </div>
         </div>
 
@@ -679,10 +876,21 @@
 
         <div class="topbar-actions">
           <div class="view-toggle glass-panel">
-            <button class="js-overview-mode active" data-mode="map">Map</button>
-            <button class="js-overview-mode" data-mode="list">List</button>
+            <button class="js-overview-mode active" data-mode="map">
+              <iconify-icon icon="ph:map-trifold-fill"></iconify-icon>
+              <span>Map</span>
+            </button>
+            <button class="js-overview-mode" data-mode="list">
+              <iconify-icon icon="ph:list-dashes-bold"></iconify-icon>
+              <span>List</span>
+            </button>
           </div>
-          <div class="avatar" title="Global Explorer">🌍</div>
+          <div class="avatar" title="Global Explorer">
+            <img
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop"
+              alt="User profile"
+            />
+          </div>
           {% if csv_available %}<a class="download-btn" href="{{ csv_url }}">CSV</a>{% endif %}
           {% if kml_available %}<a class="download-btn" href="{{ kml_url }}">KML</a>{% endif %}
         </div>
@@ -744,7 +952,11 @@
             <div id="overview-map-region" class="overview-map-panel">
               <div id="overview-map" aria-label="Global coffee map"></div>
               <div id="map-message" class="map-message hidden"></div>
-              <div class="map-hint glass-panel">Marker size reflects shop count by country. Click a marker to load the featured shop.</div>
+              <div class="map-legend glass-panel">
+                <div class="legend-row"><span class="legend-dot country"></span><span>Country bubble (zoomed out)</span></div>
+                <div class="legend-row"><span class="legend-dot shop"></span><span>Individual shop (zoomed in)</span></div>
+              </div>
+              <div class="map-hint glass-panel">Zoom out for country bubbles. Zoom in for individual coffee shop pins.</div>
             </div>
 
             <div id="overview-list-region" class="overview-list">
@@ -793,6 +1005,9 @@
         </section>
 
         <aside class="sidebar-right glass-panel" id="detail-panel">
+          <button class="drawer-toggle" id="detail-drawer-toggle" type="button" aria-expanded="true">
+            Shop Details
+          </button>
           <div class="hero">
             <img
               src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1200&auto=format&fit=crop"
@@ -802,6 +1017,9 @@
               <span class="hero-badge rank" id="detail-rank">#1 Top 100</span>
               <span class="hero-badge country" id="detail-country">Country</span>
             </div>
+            <button class="hero-save" type="button" aria-label="Save shop">
+              <iconify-icon icon="ph:heart-bold"></iconify-icon>
+            </button>
           </div>
 
           <div class="detail-body">
@@ -846,6 +1064,7 @@
       const overviewFilters = {{ overview_filters | tojson }};
       const dataQuality = {{ data_quality | tojson }};
       const googleMapsKey = {{ google_maps_js_api_key | tojson }};
+      const SHOP_ZOOM_THRESHOLD = 4;
 
       const state = {
         activeCategories: new Set(overviewFilters.defaults.active_categories),
@@ -854,12 +1073,17 @@
         selectedCountry: null,
         selectedShopId: null,
         map: null,
-        markers: [],
+        countryMarkers: [],
+        shopMarkers: [],
+        tooltip: null,
         pulseTimer: null,
+        shopPositionCache: new Map(),
       };
 
       const tabButtons = document.querySelectorAll(".tab-btn");
       const tabPanels = document.querySelectorAll(".tab-panel");
+      const detailPanel = document.getElementById("detail-panel");
+      const detailDrawerToggle = document.getElementById("detail-drawer-toggle");
 
       tabButtons.forEach((button) => {
         button.addEventListener("click", () => {
@@ -878,6 +1102,38 @@
           document.getElementById("overview-list-region").classList.toggle("is-hidden", mode !== "list");
         });
       });
+
+      function setDetailDrawerState(collapsed) {
+        if (!detailPanel || !detailDrawerToggle) return;
+        detailPanel.classList.toggle("is-collapsed", collapsed);
+        detailDrawerToggle.setAttribute("aria-expanded", String(!collapsed));
+        detailDrawerToggle.textContent = collapsed ? "Show Shop Details" : "Hide Shop Details";
+      }
+
+      function initDetailDrawer() {
+        if (!detailPanel || !detailDrawerToggle || !window.matchMedia) return;
+        const mobileQuery = window.matchMedia("(max-width: 860px)");
+
+        const syncDrawerForViewport = () => {
+          if (mobileQuery.matches) {
+            setDetailDrawerState(true);
+          } else {
+            setDetailDrawerState(false);
+          }
+        };
+
+        detailDrawerToggle.addEventListener("click", () => {
+          setDetailDrawerState(!detailPanel.classList.contains("is-collapsed"));
+        });
+
+        if (mobileQuery.addEventListener) {
+          mobileQuery.addEventListener("change", syncDrawerForViewport);
+        } else {
+          mobileQuery.addListener(syncDrawerForViewport);
+        }
+
+        syncDrawerForViewport();
+      }
 
       function setDataQuality() {
         document.getElementById("invalid-country-count").textContent = dataQuality.invalid_country_count;
@@ -913,6 +1169,7 @@
         countrySelect.onchange = (event) => {
           state.country = event.target.value;
           state.selectedCountry = state.country === "All" ? null : state.country;
+          state.selectedShopId = null;
           refreshView();
         };
 
@@ -952,7 +1209,7 @@
         document.querySelectorAll(`[data-category="${categoryKey}"]`).forEach((node) => {
           node.classList.toggle("active", state.activeCategories.has(categoryKey));
         });
-
+        state.selectedShopId = null;
         refreshView();
       }
 
@@ -1025,19 +1282,17 @@
       }
 
       function pickDefaultShop() {
-        const shops = filteredShops();
+        const shops = filteredShops().slice().sort((a, b) => a.rank - b.rank || a.name.localeCompare(b.name));
         if (!shops.length) return null;
         if (state.selectedShopId) {
           const selected = shops.find((shop) => shop.id === state.selectedShopId);
           if (selected) return selected;
         }
         if (state.selectedCountry) {
-          const countryShop = shops
-            .filter((shop) => shop.country_normalized === state.selectedCountry)
-            .sort((a, b) => a.rank - b.rank)[0];
+          const countryShop = shops.find((shop) => shop.country_normalized === state.selectedCountry);
           if (countryShop) return countryShop;
         }
-        return shops.sort((a, b) => a.rank - b.rank)[0];
+        return shops[0];
       }
 
       function updateDetailPanel(shop) {
@@ -1056,6 +1311,7 @@
         }
 
         state.selectedShopId = shop.id;
+        state.selectedCountry = shop.country_normalized;
         document.getElementById("detail-name").textContent = shop.name;
         const address = [shop.formatted_address, shop.city, shop.country_normalized].filter(Boolean).join(", ");
         document.getElementById("detail-address").textContent = address || shop.country_normalized;
@@ -1083,8 +1339,13 @@
         document.getElementById("map-message").classList.add("hidden");
       }
 
+      function setMapHint(text) {
+        const hint = document.querySelector(".map-hint");
+        if (hint) hint.textContent = text;
+      }
+
       function colorWithIntensity(baseColor, ratio) {
-        const color = baseColor.replace("#", "");
+        const color = String(baseColor || "").replace("#", "");
         if (color.length !== 6) return baseColor;
         const red = parseInt(color.slice(0, 2), 16);
         const green = parseInt(color.slice(2, 4), 16);
@@ -1094,38 +1355,215 @@
         return `rgb(${mix(red)} ${mix(green)} ${mix(blue)})`;
       }
 
-      function markerIcon(row, active, maxCount) {
+      const COUNTRY_FLAG_PALETTES = {
+        Argentina: ["#6EC1FF", "#FFFFFF"],
+        Australia: ["#2F4B9C", "#FFFFFF"],
+        Brazil: ["#45B649", "#FFD030", "#1E4096"],
+        Chile: ["#D64545", "#FFFFFF", "#1F4FA3"],
+        Colombia: ["#FFD030", "#2F61C7", "#D64545"],
+        Japan: ["#FFFFFF", "#E24B5B"],
+        Mexico: ["#2F8A48", "#FFFFFF", "#C33D3D"],
+        Peru: ["#D64545", "#FFFFFF"],
+        USA: ["#274690", "#FFFFFF", "#D64545"],
+        Venezuela: ["#FFD030", "#2F61C7", "#D64545"],
+      };
+
+      function paletteForCountry(country, baseColor) {
+        const palette = COUNTRY_FLAG_PALETTES[country];
+        if (palette && palette.length) return palette;
+        const fallback = colorWithIntensity(baseColor || "#888899", 0.78);
+        return [fallback, "#ffffff"];
+      }
+
+      function countryMarkerIcon(row, active, maxCount) {
         const ratio = row.shop_count / Math.max(1, maxCount);
-        const baseScale = 8 + ratio * 18;
-        const scale = active ? baseScale + 5 : baseScale;
+        const palette = paletteForCountry(row.country, row.marker_color);
+        const markerSize = Math.max(16, Math.min(56, Number(row.marker_size_px) || 16 + ratio * 40));
         return {
           path: google.maps.SymbolPath.CIRCLE,
-          fillColor: active ? "#ff7600" : colorWithIntensity(row.marker_color || "#888899", ratio),
-          fillOpacity: active ? 1 : 0.9,
-          strokeColor: "#ffffff",
+          fillColor: active ? "#ff7600" : colorWithIntensity(palette[0], ratio),
+          fillOpacity: active ? 1 : 0.92,
+          strokeColor: active ? "#ffd030" : palette[1] || "#ffffff",
           strokeWeight: active ? 2.8 : 1.7,
-          scale,
+          scale: active ? markerSize / 2 + 2 : markerSize / 2,
+        };
+      }
+
+      function shopMarkerIcon(shop, active, faded, countriesByName, maxCount) {
+        const country = countriesByName.get(shop.country_normalized);
+        const ratio = (country?.shop_count || 1) / Math.max(1, maxCount);
+        const palette = paletteForCountry(shop.country_normalized, country?.marker_color || "#ff7600");
+        const fill = active ? "#ffd030" : colorWithIntensity(palette[0], Math.max(0.4, ratio));
+        return {
+          path: google.maps.SymbolPath.CIRCLE,
+          fillColor: fill,
+          fillOpacity: faded ? 0.5 : active ? 1 : 0.9,
+          strokeColor: active ? "#ff7600" : palette[1] || "#ffffff",
+          strokeWeight: active ? 2.2 : 1.2,
+          scale: active ? 12 : 5,
         };
       }
 
       function clearMarkers() {
-        state.markers.forEach((marker) => marker.setMap(null));
-        state.markers = [];
+        state.countryMarkers.forEach((marker) => marker.setMap(null));
+        state.shopMarkers.forEach((marker) => marker.setMap(null));
+        state.countryMarkers = [];
+        state.shopMarkers = [];
         if (state.pulseTimer) {
           window.clearInterval(state.pulseTimer);
           state.pulseTimer = null;
         }
       }
 
-      function startPulse(marker, row, maxCount) {
+      function startPulse(marker, iconFactory) {
         if (state.pulseTimer) window.clearInterval(state.pulseTimer);
         let step = 0;
         state.pulseTimer = window.setInterval(() => {
           step = (step + 1) % 2;
-          const icon = markerIcon(row, true, maxCount);
-          icon.scale += step ? 1.8 : 0;
+          const icon = iconFactory();
+          icon.scale += step ? 3 : 0;
           marker.setIcon(icon);
-        }, 700);
+        }, 900);
+      }
+
+      function hashString(value) {
+        let hash = 0;
+        for (let index = 0; index < value.length; index += 1) {
+          hash = (hash << 5) - hash + value.charCodeAt(index);
+          hash |= 0;
+        }
+        return hash;
+      }
+
+      function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+      }
+
+      function wrapLng(value) {
+        if (!Number.isFinite(value)) return 0;
+        let next = value;
+        while (next > 180) next -= 360;
+        while (next < -180) next += 360;
+        return next;
+      }
+
+      function shopPosition(shop, countriesByName) {
+        if (Number.isFinite(shop.lat) && Number.isFinite(shop.lng)) {
+          return { lat: Number(shop.lat), lng: Number(shop.lng) };
+        }
+
+        if (state.shopPositionCache.has(shop.id)) {
+          return state.shopPositionCache.get(shop.id);
+        }
+
+        const baseCountry = countriesByName.get(shop.country_normalized) || { lat: 10, lng: 0 };
+        const seed = Math.abs(hashString(shop.id));
+        const angle = ((seed % 360) * Math.PI) / 180;
+        const ring = 1 + (seed % 8);
+        const radius = 0.06 + ring * 0.045;
+
+        const position = {
+          lat: clamp(Number(baseCountry.lat) + Math.sin(angle) * radius * 0.8, -84, 84),
+          lng: wrapLng(Number(baseCountry.lng) + Math.cos(angle) * radius),
+        };
+
+        state.shopPositionCache.set(shop.id, position);
+        return position;
+      }
+
+      function renderCountryMarkers(countries, shops, maxCount) {
+        setMapHint("Zoom out for country bubbles. Click a country to zoom in and open shop-level pins.");
+        countries.forEach((row) => {
+          const active = state.selectedCountry === row.country;
+          const marker = new google.maps.Marker({
+            map: state.map,
+            position: { lat: row.lat, lng: row.lng },
+            title: `${row.country} - ${row.shop_count} shops`,
+            icon: countryMarkerIcon(row, active, maxCount),
+            label: {
+              text: String(row.shop_count),
+              color: "#101216",
+              fontWeight: "700",
+              fontSize: "11px",
+            },
+            zIndex: active ? 70 : 20,
+          });
+
+          marker.addListener("click", () => {
+            state.selectedCountry = row.country;
+            state.country = row.country;
+            const featuredShop = shops
+              .filter((shop) => shop.country_normalized === row.country)
+              .sort((a, b) => a.rank - b.rank || a.name.localeCompare(b.name))[0];
+            if (featuredShop) {
+              state.selectedShopId = featuredShop.id;
+              updateDetailPanel(featuredShop);
+            }
+            document.getElementById("country-filter").value = row.country;
+            renderFilterControls();
+            renderListRows();
+            if ((state.map.getZoom() || 2) < SHOP_ZOOM_THRESHOLD) {
+              state.map.setZoom(SHOP_ZOOM_THRESHOLD);
+            }
+            state.map.panTo({ lat: row.lat, lng: row.lng });
+            renderMapMarkers();
+          });
+
+          marker.addListener("mouseover", () => {
+            if (!state.tooltip) return;
+            state.tooltip.setContent(`${row.country} - ${row.shop_count} shops`);
+            state.tooltip.open({ map: state.map, anchor: marker, shouldFocus: false });
+          });
+
+          marker.addListener("mouseout", () => {
+            state.tooltip?.close();
+          });
+
+          if (active) startPulse(marker, () => countryMarkerIcon(row, true, maxCount));
+          state.countryMarkers.push(marker);
+        });
+      }
+
+      function renderShopMarkers(shops, countriesByName, maxCount) {
+        setMapHint("Zoomed in: individual coffee shop pins. Click any pin to load source-backed details.");
+        const selectedShop = shops.find((shop) => shop.id === state.selectedShopId) || shops[0] || null;
+        if (selectedShop) {
+          state.selectedShopId = selectedShop.id;
+          state.selectedCountry = selectedShop.country_normalized;
+          updateDetailPanel(selectedShop);
+        }
+
+        shops.forEach((shop) => {
+          const active = Boolean(selectedShop && selectedShop.id === shop.id);
+          const faded = Boolean(selectedShop && selectedShop.id !== shop.id);
+          const marker = new google.maps.Marker({
+            map: state.map,
+            position: shopPosition(shop, countriesByName),
+            title: shop.name,
+            icon: shopMarkerIcon(shop, active, faded, countriesByName, maxCount),
+            zIndex: active ? 90 : 30,
+          });
+
+          marker.addListener("click", () => {
+            state.selectedCountry = shop.country_normalized;
+            state.selectedShopId = shop.id;
+            updateDetailPanel(shop);
+            renderMapMarkers();
+          });
+
+          marker.addListener("mouseover", () => {
+            if (!state.tooltip) return;
+            state.tooltip.setContent(shop.name);
+            state.tooltip.open({ map: state.map, anchor: marker, shouldFocus: false });
+          });
+
+          marker.addListener("mouseout", () => {
+            state.tooltip?.close();
+          });
+
+          if (active) startPulse(marker, () => shopMarkerIcon(shop, true, false, countriesByName, maxCount));
+          state.shopMarkers.push(marker);
+        });
       }
 
       function renderMapMarkers() {
@@ -1133,43 +1571,22 @@
         clearMarkers();
 
         const countries = filteredCountries();
-        if (!countries.length) {
+        const shops = filteredShops().slice().sort((a, b) => a.rank - b.rank || a.name.localeCompare(b.name));
+        if (!countries.length || !shops.length) {
           showMapMessage("No countries match the current filters.");
+          setMapHint("Adjust category/country/rank filters to repopulate the map.");
           return;
         }
 
         hideMapMessage();
-        const maxCount = Math.max(...countries.map((row) => row.shop_count));
-
-        countries.forEach((row) => {
-          const active = state.selectedCountry === row.country;
-          const marker = new google.maps.Marker({
-            map: state.map,
-            position: { lat: row.lat, lng: row.lng },
-            title: `${row.country} - ${row.shop_count} shops`,
-            icon: markerIcon(row, active, maxCount),
-            label: {
-              text: String(row.shop_count),
-              color: "#101216",
-              fontWeight: "700",
-              fontSize: "11px",
-            },
-            zIndex: active ? 50 : 10,
-          });
-
-          marker.addListener("click", () => {
-            state.selectedCountry = row.country;
-            document.getElementById("country-filter").value = row.country;
-            state.country = row.country;
-            state.selectedShopId = row.primary_shop.id;
-            refreshView();
-            state.map.panTo(marker.getPosition());
-            state.map.setZoom(Math.max(3, state.map.getZoom() || 2));
-          });
-
-          if (active) startPulse(marker, row, maxCount);
-          state.markers.push(marker);
-        });
+        const maxCount = Math.max(...countries.map((row) => row.shop_count), 1);
+        const countriesByName = new Map(countries.map((row) => [row.country, row]));
+        const zoom = state.map.getZoom() || 2;
+        if (zoom < SHOP_ZOOM_THRESHOLD) {
+          renderCountryMarkers(countries, shops, maxCount);
+          return;
+        }
+        renderShopMarkers(shops, countriesByName, maxCount);
       }
 
       function refreshView() {
@@ -1178,8 +1595,10 @@
 
         const selectedShop = pickDefaultShop();
         updateDetailPanel(selectedShop);
-        if (selectedShop) state.selectedCountry = selectedShop.country_normalized;
-
+        if (!selectedShop) {
+          state.selectedCountry = state.country === "All" ? null : state.country;
+          state.selectedShopId = null;
+        }
         renderMapMarkers();
       }
 
@@ -1192,17 +1611,23 @@
         state.map = new google.maps.Map(document.getElementById("overview-map"), {
           center: { lat: 10, lng: 0 },
           zoom: 2,
+          minZoom: 2,
           mapTypeControl: false,
           streetViewControl: false,
           fullscreenControl: true,
           styles: [
-            { elementType: "geometry", stylers: [{ color: "#12131A" }] },
-            { elementType: "labels.text.fill", stylers: [{ color: "#8e93a5" }] },
-            { elementType: "labels.text.stroke", stylers: [{ color: "#12131A" }] },
-            { featureType: "administrative", elementType: "geometry", stylers: [{ color: "#2b2f3a" }] },
+            { elementType: "geometry", stylers: [{ color: "#101114" }] },
+            { elementType: "labels.text.fill", stylers: [{ color: "#888899" }] },
+            { elementType: "labels.text.stroke", stylers: [{ color: "#101114" }] },
+            { featureType: "administrative", elementType: "geometry", stylers: [{ color: "#24252c" }] },
             { featureType: "road", stylers: [{ visibility: "off" }] },
-            { featureType: "water", elementType: "geometry", stylers: [{ color: "#0b0f1e" }] },
+            { featureType: "water", elementType: "geometry", stylers: [{ color: "#0b0c10" }] },
           ],
+        });
+        state.tooltip = new google.maps.InfoWindow();
+
+        state.map.addListener("zoom_changed", () => {
+          renderMapMarkers();
         });
 
         refreshView();
@@ -1215,15 +1640,27 @@
           );
           return;
         }
+        if (String(googleMapsKey).startsWith("YOUR_")) {
+          showMapMessage("Google Maps API key placeholder detected. Replace it with a real GOOGLE_MAPS_JS_API_KEY value.");
+          return;
+        }
 
         window.initRoastMap = initMap;
+        window.gm_authFailure = () => {
+          showMapMessage(
+            "Google Maps authentication failed. Confirm Maps JavaScript API is enabled and HTTP referrer restrictions allow http://127.0.0.1:* and http://localhost:*."
+          );
+        };
         const script = document.createElement("script");
         script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(
           googleMapsKey
-        )}&callback=initRoastMap`;
+        )}&callback=initRoastMap&loading=async`;
         script.async = true;
         script.defer = true;
-        script.onerror = () => showMapMessage("Google Maps failed to load. Verify API key restrictions.");
+        script.onerror = () =>
+          showMapMessage(
+            "Google Maps failed to load. Verify key restrictions, billing setup, and that Maps JavaScript API is enabled."
+          );
         document.head.appendChild(script);
       }
 
@@ -1244,6 +1681,7 @@
         });
       });
 
+      initDetailDrawer();
       setDataQuality();
       renderFilterControls();
       renderListRows();

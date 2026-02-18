@@ -16,10 +16,10 @@ New repository `coffee-map-sync` logic.
 
 #### [NEW] `src/scraper.py`
 - Function to fetch target URLs:
-  - Main: `.../top-100-coffee-shops/`
+  - Top 100: `.../top-100-coffee-shops/`
   - South America: `.../top-100-coffee-shops-south/`
 - Parse HTML using `BeautifulSoup`.
-- Extract List of Dicts: `{name, city, country, rank, category}` (category = "Main" or "South America").
+- Extract List of Dicts: `{name, city, country, rank, category}` (category = "Top 100" or "South America").
 
 #### [NEW] `src/geocoder.py`
 - Interface with Google Places API.

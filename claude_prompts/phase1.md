@@ -7,7 +7,7 @@
 **Requirements**:
 1.  **Dependencies**: Use `requests` and `beautifulsoup4`.
 2.  **URLs**:
-    -   Main: `https://theworlds100bestcoffeeshops.com/top-100-coffee-shops/`
+    -   Top 100: `https://theworlds100bestcoffeeshops.com/top-100-coffee-shops/`
     -   South America: `https://theworlds100bestcoffeeshops.com/top-100-coffee-shops-south/`
 3.  **Logic**:
     -   Fetch the main/south list page.
@@ -24,7 +24,7 @@
           "name": "Toby's Estate",
           "country": "Australia",
           "rank": 1,
-          "category": "Main", # or "South America"
+          "category": "Top 100", # or "South America"
           "detail_url": "...",
           "address": "32-36 City Rd, Chippendale NSW 2008..."
         }
