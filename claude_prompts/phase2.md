@@ -25,7 +25,7 @@
     -   *Correction*: Let's use `simplekml` for ease. Add it to `requirements.txt`.
 2.  **Logic**:
     -   Create a KML object.
-    -   Create two Folders: "Top 100" and "Top 100 South".
+    -   Create two Folders: "Top 100" and "Top 100 South America".
     -   Loop through the geocoded data.
     -   Add a Point for each shop.
     -   **Metadata**:

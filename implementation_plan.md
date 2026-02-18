@@ -17,9 +17,9 @@ New repository `coffee-map-sync` logic.
 #### [NEW] `src/scraper.py`
 - Function to fetch target URLs:
   - Main: `.../top-100-coffee-shops/`
-  - South: `.../top-100-coffee-shops-south/`
+  - South America: `.../top-100-coffee-shops-south/`
 - Parse HTML using `BeautifulSoup`.
-- Extract List of Dicts: `{name, city, country, rank, category}` (category = "Main" or "South").
+- Extract List of Dicts: `{name, city, country, rank, category}` (category = "Main" or "South America").
 
 #### [NEW] `src/geocoder.py`
 - Interface with Google Places API.
@@ -30,7 +30,7 @@ New repository `coffee-map-sync` logic.
 #### [NEW] `src/generator.py`
 - Convert the geocoded list into a **KML** (Keyhole Markup Language) file.
 - KML is the native format for Google My Maps.
-- **Features**: Organize into two folders/layers: "Top 100" and "South Edition".
+- **Features**: Organize into two folders/layers: "Top 100" and "South America".
 - Style the pins (e.g., rank 1-10 get a star, others a dot).
 
 #### [NEW] `main.py`
