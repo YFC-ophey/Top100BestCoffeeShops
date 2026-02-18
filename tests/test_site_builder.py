@@ -24,6 +24,11 @@ def test_build_static_site_generates_index_and_styles(tmp_path: Path) -> None:
     index = (site_dir / "index.html").read_text(encoding="utf-8")
     style = (site_dir / "assets" / "style.css").read_text(encoding="utf-8")
     assert 'id="overview-map"' in index
+    assert '<p class="banner-title">Top 100 Best Coffee Shops 2026</p>' in index
+    assert index.index('class="banner-title"') < index.index('class="workspace-head"')
+    assert 'data-category="Top 100"' not in index
+    assert 'data-category="South"' not in index
+    assert 'class="profile-badge"' not in index
     assert "Main Top 100" in index
     assert "South America" in index
     assert "Chat conversation history" not in index
