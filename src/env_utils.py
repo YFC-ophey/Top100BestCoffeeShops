@@ -9,16 +9,20 @@ def load_env_file(base_dir: Path, filename: str = ".env") -> None:
 
     Existing environment variables are preserved.
     """
-    env_path = base_dir / filename
-    if not env_path.exists():
-        return
+    candidates: list[Path] = [base_dir / filename]
+    # When running inside a git worktree, prefer local .env first but allow root fallback.
+    if base_dir.parent.name == ".worktrees":
+        candidates.append(base_dir.parent.parent / filename)
 
-    for raw_line in env_path.read_text(encoding="utf-8").splitlines():
-        line = raw_line.strip()
-        if not line or line.startswith("#") or "=" not in line:
+    for env_path in candidates:
+        if not env_path.exists():
             continue
-        key, value = line.split("=", 1)
-        key = key.strip()
-        value = value.strip().strip('"').strip("'")
-        if key:
-            os.environ.setdefault(key, value)
+        for raw_line in env_path.read_text(encoding="utf-8").splitlines():
+            line = raw_line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, value = line.split("=", 1)
+            key = key.strip()
+            value = value.strip().strip('"').strip("'")
+            if key:
+                os.environ.setdefault(key, value)

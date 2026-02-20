@@ -21,7 +21,7 @@ def test_generate_kml_groups_by_category_and_writes_valid_xml(tmp_path: Path) ->
             city="Melbourne",
             country="Australia",
             rank=2,
-            category="South",
+            category="South America",
             lat=-37.8136,
             lng=144.9631,
         ),
@@ -40,4 +40,4 @@ def test_generate_kml_groups_by_category_and_writes_valid_xml(tmp_path: Path) ->
 
     assert output_path.exists()
     assert "Top 100" in folder_names
-    assert "South" in folder_names
+    assert "South America" in folder_names

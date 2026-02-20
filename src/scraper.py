@@ -8,7 +8,7 @@ from src.models import CoffeeShop
 
 SOURCE_URLS: dict[str, str] = {
     "Top 100": "https://theworlds100bestcoffeeshops.com/top-100-coffee-shops/",
-    "South": "https://theworlds100bestcoffeeshops.com/top-100-coffee-shops-south/",
+    "South America": "https://theworlds100bestcoffeeshops.com/top-100-coffee-shops-south/",
 }
 
 _ITEM_PATTERN = re.compile(
