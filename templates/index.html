@@ -91,6 +91,16 @@
         letter-spacing: 0.02em;
       }
 
+      .collection-toggle {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.45);
+        padding: 4px;
+      }
+
       .category-chip {
         border: 0;
         border-radius: 999px;
@@ -552,8 +562,14 @@
       }
 
       @media (max-width: 1080px) {
-        .banner-title {
+        .collection-toggle {
           order: 3;
+          flex-basis: 100%;
+          justify-content: center;
+        }
+
+        .banner-title {
+          order: 4;
           flex-basis: 100%;
           text-align: left;
         }
@@ -614,6 +630,11 @@
 
         <p class="banner-title">Top 100 Best Coffee Shops 2026</p>
 
+        <div class="collection-toggle" aria-label="Collection toggle">
+          <button class="category-chip active" data-category="Top 100">Top 100 World</button>
+          <button class="category-chip active" data-category="South America">South America</button>
+        </div>
+
         <div class="topbar-actions">
           <div class="view-toggle">
             <button class="view-btn active" data-overview-view="map">Map</button>
@@ -636,7 +657,7 @@
               <span class="chip">{{ category }}: {{ count }}</span>
               {% endfor %}
               {% if map_missing_coords_count %}
-              <span class="chip">Map skipped: {{ map_missing_coords_count }}</span>
+              <span class="chip">Missing lat/lng: {{ map_missing_coords_count }}</span>
               {% endif %}
             </div>
           </div>
@@ -644,7 +665,7 @@
           <div class="tabs" role="tablist" aria-label="Coffee shop views">
             <button class="tab-btn active" data-tab="overview" role="tab" aria-selected="true">Overview</button>
             <button class="tab-btn" data-tab="top100-links" role="tab" aria-selected="false">Top 100 Links</button>
-            <button class="tab-btn" data-tab="south-links" role="tab" aria-selected="false">South Links</button>
+            <button class="tab-btn" data-tab="south-links" role="tab" aria-selected="false">South America Links</button>
           </div>
 
           <section id="overview" class="tab-panel active" role="tabpanel">
@@ -737,7 +758,7 @@
           </section>
 
           <section id="top100-links" class="tab-panel panel" role="tabpanel">
-            <h2>Top 100 Map Links</h2>
+            <h2>Main Top 100</h2>
             <ol class="link-list">
               {% for item in top_100_links %}
               <li><a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.label }}</a></li>
@@ -746,7 +767,7 @@
           </section>
 
           <section id="south-links" class="tab-panel panel" role="tabpanel">
-            <h2>South Map Links</h2>
+            <h2>South America</h2>
             <ol class="link-list">
               {% for item in south_links %}
               <li><a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.label }}</a></li>
@@ -795,7 +816,7 @@
       });
 
       const markerState = {
-        activeCategories: new Set(["Top 100", "South"]),
+        activeCategories: new Set(["Top 100", "South America"]),
         countryMarkers: [],
         shopMarkers: [],
         selectedShop: null,
@@ -804,7 +825,8 @@
       };
 
       function normalizeCategory(category) {
-        return category === "South" ? "South" : "Top 100";
+        if (category === "South America" || category === "South") return "South America";
+        return "Top 100";
       }
 
       function getVisibleShops() {
@@ -826,7 +848,44 @@
       }
 
       function colorForCategory(category) {
-        return normalizeCategory(category) === "South" ? "#FF7600" : "#FFD030";
+        return normalizeCategory(category) === "South America" ? "#FF7600" : "#FFD030";
+      }
+
+      function hashString(value) {
+        let hash = 0;
+        for (let index = 0; index < value.length; index += 1) {
+          hash = (hash << 5) - hash + value.charCodeAt(index);
+          hash |= 0;
+        }
+        return hash;
+      }
+
+      function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+      }
+
+      function wrapLng(value) {
+        if (!Number.isFinite(value)) return 0;
+        let next = value;
+        while (next > 180) next -= 360;
+        while (next < -180) next += 360;
+        return next;
+      }
+
+      function shopPosition(shop, countriesByName) {
+        if (Number.isFinite(shop.lat) && Number.isFinite(shop.lng)) {
+          return { lat: Number(shop.lat), lng: Number(shop.lng) };
+        }
+        const baseCountry = countriesByName.get(shop.country) || { lat: 10, lng: 0 };
+        const key = `${shop.rank}|${shop.name}|${shop.category}`;
+        const seed = Math.abs(hashString(key));
+        const angle = ((seed % 360) * Math.PI) / 180;
+        const ring = 1 + (seed % 8);
+        const radius = 0.06 + ring * 0.045;
+        return {
+          lat: clamp(Number(baseCountry.lat) + Math.sin(angle) * radius * 0.8, -84, 84),
+          lng: wrapLng(Number(baseCountry.lng) + Math.cos(angle) * radius),
+        };
       }
 
       function iconForShop(shop, active) {
@@ -979,14 +1038,19 @@
         });
       }
 
-      function renderShopMarkers() {
+      function renderShopMarkers(countriesByName) {
         clearMarkers(markerState.shopMarkers);
         const visibleShops = getVisibleShops();
+        if (!visibleShops.length) {
+          showMapMessage("No shops match the active filters.");
+          return;
+        }
+        hideMapMessage();
 
         visibleShops.forEach((shop) => {
           const active = markerState.selectedShop && shopKey(markerState.selectedShop) === shopKey(shop);
           const marker = new google.maps.Marker({
-            position: { lat: shop.lat, lng: shop.lng },
+            position: shopPosition(shop, countriesByName),
             map: markerState.map,
             icon: iconForShop(shop, active),
             title: `${shop.rank}. ${shop.name}`,
@@ -995,7 +1059,7 @@
 
           marker.addListener("click", () => {
             markerState.selectedShop = shop;
-            renderShopMarkers();
+            refreshMapLayers();
             openShopInfo(marker, shop);
           });
 
@@ -1007,6 +1071,7 @@
         if (!markerState.map) {
           return;
         }
+        const countriesByName = new Map(mapCountries.map((country) => [country.country, country]));
         const zoom = markerState.map.getZoom() || 2;
 
         if (zoom < 4) {
@@ -1014,7 +1079,7 @@
           renderCountryMarkers();
         } else {
           clearMarkers(markerState.countryMarkers);
-          renderShopMarkers();
+          renderShopMarkers(countriesByName);
         }
       }
 
@@ -1069,16 +1134,18 @@
 
         markerState.infoWindow = new google.maps.InfoWindow();
         markerState.selectedShop = getVisibleSidebarShops()[0] || sidebarShops[0] || null;
-        updateDetailPanel(markerState.selectedShop);
+        if (markerState.selectedShop) {
+          updateDetailPanel(markerState.selectedShop);
+        }
 
         markerState.map.addListener("zoom_changed", refreshMapLayers);
-        if (!mapShops.length) {
+        if (!sidebarShops.length) {
           showMapMessage(
-            "No mapped coordinates are available yet. Run owner geocoding first: python src/main.py owner-geocode --api-key $GOOGLE_MAPS_JS_API_KEY"
+            "No shop data is available. Run the scraper to refresh data/current_list.json and rebuild."
           );
-          document.getElementById("shop-name").textContent = "No geocoded map markers";
+          document.getElementById("shop-name").textContent = "No coffee shop data";
           document.getElementById("shop-address").textContent =
-            "Map is available, but markers need lat/lng values in data/current_list.json.";
+            "The map will render once at least one shop row exists in data/current_list.json.";
           return;
         }
 
@@ -1087,7 +1154,7 @@
 
         if (mapMissingCoordsCount > 0) {
           document.querySelector(".map-help").textContent =
-            `${mapMissingCoordsCount} shops were skipped due to missing coordinates.`;
+            `${mapMissingCoordsCount} shops are using centroid fallback until lat/lng is available.`;
         }
       }
 

@@ -3,6 +3,7 @@ from collections import defaultdict
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
+from src.category_utils import normalize_category
 from src.models import CoffeeShop
 
 KML_NS = "http://www.opengis.net/kml/2.2"
@@ -32,7 +33,7 @@ def generate_kml(shops: list[CoffeeShop], output_path: Path) -> None:
 
     grouped: dict[str, list[CoffeeShop]] = defaultdict(list)
     for shop in shops:
-        grouped[shop.category].append(shop)
+        grouped[normalize_category(shop.category)].append(shop)
 
     kml = ET.Element(f"{{{KML_NS}}}kml")
     doc = ET.SubElement(kml, f"{{{KML_NS}}}Document")
@@ -71,4 +72,5 @@ def generate_csv(shops: list[CoffeeShop], output_path: Path) -> None:
         writer.writeheader()
         for shop in sorted(shops, key=lambda value: (value.rank, value.category, value.name)):
             row = {header: shop.to_dict().get(header) for header in CSV_HEADERS}
+            row["category"] = normalize_category(shop.category)
             writer.writerow(row)

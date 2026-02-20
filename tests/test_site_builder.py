@@ -26,7 +26,8 @@ def test_build_static_site_generates_index_and_styles(tmp_path: Path) -> None:
     assert 'id="overview-map"' in index
     assert '<p class="banner-title">Top 100 Best Coffee Shops 2026</p>' in index
     assert index.index('class="banner-title"') < index.index('class="workspace-head"')
-    assert 'data-category="Top 100"' not in index
+    assert 'data-category="Top 100"' in index
+    assert 'data-category="South America"' in index
     assert 'data-category="South"' not in index
     assert 'class="profile-badge"' not in index
     assert "Main Top 100" in index
@@ -41,10 +42,9 @@ def test_build_static_site_generates_index_and_styles(tmp_path: Path) -> None:
     assert "Book a Table" not in index
     assert "Open in Google Maps" in index
     assert "Download CSV" in index
-    assert "--api-key $GOOGLE_MAPS_JS_API_KEY" in index
-    assert '"$GOOGLE_MAPS_JS_API_KEY"' not in index
     assert 'const googleMapsKey = "";' in index
-    assert index.index("markerState.map = new google.maps.Map") < index.index("if (!mapShops.length)")
+    assert index.index("markerState.map = new google.maps.Map") < index.index("if (!sidebarShops.length)")
+    assert "shops are using centroid fallback until lat/lng is available" in index
     assert "top10" in style
 
 

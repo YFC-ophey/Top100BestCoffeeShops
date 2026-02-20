@@ -1,5 +1,7 @@
+from __future__ import annotations
+
+from collections import Counter, defaultdict
 import os
-from collections import Counter
 from pathlib import Path
 from urllib.parse import urlencode
 
@@ -7,6 +9,13 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.templating import Jinja2Templates
 
+from src.category_utils import SOUTH_AMERICA_CATEGORY, TOP_100_CATEGORY, normalize_category
+from src.country_centroids import (
+    UNKNOWN_COUNTRY,
+    country_base_color,
+    country_centroid,
+    normalize_country,
+)
 from src.env_utils import load_env_file
 from src.models import CoffeeShop
 from src.state import load_previous_state
@@ -33,11 +42,13 @@ def create_app(data_file: Path, csv_file: Path, kml_file: Path) -> FastAPI:
     def home(request: Request):
         shops = _load_shops(app.state.data_file)
         category_counts = Counter(shop.category for shop in shops)
-        top_100_links = _build_ordered_links(shops, "Top 100")
-        south_links = _build_ordered_links(shops, "South")
+        top_100_links = _build_ordered_links(shops, TOP_100_CATEGORY)
+        south_america_links = _build_ordered_links(shops, SOUTH_AMERICA_CATEGORY)
         map_shops, missing_coords_count = _build_map_shops(shops)
         sidebar_shops = _build_sidebar_shops(shops)
-        map_country_aggregates = _build_country_aggregates(map_shops)
+        map_country_aggregates = _build_country_aggregates(sidebar_shops)
+        overview_filters = _build_overview_filters(sidebar_shops)
+        data_quality = _build_data_quality(shops, sidebar_shops, missing_coords_count)
         context = {
             "request": request,
             "shops": sorted(shops, key=lambda value: (value.rank, value.category, value.name)),
@@ -48,12 +59,17 @@ def create_app(data_file: Path, csv_file: Path, kml_file: Path) -> FastAPI:
             "csv_url": "/artifacts/csv",
             "kml_url": "/artifacts/kml",
             "top_100_links": top_100_links,
-            "south_links": south_links,
-            "google_maps_js_api_key": os.getenv("GOOGLE_MAPS_JS_API_KEY", "").strip(),
+            "south_america_links": south_america_links,
+            "south_links": south_america_links,
+            "google_maps_js_api_key": _google_maps_js_key(),
             "map_shops": map_shops,
             "sidebar_shops": sidebar_shops,
             "map_country_aggregates": map_country_aggregates,
             "map_missing_coords_count": missing_coords_count,
+            "overview_countries": map_country_aggregates,
+            "overview_shops": sidebar_shops,
+            "overview_filters": overview_filters,
+            "data_quality": data_quality,
         }
         return TEMPLATES.TemplateResponse(request=request, name="index.html", context=context)
 
@@ -69,30 +85,42 @@ def create_app(data_file: Path, csv_file: Path, kml_file: Path) -> FastAPI:
     return app
 
 
+def _google_maps_js_key() -> str:
+    for env_key in ("GOOGLE_MAPS_JS_API_KEY", "GOOGLE_MAPS_API_KEY"):
+        value = os.getenv(env_key, "").strip()
+        if value:
+            return value
+    return ""
+
+
 def _load_shops(data_file: Path) -> list[CoffeeShop]:
     if not data_file.exists():
         return []
-    return load_previous_state(data_file)
+
+    shops = load_previous_state(data_file)
+    for shop in shops:
+        shop.category = normalize_category(shop.category)
+    return shops
 
 
 def _build_ordered_links(shops: list[CoffeeShop], category: str) -> list[dict[str, str]]:
-    filtered = [shop for shop in shops if shop.category == category]
+    filtered = [shop for shop in shops if normalize_category(shop.category) == category]
     ordered = sorted(filtered, key=lambda value: (value.rank, value.name))
-    return [
-        {
-            "label": f"{shop.rank}. {shop.name}",
-            "url": _google_maps_link(shop),
-        }
-        for shop in ordered
-    ]
+    return [{"label": f"{shop.rank}. {shop.name}", "url": _google_maps_link(shop)} for shop in ordered]
 
 
 def _google_maps_link(shop: CoffeeShop) -> str:
     query_parts = [shop.name]
-    if shop.city:
-        query_parts.append(shop.city)
-    if shop.country:
+    city = shop.city.strip() if shop.city else ""
+    if city:
+        query_parts.append(city)
+
+    country_value, _ = normalize_country(shop.country)
+    if country_value != UNKNOWN_COUNTRY:
+        query_parts.append(country_value)
+    elif shop.country:
         query_parts.append(shop.country)
+
     query = ", ".join(query_parts)
     params: dict[str, str] = {"api": "1", "query": query}
     if shop.place_id:
@@ -101,19 +129,27 @@ def _google_maps_link(shop: CoffeeShop) -> str:
 
 
 def _build_map_shops(shops: list[CoffeeShop]) -> tuple[list[dict[str, object]], int]:
-    map_shops: list[dict[str, object]] = []
     missing = 0
+    items: list[dict[str, object]] = []
     for shop in shops:
-        if shop.lat is None or shop.lng is None:
+        country_normalized, invalid_country = normalize_country(shop.country)
+        if invalid_country:
+            country_normalized = UNKNOWN_COUNTRY
+
+        has_coords = shop.lat is not None and shop.lng is not None
+        if not has_coords:
             missing += 1
-            continue
-        map_shops.append(
+
+        items.append(
             {
+                "id": _shop_id(shop),
                 "name": shop.name,
                 "city": shop.city,
-                "country": shop.country,
+                "country_normalized": country_normalized,
+                "country": country_normalized,
+                "country_raw": shop.country,
                 "rank": shop.rank,
-                "category": shop.category,
+                "category": normalize_category(shop.category),
                 "lat": shop.lat,
                 "lng": shop.lng,
                 "place_id": shop.place_id or "",
@@ -122,84 +158,133 @@ def _build_map_shops(shops: list[CoffeeShop]) -> tuple[list[dict[str, object]], 
                 "google_maps_url": _google_maps_link(shop),
             }
         )
-    return map_shops, missing
+    return items, missing
 
 
 def _build_sidebar_shops(shops: list[CoffeeShop]) -> list[dict[str, object]]:
     ordered = sorted(shops, key=lambda value: (value.rank, value.category, value.name))
-    return [
-        {
-            "name": shop.name,
-            "city": shop.city,
-            "country": shop.country,
-            "rank": shop.rank,
-            "category": shop.category,
-            "lat": shop.lat,
-            "lng": shop.lng,
-            "place_id": shop.place_id or "",
-            "address": shop.formatted_address or shop.address or "",
-            "source_url": shop.source_url or "",
-            "google_maps_url": _google_maps_link(shop),
-        }
-        for shop in ordered
-    ]
-
-
-COUNTRY_COLOR_MAP: dict[str, str] = {
-    "Argentina": "#6EC1FF",
-    "Australia": "#2F4B9C",
-    "Brazil": "#45B649",
-    "Colombia": "#FFD030",
-    "Japan": "#E24B5B",
-    "Peru": "#FF7600",
-    "United States": "#E2ACB7",
-    "USA": "#E2ACB7",
-}
-
-
-def _build_country_aggregates(map_shops: list[dict[str, object]]) -> list[dict[str, object]]:
-    grouped: dict[str, dict[str, object]] = {}
-    for item in map_shops:
-        country = str(item.get("country") or "Unknown")
-        bucket = grouped.setdefault(
-            country,
+    rows: list[dict[str, object]] = []
+    for shop in ordered:
+        country_normalized, invalid_country = normalize_country(shop.country)
+        if invalid_country:
+            country_normalized = UNKNOWN_COUNTRY
+        rows.append(
             {
-                "country": country,
-                "count": 0,
-                "top_count": 0,
-                "south_count": 0,
-                "lat_sum": 0.0,
-                "lng_sum": 0.0,
-            },
+                "id": _shop_id(shop),
+                "name": shop.name,
+                "city": shop.city,
+                "country_normalized": country_normalized,
+                "country": country_normalized,
+                "country_raw": shop.country,
+                "rank": shop.rank,
+                "category": normalize_category(shop.category),
+                "lat": shop.lat,
+                "lng": shop.lng,
+                "place_id": shop.place_id or "",
+                "address": shop.formatted_address or shop.address or "",
+                "source_url": shop.source_url or "",
+                "google_maps_url": _google_maps_link(shop),
+            }
         )
-        bucket["count"] = int(bucket["count"]) + 1
-        if item.get("category") == "Top 100":
-            bucket["top_count"] = int(bucket["top_count"]) + 1
-        if item.get("category") == "South":
-            bucket["south_count"] = int(bucket["south_count"]) + 1
-        bucket["lat_sum"] = float(bucket["lat_sum"]) + float(item["lat"])
-        bucket["lng_sum"] = float(bucket["lng_sum"]) + float(item["lng"])
+    return rows
 
-    aggregates: list[dict[str, object]] = []
+
+def _build_country_aggregates(shops: list[dict[str, object]]) -> list[dict[str, object]]:
+    grouped: dict[str, dict[str, object]] = defaultdict(
+        lambda: {
+            "country": UNKNOWN_COUNTRY,
+            "count": 0,
+            "top_count": 0,
+            "south_count": 0,
+            "lat_values": [],
+            "lng_values": [],
+        }
+    )
+
+    for item in shops:
+        country = str(item.get("country") or UNKNOWN_COUNTRY)
+        bucket = grouped[country]
+        bucket["country"] = country
+        bucket["count"] = int(bucket["count"]) + 1
+        if item.get("category") == TOP_100_CATEGORY:
+            bucket["top_count"] = int(bucket["top_count"]) + 1
+        if item.get("category") == SOUTH_AMERICA_CATEGORY:
+            bucket["south_count"] = int(bucket["south_count"]) + 1
+
+        lat = item.get("lat")
+        lng = item.get("lng")
+        if lat is not None and lng is not None:
+            bucket["lat_values"].append(float(lat))
+            bucket["lng_values"].append(float(lng))
+
+    result: list[dict[str, object]] = []
     for country, bucket in grouped.items():
-        count = int(bucket["count"])
-        aggregates.append(
+        lat_values: list[float] = bucket["lat_values"]  # type: ignore[assignment]
+        lng_values: list[float] = bucket["lng_values"]  # type: ignore[assignment]
+        if lat_values and lng_values:
+            lat = sum(lat_values) / len(lat_values)
+            lng = sum(lng_values) / len(lng_values)
+        else:
+            lat, lng = country_centroid(country)
+        result.append(
             {
                 "country": country,
-                "count": count,
+                "count": int(bucket["count"]),
                 "top_count": int(bucket["top_count"]),
                 "south_count": int(bucket["south_count"]),
-                "lat": float(bucket["lat_sum"]) / count,
-                "lng": float(bucket["lng_sum"]) / count,
-                "color": COUNTRY_COLOR_MAP.get(country, "#888899"),
+                "lat": lat,
+                "lng": lng,
+                "color": country_base_color(country),
             }
         )
 
-    return sorted(aggregates, key=lambda row: (-int(row["count"]), str(row["country"])))
+    return sorted(result, key=lambda row: (-int(row["count"]), str(row["country"])))
 
 
-app = create_app(
-    data_file=DEFAULT_DATA_FILE,
-    csv_file=DEFAULT_CSV_FILE,
-    kml_file=DEFAULT_KML_FILE,
-)
+def _shop_id(shop: CoffeeShop) -> str:
+    raw = f"{normalize_category(shop.category)}-{shop.rank}-{shop.name}".strip().lower()
+    return "".join(char if char.isalnum() else "-" for char in raw).strip("-")
+
+
+def _build_overview_filters(sidebar_shops: list[dict[str, object]]) -> dict[str, object]:
+    countries = sorted({str(item.get("country") or UNKNOWN_COUNTRY) for item in sidebar_shops})
+    return {
+        "categories": [TOP_100_CATEGORY, SOUTH_AMERICA_CATEGORY],
+        "countries": countries,
+        "rank_bands": ["All", "1-10", "11-25", "26-50", "51-100"],
+        "defaults": {
+            "categories": [TOP_100_CATEGORY, SOUTH_AMERICA_CATEGORY],
+            "country": "All Countries",
+            "rank_band": "All",
+        },
+    }
+
+
+def _build_data_quality(
+    shops: list[CoffeeShop],
+    sidebar_shops: list[dict[str, object]],
+    missing_coords_count: int,
+) -> dict[str, int]:
+    invalid_country_values = 0
+    rows_without_city = 0
+    missing_place_id = 0
+    for shop in shops:
+        _, invalid_country = normalize_country(shop.country)
+        if invalid_country:
+            invalid_country_values += 1
+        if not (shop.city or "").strip():
+            rows_without_city += 1
+        if not (shop.place_id or "").strip():
+            missing_place_id += 1
+
+    unknown_country_markers = sum(1 for item in sidebar_shops if item.get("country") == UNKNOWN_COUNTRY)
+    return {
+        "invalid_country_values": invalid_country_values,
+        "unknown_country_markers": unknown_country_markers,
+        "rows_without_city": rows_without_city,
+        "missing_lat_lng": missing_coords_count,
+        "missing_place_id": missing_place_id,
+    }
+
+
+app = create_app(data_file=DEFAULT_DATA_FILE, csv_file=DEFAULT_CSV_FILE, kml_file=DEFAULT_KML_FILE)

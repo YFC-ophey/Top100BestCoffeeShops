@@ -1,20 +1,17 @@
 import html
 import json
+from collections import defaultdict
 from pathlib import Path
 from urllib.parse import urlencode
 
+from src.category_utils import SOUTH_AMERICA_CATEGORY, TOP_100_CATEGORY, normalize_category
+from src.country_centroids import (
+    UNKNOWN_COUNTRY,
+    country_base_color,
+    country_centroid,
+    normalize_country,
+)
 from src.models import CoffeeShop
-
-COUNTRY_COLOR_MAP: dict[str, str] = {
-    "Argentina": "#6EC1FF",
-    "Australia": "#2F4B9C",
-    "Brazil": "#45B649",
-    "Colombia": "#FFD030",
-    "Japan": "#E24B5B",
-    "Peru": "#FF7600",
-    "United States": "#E2ACB7",
-    "USA": "#E2ACB7",
-}
 
 
 def build_static_site(
@@ -28,13 +25,19 @@ def build_static_site(
     assets_dir.mkdir(parents=True, exist_ok=True)
 
     shops = _load_shops(data_file)
-    top_100 = sorted((shop for shop in shops if shop.category == "Top 100"), key=lambda value: (value.rank, value.name))
-    south = sorted((shop for shop in shops if shop.category == "South"), key=lambda value: (value.rank, value.name))
+    top_100 = sorted(
+        (shop for shop in shops if normalize_category(shop.category) == TOP_100_CATEGORY),
+        key=lambda value: (value.rank, value.name),
+    )
+    south = sorted(
+        (shop for shop in shops if normalize_category(shop.category) == SOUTH_AMERICA_CATEGORY),
+        key=lambda value: (value.rank, value.name),
+    )
     all_shops = sorted(shops, key=lambda value: (value.rank, value.category, value.name))
 
     map_shops, missing_coords_count = _build_map_shops(all_shops)
     sidebar_shops = _build_sidebar_shops(all_shops)
-    map_country_aggregates = _build_country_aggregates(map_shops)
+    map_country_aggregates = _build_country_aggregates(sidebar_shops)
 
     csv_url = "../output/coffee_shops.csv" if csv_file.exists() else ""
     kml_url = "../output/coffee_shops.kml" if kml_file.exists() else ""
@@ -62,15 +65,24 @@ def _load_shops(data_file: Path) -> list[CoffeeShop]:
     if not data_file.exists():
         return []
     payload = json.loads(data_file.read_text(encoding="utf-8"))
-    return [CoffeeShop(**item) for item in payload]
+    shops = [CoffeeShop(**item) for item in payload]
+    for shop in shops:
+        shop.category = normalize_category(shop.category)
+    return shops
 
 
 def _maps_link(shop: CoffeeShop) -> str:
     query_parts = [shop.name]
-    if shop.city:
-        query_parts.append(shop.city)
-    if shop.country:
+    city = shop.city.strip() if shop.city else ""
+    if city:
+        query_parts.append(city)
+
+    country_value, _ = normalize_country(shop.country)
+    if country_value != UNKNOWN_COUNTRY:
+        query_parts.append(country_value)
+    elif shop.country:
         query_parts.append(shop.country)
+
     query = ", ".join(query_parts)
     params: dict[str, str] = {"api": "1", "query": query}
     if shop.place_id:
@@ -82,16 +94,22 @@ def _build_map_shops(shops: list[CoffeeShop]) -> tuple[list[dict[str, object]], 
     map_shops: list[dict[str, object]] = []
     missing = 0
     for shop in shops:
+        country_normalized, invalid_country = normalize_country(shop.country)
+        if invalid_country:
+            country_normalized = UNKNOWN_COUNTRY
+
         if shop.lat is None or shop.lng is None:
             missing += 1
-            continue
         map_shops.append(
             {
+                "id": _shop_id(shop),
                 "name": shop.name,
                 "city": shop.city,
-                "country": shop.country,
+                "country_normalized": country_normalized,
+                "country": country_normalized,
+                "country_raw": shop.country,
                 "rank": shop.rank,
-                "category": shop.category,
+                "category": normalize_category(shop.category),
                 "lat": shop.lat,
                 "lng": shop.lng,
                 "place_id": shop.place_id or "",
@@ -104,63 +122,86 @@ def _build_map_shops(shops: list[CoffeeShop]) -> tuple[list[dict[str, object]], 
 
 
 def _build_sidebar_shops(shops: list[CoffeeShop]) -> list[dict[str, object]]:
-    return [
-        {
-            "name": shop.name,
-            "city": shop.city,
-            "country": shop.country,
-            "rank": shop.rank,
-            "category": shop.category,
-            "lat": shop.lat,
-            "lng": shop.lng,
-            "place_id": shop.place_id or "",
-            "address": shop.formatted_address or shop.address or "",
-            "source_url": shop.source_url or "",
-            "google_maps_url": _maps_link(shop),
-        }
-        for shop in shops
-    ]
+    rows: list[dict[str, object]] = []
+    for shop in shops:
+        country_normalized, invalid_country = normalize_country(shop.country)
+        if invalid_country:
+            country_normalized = UNKNOWN_COUNTRY
+        rows.append(
+            {
+                "id": _shop_id(shop),
+                "name": shop.name,
+                "city": shop.city,
+                "country_normalized": country_normalized,
+                "country": country_normalized,
+                "country_raw": shop.country,
+                "rank": shop.rank,
+                "category": normalize_category(shop.category),
+                "lat": shop.lat,
+                "lng": shop.lng,
+                "place_id": shop.place_id or "",
+                "address": shop.formatted_address or shop.address or "",
+                "source_url": shop.source_url or "",
+                "google_maps_url": _maps_link(shop),
+            }
+        )
+    return rows
 
 
 def _json_script_literal(value: object) -> str:
     return json.dumps(value).replace("</", "<\\/")
 
 
-def _build_country_aggregates(map_shops: list[dict[str, object]]) -> list[dict[str, object]]:
-    grouped: dict[str, dict[str, object]] = {}
-    for item in map_shops:
-        country = str(item.get("country") or "Unknown")
-        bucket = grouped.setdefault(
-            country,
-            {
-                "country": country,
-                "count": 0,
-                "top_count": 0,
-                "south_count": 0,
-                "lat_sum": 0.0,
-                "lng_sum": 0.0,
-            },
-        )
+def _shop_id(shop: CoffeeShop) -> str:
+    raw = f"{normalize_category(shop.category)}-{shop.rank}-{shop.name}".strip().lower()
+    return "".join(char if char.isalnum() else "-" for char in raw).strip("-")
+
+
+def _build_country_aggregates(shops: list[dict[str, object]]) -> list[dict[str, object]]:
+    grouped: dict[str, dict[str, object]] = defaultdict(
+        lambda: {
+            "country": UNKNOWN_COUNTRY,
+            "count": 0,
+            "top_count": 0,
+            "south_count": 0,
+            "lat_values": [],
+            "lng_values": [],
+        }
+    )
+    for item in shops:
+        country = str(item.get("country") or UNKNOWN_COUNTRY)
+        bucket = grouped[country]
+        bucket["country"] = country
         bucket["count"] = int(bucket["count"]) + 1
-        if item.get("category") == "Top 100":
+        if item.get("category") == TOP_100_CATEGORY:
             bucket["top_count"] = int(bucket["top_count"]) + 1
-        if item.get("category") == "South":
+        if item.get("category") == SOUTH_AMERICA_CATEGORY:
             bucket["south_count"] = int(bucket["south_count"]) + 1
-        bucket["lat_sum"] = float(bucket["lat_sum"]) + float(item["lat"])
-        bucket["lng_sum"] = float(bucket["lng_sum"]) + float(item["lng"])
+
+        lat = item.get("lat")
+        lng = item.get("lng")
+        if lat is not None and lng is not None:
+            bucket["lat_values"].append(float(lat))
+            bucket["lng_values"].append(float(lng))
 
     result: list[dict[str, object]] = []
     for country, bucket in grouped.items():
-        count = int(bucket["count"])
+        lat_values: list[float] = bucket["lat_values"]  # type: ignore[assignment]
+        lng_values: list[float] = bucket["lng_values"]  # type: ignore[assignment]
+        if lat_values and lng_values:
+            lat = sum(lat_values) / len(lat_values)
+            lng = sum(lng_values) / len(lng_values)
+        else:
+            lat, lng = country_centroid(country)
         result.append(
             {
                 "country": country,
-                "count": count,
+                "count": int(bucket["count"]),
                 "top_count": int(bucket["top_count"]),
                 "south_count": int(bucket["south_count"]),
-                "lat": float(bucket["lat_sum"]) / count,
-                "lng": float(bucket["lng_sum"]) / count,
-                "color": COUNTRY_COLOR_MAP.get(country, "#888899"),
+                "lat": lat,
+                "lng": lng,
+                "color": country_base_color(country),
             }
         )
 
@@ -264,6 +305,11 @@ def _html_template() -> str:
 
         <p class="banner-title">Top 100 Best Coffee Shops 2026</p>
 
+        <div class="collection-toggle" aria-label="Collection toggle">
+          <button class="category-chip active" data-category="Top 100">Top 100 World</button>
+          <button class="category-chip active" data-category="South America">South America</button>
+        </div>
+
         <div class="topbar-actions">
           <div class="view-toggle">
             <button class="view-btn active" data-overview-view="map">Map</button>
@@ -283,15 +329,15 @@ def _html_template() -> str:
             <div class="meta-chips">
               <span class="chip">Total shops: __TOTAL_SHOPS__</span>
               <span class="chip">Top 100: __TOP_100_COUNT__</span>
-              <span class="chip">South: __SOUTH_COUNT__</span>
-              <span class="chip">Map skipped: __MISSING_COORDS_COUNT__</span>
+              <span class="chip">South America: __SOUTH_COUNT__</span>
+              <span class="chip">Missing lat/lng: __MISSING_COORDS_COUNT__</span>
             </div>
           </div>
 
           <div class="tabs" role="tablist" aria-label="Coffee shop views">
             <button class="tab-btn active" data-tab="overview" role="tab" aria-selected="true">Overview</button>
             <button class="tab-btn" data-tab="top100-links" role="tab" aria-selected="false">Main Top 100</button>
-            <button class="tab-btn" data-tab="south-links" role="tab" aria-selected="false">South America</button>
+            <button class="tab-btn" data-tab="south-links" role="tab" aria-selected="false">South America Links</button>
           </div>
 
           <section id="overview" class="tab-panel active" role="tabpanel">
@@ -430,7 +476,7 @@ def _html_template() -> str:
       });
 
       const markerState = {
-        activeCategories: new Set(["Top 100", "South"]),
+        activeCategories: new Set(["Top 100", "South America"]),
         countryMarkers: [],
         shopMarkers: [],
         selectedShop: null,
@@ -439,7 +485,8 @@ def _html_template() -> str:
       };
 
       function normalizeCategory(category) {
-        return category === "South" ? "South" : "Top 100";
+        if (category === "South America" || category === "South") return "South America";
+        return "Top 100";
       }
 
       function getVisibleShops() {
@@ -461,7 +508,7 @@ def _html_template() -> str:
       }
 
       function colorForCategory(category) {
-        return normalizeCategory(category) === "South" ? "#FF7600" : "#FFD030";
+        return normalizeCategory(category) === "South America" ? "#FF7600" : "#FFD030";
       }
 
       function shopKey(shop) {
@@ -475,6 +522,45 @@ def _html_template() -> str:
           .replaceAll(">", "&gt;")
           .replaceAll('"', "&quot;")
           .replaceAll("'", "&#39;");
+      }
+
+      function hashString(value) {
+        let hash = 0;
+        for (let index = 0; index < value.length; index += 1) {
+          hash = (hash << 5) - hash + value.charCodeAt(index);
+          hash |= 0;
+        }
+        return hash;
+      }
+
+      function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+      }
+
+      function wrapLng(value) {
+        if (!Number.isFinite(value)) return 0;
+        let next = value;
+        while (next > 180) next -= 360;
+        while (next < -180) next += 360;
+        return next;
+      }
+
+      function shopPosition(shop, countriesByName) {
+        if (Number.isFinite(shop.lat) && Number.isFinite(shop.lng)) {
+          return { lat: Number(shop.lat), lng: Number(shop.lng) };
+        }
+
+        const baseCountry = countriesByName.get(shop.country) || { lat: 10, lng: 0 };
+        const key = `${shop.rank}|${shop.name}|${shop.category}`;
+        const seed = Math.abs(hashString(key));
+        const angle = ((seed % 360) * Math.PI) / 180;
+        const ring = 1 + (seed % 8);
+        const radius = 0.06 + ring * 0.045;
+
+        return {
+          lat: clamp(Number(baseCountry.lat) + Math.sin(angle) * radius * 0.8, -84, 84),
+          lng: wrapLng(Number(baseCountry.lng) + Math.cos(angle) * radius),
+        };
       }
 
       function iconForShop(shop, active) {
@@ -587,13 +673,18 @@ def _html_template() -> str:
         });
       }
 
-      function renderShopMarkers() {
+      function renderShopMarkers(countriesByName) {
         clearMarkers(markerState.shopMarkers);
         const visibleShops = getVisibleShops();
+        if (!visibleShops.length) {
+          showMapMessage("No shops match the active filters.");
+          return;
+        }
+        hideMapMessage();
         visibleShops.forEach((shop) => {
           const active = markerState.selectedShop && shopKey(markerState.selectedShop) === shopKey(shop);
           const marker = new google.maps.Marker({
-            position: { lat: shop.lat, lng: shop.lng },
+            position: shopPosition(shop, countriesByName),
             map: markerState.map,
             icon: iconForShop(shop, active),
             title: `${shop.rank}. ${shop.name}`,
@@ -601,7 +692,7 @@ def _html_template() -> str:
 
           marker.addListener("click", () => {
             markerState.selectedShop = shop;
-            renderShopMarkers();
+            refreshMapLayers();
             openShopInfo(marker, shop);
           });
 
@@ -611,13 +702,14 @@ def _html_template() -> str:
 
       function refreshMapLayers() {
         if (!markerState.map) return;
+        const countriesByName = new Map(mapCountries.map((country) => [country.country, country]));
         const zoom = markerState.map.getZoom() || 2;
         if (zoom < 4) {
           clearMarkers(markerState.shopMarkers);
           renderCountryMarkers();
         } else {
           clearMarkers(markerState.countryMarkers);
-          renderShopMarkers();
+          renderShopMarkers(countriesByName);
         }
       }
 
@@ -662,15 +754,17 @@ def _html_template() -> str:
 
         markerState.infoWindow = new google.maps.InfoWindow();
         markerState.selectedShop = getVisibleSidebarShops()[0] || sidebarShops[0] || null;
-        updateDetailPanel(markerState.selectedShop);
+        if (markerState.selectedShop) {
+          updateDetailPanel(markerState.selectedShop);
+        }
         markerState.map.addListener("zoom_changed", refreshMapLayers);
-        if (!mapShops.length) {
+        if (!sidebarShops.length) {
           showMapMessage(
-            "No mapped coordinates are available yet. Run owner geocoding first: python src/main.py owner-geocode --api-key $GOOGLE_MAPS_JS_API_KEY"
+            "No shop data is available. Run the scraper to refresh data/current_list.json and rebuild."
           );
-          document.getElementById("shop-name").textContent = "No geocoded map markers";
+          document.getElementById("shop-name").textContent = "No coffee shop data";
           document.getElementById("shop-address").textContent =
-            "Map is available, but markers need lat/lng values in data/current_list.json.";
+            "The map will render once at least one shop row exists in current_list.json.";
           return;
         }
 
@@ -678,7 +772,8 @@ def _html_template() -> str:
         refreshMapLayers();
 
         if (mapMissingCoordsCount > 0) {
-          document.querySelector(".map-help").textContent = `${mapMissingCoordsCount} shops were skipped due to missing coordinates.`;
+          document.querySelector(".map-help").textContent =
+            `${mapMissingCoordsCount} shops are using centroid fallback until lat/lng is available.`;
         }
       }
 
@@ -781,6 +876,15 @@ body {
   font-size: 1.05rem;
   font-weight: 800;
   letter-spacing: 0.02em;
+}
+.collection-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 4px;
 }
 .category-chip {
   border: 0;
@@ -1166,8 +1270,13 @@ th {
   display: none !important;
 }
 @media (max-width: 1080px) {
-  .banner-title {
+  .collection-toggle {
     order: 3;
+    flex-basis: 100%;
+    justify-content: center;
+  }
+  .banner-title {
+    order: 4;
     flex-basis: 100%;
     text-align: left;
   }
