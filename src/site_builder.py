@@ -7,14 +7,62 @@ from urllib.parse import urlencode
 from src.models import CoffeeShop
 
 COUNTRY_COLOR_MAP: dict[str, str] = {
-    "Argentina": "#6EC1FF",
-    "Australia": "#2F4B9C",
-    "Brazil": "#45B649",
-    "Colombia": "#FFD030",
-    "Japan": "#E24B5B",
-    "Peru": "#FF7600",
-    "United States": "#E2ACB7",
-    "USA": "#E2ACB7",
+    "Argentina": "#74ACDF",
+    "Australia": "#00008B",
+    "Austria": "#ED2939",
+    "Belgium": "#FDDA24",
+    "Bolivia": "#007934",
+    "Brazil": "#009C3B",
+    "Bulgaria": "#00966E",
+    "Canada": "#FF0000",
+    "Chile": "#D52B1E",
+    "China": "#DE2910",
+    "Colombia": "#FCD116",
+    "Costa Rica": "#002B7F",
+    "Czech Republic": "#D7141A",
+    "Denmark": "#C60C30",
+    "Dominican Republic": "#002D62",
+    "EEUU": "#3C3B6E",
+    "Ecuador": "#FFD100",
+    "Egypt": "#CE1126",
+    "El Salvador": "#0F47AF",
+    "England": "#CF081F",
+    "Ethiopia": "#009A44",
+    "France": "#002395",
+    "Greece": "#004C98",
+    "Guatemala": "#4997D0",
+    "Honduras": "#0073CF",
+    "Ireland": "#169B62",
+    "Italy": "#008C45",
+    "Japan": "#BC002D",
+    "Macedonia": "#D20000",
+    "Malaysia": "#010066",
+    "Mexico": "#006847",
+    "México": "#006847",
+    "Netherlands": "#AE1C28",
+    "Nicaragua": "#0067C6",
+    "Norway": "#EF2B2D",
+    "Paraguay": "#D52B1E",
+    "Peru": "#D91023",
+    "Portugal": "#006600",
+    "Qatar": "#8D1B3D",
+    "Republic of Korea": "#CD2E3A",
+    "Romania": "#002B7F",
+    "Rwanda": "#20603D",
+    "Scotland": "#005EB8",
+    "Singapore": "#EF3340",
+    "South Africa": "#007749",
+    "Spain": "#AA151B",
+    "Switzerland": "#D52B1E",
+    "Taiwan": "#000095",
+    "Thailand": "#A51931",
+    "The Philippines": "#0038A8",
+    "Turkey": "#E30A17",
+    "UAE": "#00732F",
+    "United States": "#3C3B6E",
+    "Uruguay": "#001489",
+    "USA": "#3C3B6E",
+    "Venezuela": "#FFCC00",
 }
 
 
@@ -357,7 +405,7 @@ def _html_template() -> str:
                 </aside>
 
                 <div class="map-help">
-                  Zoom out for country-level density markers. Zoom in to reveal individual coffee shops.
+                  Pins use national flag colors. Zoom out for country density, zoom in for individual shops.
                 </div>
               </div>
             </div>
@@ -465,6 +513,36 @@ def _html_template() -> str:
         document.getElementById("map-unavailable").classList.add("hidden");
       }
 
+      const FLAG_COLORS = {
+        "Argentina":"#74ACDF","Australia":"#00008B","Austria":"#ED2939",
+        "Belgium":"#FDDA24","Bolivia":"#007934","Brazil":"#009C3B",
+        "Bulgaria":"#00966E","Canada":"#FF0000","Chile":"#D52B1E",
+        "China":"#DE2910","Colombia":"#FCD116","Costa Rica":"#002B7F",
+        "Czech Republic":"#D7141A","Denmark":"#C60C30",
+        "Dominican Republic":"#002D62","EEUU":"#3C3B6E",
+        "Ecuador":"#FFD100","Egypt":"#CE1126","El Salvador":"#0F47AF",
+        "England":"#CF081F","Ethiopia":"#009A44","France":"#002395",
+        "Greece":"#004C98","Guatemala":"#4997D0","Honduras":"#0073CF",
+        "Ireland":"#169B62","Italy":"#008C45","Japan":"#BC002D",
+        "Macedonia":"#D20000","Malaysia":"#010066","Mexico":"#006847",
+        "México":"#006847","Netherlands":"#AE1C28","Nicaragua":"#0067C6",
+        "Norway":"#EF2B2D","Paraguay":"#D52B1E","Peru":"#D91023",
+        "Portugal":"#006600","Qatar":"#8D1B3D",
+        "Republic of Korea":"#CD2E3A","Romania":"#002B7F",
+        "Rwanda":"#20603D","Scotland":"#005EB8","Singapore":"#EF3340",
+        "South Africa":"#007749","Spain":"#AA151B",
+        "Switzerland":"#D52B1E","Taiwan":"#000095","Thailand":"#A51931",
+        "The Philippines":"#0038A8","Turkey":"#E30A17","UAE":"#00732F",
+        "United States":"#3C3B6E","Uruguay":"#001489","USA":"#3C3B6E",
+        "Venezuela":"#FFCC00",
+      };
+
+      const PIN_PATH = "M 0,-24 C -6.6,-24 -12,-18.6 -12,-12 C -12,-4.8 0,0 0,0 C 0,0 12,-4.8 12,-12 C 12,-18.6 6.6,-24 0,-24 Z";
+
+      function flagColorFor(country) {
+        return FLAG_COLORS[country] || "#888899";
+      }
+
       function colorForCategory(category) {
         return normalizeCategory(category) === "South" ? "#FF7600" : "#FFD030";
       }
@@ -483,24 +561,29 @@ def _html_template() -> str:
       }
 
       function iconForShop(shop, active) {
+        const color = flagColorFor(shop.country);
         return {
-          path: google.maps.SymbolPath.CIRCLE,
-          fillColor: active ? "#ff7600" : colorForCategory(shop.category),
-          fillOpacity: active ? 1 : 0.95,
-          strokeColor: "#ffffff",
-          strokeWeight: active ? 2.6 : 1.8,
-          scale: active ? 9 : 6,
+          path: PIN_PATH,
+          fillColor: active ? "#ffffff" : color,
+          fillOpacity: active ? 1 : 0.92,
+          strokeColor: active ? color : "#ffffff",
+          strokeWeight: active ? 2.5 : 1.5,
+          scale: active ? 1.4 : 1,
+          anchor: new google.maps.Point(0, 0),
+          labelOrigin: new google.maps.Point(0, -14),
         };
       }
 
       function iconForCountry(color, scale) {
         return {
-          path: google.maps.SymbolPath.CIRCLE,
+          path: PIN_PATH,
           fillColor: color,
-          fillOpacity: 0.88,
+          fillOpacity: 0.92,
           strokeColor: "#ffffff",
           strokeWeight: 2,
-          scale,
+          scale: scale / 12,
+          anchor: new google.maps.Point(0, 0),
+          labelOrigin: new google.maps.Point(0, -14),
         };
       }
 
@@ -531,18 +614,29 @@ def _html_template() -> str:
         markers.length = 0;
       }
 
+      function labelColor(hexBg) {
+        const r = parseInt(hexBg.slice(1, 3), 16);
+        const g = parseInt(hexBg.slice(3, 5), 16);
+        const b = parseInt(hexBg.slice(5, 7), 16);
+        return (r * 0.299 + g * 0.587 + b * 0.114) > 140 ? "#111318" : "#ffffff";
+      }
+
       function openShopInfo(marker, shop) {
         markerState.selectedShop = shop;
         updateDetailPanel(shop);
         const shopName = escapeHtml(shop.name);
         const cityCountry = escapeHtml(`${shop.city ? `${shop.city}, ` : ""}${shop.country || ""}`);
         const category = escapeHtml(shop.category || "");
+        const flagHex = flagColorFor(shop.country);
         markerState.infoWindow.setContent(
-          `<div style="min-width:190px;color:#101217;font-family:system-ui,sans-serif">` +
-            `<strong>#${shop.rank} ${shopName}</strong><br/>` +
+          `<div style="min-width:200px;color:#101217;font-family:system-ui,sans-serif">` +
+            `<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">` +
+              `<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${flagHex};border:1px solid #ccc"></span>` +
+              `<strong>#${shop.rank} ${shopName}</strong>` +
+            `</div>` +
             `<span>${cityCountry}</span><br/>` +
-            `<span>${category}</span><br/>` +
-            `<a href="${shop.google_maps_url}" target="_blank" rel="noopener">Open in Google Maps</a>` +
+            `<span style="color:#666">${category}</span><br/>` +
+            `<a href="${shop.google_maps_url}" target="_blank" rel="noopener" style="color:#1a73e8">Open in Google Maps</a>` +
           `</div>`
         );
         markerState.infoWindow.open({ map: markerState.map, anchor: marker });
@@ -569,14 +663,15 @@ def _html_template() -> str:
           if (!match) return;
 
           const ratio = match.count / Math.max(1, maxCount);
+          const scale = 16 + ratio * 24;
           const marker = new google.maps.Marker({
             position: { lat: countryRow.lat, lng: countryRow.lng },
             map: markerState.map,
-            icon: iconForCountry(countryRow.color, 16 + ratio * 24),
+            icon: iconForCountry(countryRow.color, scale),
             title: `${countryRow.country} - ${match.count} shops`,
             label: {
               text: String(match.count),
-              color: "#111318",
+              color: labelColor(countryRow.color),
               fontSize: "11px",
               fontWeight: "700",
             },
@@ -597,11 +692,18 @@ def _html_template() -> str:
         const visibleShops = getVisibleShops();
         visibleShops.forEach((shop) => {
           const active = markerState.selectedShop && shopKey(markerState.selectedShop) === shopKey(shop);
+          const color = flagColorFor(shop.country);
           const marker = new google.maps.Marker({
             position: { lat: shop.lat, lng: shop.lng },
             map: markerState.map,
             icon: iconForShop(shop, active),
-            title: `${shop.rank}. ${shop.name}`,
+            title: `${shop.rank}. ${shop.name} (${shop.country})`,
+            label: {
+              text: String(shop.rank),
+              color: active ? labelColor("#ffffff") : labelColor(color),
+              fontSize: "9px",
+              fontWeight: "700",
+            },
           });
 
           marker.addListener("click", () => {
@@ -657,11 +759,16 @@ def _html_template() -> str:
           mapTypeControl: false,
           streetViewControl: false,
           styles: [
-            { elementType: "geometry", stylers: [{ color: "#202022" }] },
-            { elementType: "labels.text.stroke", stylers: [{ color: "#202022" }] },
-            { elementType: "labels.text.fill", stylers: [{ color: "#928f86" }] },
+            { elementType: "geometry", stylers: [{ color: "#1a1a1e" }] },
+            { elementType: "labels.text.stroke", stylers: [{ color: "#15151a" }] },
+            { elementType: "labels.text.fill", stylers: [{ color: "#6b6b78" }] },
+            { featureType: "administrative.country", elementType: "geometry.stroke", stylers: [{ color: "#2a2a32" }, { weight: 0.8 }] },
+            { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [{ color: "#555566" }] },
             { featureType: "road", stylers: [{ visibility: "off" }] },
-            { featureType: "water", elementType: "geometry", stylers: [{ color: "#1a1d24" }] },
+            { featureType: "poi", stylers: [{ visibility: "off" }] },
+            { featureType: "transit", stylers: [{ visibility: "off" }] },
+            { featureType: "water", elementType: "geometry", stylers: [{ color: "#111116" }] },
+            { featureType: "landscape.natural", elementType: "geometry", stylers: [{ color: "#1e1e24" }] },
           ],
         });
 
