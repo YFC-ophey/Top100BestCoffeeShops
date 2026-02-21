@@ -66,6 +66,8 @@ def test_home_page_renders_roast_overview_with_south_america_label(tmp_path: Pat
     assert "<th>City</th>" in response.text
     assert ">Map</a>" in response.text
     assert "color: var(--brand-gold);" in response.text
+    assert "Pins use national flag colors. Zoom out for country density, zoom in for individual shops." in response.text
+    assert 'const PIN_PATH = "M 0,-24 C -6.6,-24 -12,-18.6 -12,-12 C -12,-4.8 0,0 0,0 C 0,0 12,-4.8 12,-12 C 12,-18.6 6.6,-24 0,-24 Z";' in response.text
 
 
 def test_health_endpoint_reports_ok(tmp_path: Path) -> None:
