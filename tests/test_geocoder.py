@@ -48,7 +48,13 @@ def test_geocode_shop_returns_first_candidate() -> None:
 def test_geocode_shop_returns_none_when_no_candidates() -> None:
     payload = {"status": "ZERO_RESULTS", "candidates": []}
 
-    with patch("urllib.request.urlopen", return_value=_FakeResponse(json.dumps(payload).encode())):
+    with patch(
+        "urllib.request.urlopen",
+        side_effect=[
+            _FakeResponse(json.dumps(payload).encode()),
+            _FakeResponse(json.dumps({"status": "ZERO_RESULTS", "results": []}).encode()),
+        ],
+    ):
         geocoder = GooglePlacesGeocoder(api_key="test-key")
         shop = CoffeeShop(
             name="Unknown",
@@ -61,6 +67,45 @@ def test_geocode_shop_returns_none_when_no_candidates() -> None:
         result = geocoder.geocode_shop(shop)
 
     assert result is None
+    assert geocoder.last_status == "ZERO_RESULTS"
+
+
+def test_geocode_shop_falls_back_to_geocoding_api_when_places_has_zero_results() -> None:
+    places_payload = {"status": "ZERO_RESULTS", "candidates": []}
+    geocode_payload = {
+        "status": "OK",
+        "results": [
+            {
+                "place_id": "geo123",
+                "formatted_address": "R. dos Sapateiros 111, 1100-619 Lisboa, Portugal",
+                "geometry": {"location": {"lat": 38.71066, "lng": -9.13922}},
+            }
+        ],
+    }
+
+    with patch(
+        "urllib.request.urlopen",
+        side_effect=[
+            _FakeResponse(json.dumps(places_payload).encode()),
+            _FakeResponse(json.dumps(geocode_payload).encode()),
+        ],
+    ):
+        geocoder = GooglePlacesGeocoder(api_key="test-key")
+        shop = CoffeeShop(
+            name="The Folks",
+            city="Lisbon",
+            country="Portugal",
+            rank=88,
+            category="Top 100",
+        )
+
+        result = geocoder.geocode_shop(shop)
+
+    assert result is not None
+    assert result.place_id == "geo123"
+    assert result.lat == 38.71066
+    assert result.lng == -9.13922
+    assert geocoder.last_status == "OK"
 
 
 def test_geocode_shop_retries_and_recovers_on_transient_error() -> None:
@@ -123,3 +168,5 @@ def test_geocode_shop_returns_none_after_retry_exhaustion() -> None:
 
     assert result is None
     assert sleeper_calls == [0.25]
+    assert geocoder.last_status == "NETWORK_ERROR"
+    assert "always down" in geocoder.last_error_message
