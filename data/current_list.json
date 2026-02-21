@@ -6,10 +6,11 @@
     "rank": 1,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/onyx-coffee-lab/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "101 E Walnut Ave Rogers, AR 72756, USA"
+    "address": null,
+    "lat": 36.3333573,
+    "lng": -94.11587329999999,
+    "place_id": "ChIJk9nZVQ8XyYcRZFTk53sKJj8",
+    "formatted_address": "101 E Walnut St, Rogers, AR 72756, USA"
   },
   {
     "name": "Tim Wendelboe",
@@ -18,10 +19,11 @@
     "rank": 2,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/tim-wendelboe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Grüners Gate 1, 0552 Oslo, Norway"
+    "address": null,
+    "lat": 59.9232769,
+    "lng": 10.7557482,
+    "place_id": "ChIJWR6FqmhuQUYRN9lAKt93iU4",
+    "formatted_address": "Grüners gate 1, 0552 Oslo, Norway"
   },
   {
     "name": "Alquimia Coffee",
@@ -30,10 +32,11 @@
     "rank": 3,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/alquimia-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Calle Circunvalación, 294, San Salvador, El Salvador"
+    "address": null,
+    "lat": 13.6928745,
+    "lng": -89.2426957,
+    "place_id": "ChIJnwIIpygwY48REUd4uchWq4E",
+    "formatted_address": "MQV4+5WJ, Calle Circunvalacion 294, San Salvador, El Salvador"
   },
   {
     "name": "Only Coffee Project Crows Nest",
@@ -42,10 +45,11 @@
     "rank": 4,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/only-coffee-project-crows-nest/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Shop 2/118 Willoughby Rd, Crows Nest NSW 2065, Australia"
+    "address": null,
+    "lat": -33.8242841,
+    "lng": 151.2006511,
+    "place_id": "ChIJefAW7cKuEmsR6bbbNIeh9JM",
+    "formatted_address": "2/118 Willoughby Rd, Crows Nest NSW 2065, Australia"
   },
   {
     "name": "Toby&#8217;s Estate Coffee Roasters",
@@ -54,9 +58,10 @@
     "rank": 5,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/tobbys-estate/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": -33.8858584,
+    "lng": 151.1944136,
+    "place_id": "ChIJiWjKI9axEmsRNuGud8pJWJ0",
     "formatted_address": "32-36 City Rd, Chippendale NSW 2008, Australia"
   },
   {
@@ -66,10 +71,11 @@
     "rank": 6,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/apartment-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "139, Selegie Road, Singapore, 18309, Singapore"
+    "address": null,
+    "lat": 1.3028157,
+    "lng": 103.8499343,
+    "place_id": "ChIJyRJvdrMZ2jERpcCkSyqNYI8",
+    "formatted_address": "139 Selegie Rd, #01-01, Singapore 188309"
   },
   {
     "name": "Gota Coffee Experts",
@@ -78,10 +84,11 @@
     "rank": 7,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/gota-coffee-experts/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Mariahilfer Straße 192, 1150, Vienna, Austria"
+    "address": null,
+    "lat": 48.1915042,
+    "lng": 16.3269157,
+    "place_id": "ChIJg0ccoRyobUcR7yKVggFLBww",
+    "formatted_address": "Mariahilfer Str. 192, 1150 Wien, Austria"
   },
   {
     "name": "Story of Ono",
@@ -90,9 +97,10 @@
     "rank": 8,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/story-of-ono/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 3.114084,
+    "lng": 101.6215677,
+    "place_id": "ChIJZaLrClZJzDERdgtscINLHOo",
     "formatted_address": "47, Jalan SS 2/30, SS 2, 47300 Petaling Jaya, Selangor, Malaysia"
   },
   {
@@ -102,10 +110,11 @@
     "rank": 9,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/tropicalia-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "CLL 81A 8 23, Bogota, Colombia"
+    "address": null,
+    "lat": 4.6637286,
+    "lng": -74.0506899,
+    "place_id": "ChIJTVQUVWCaP44RZT7-gUaccBg",
+    "formatted_address": "Cl. 81a #8-23, Bogotá, Colombia"
   },
   {
     "name": "Tanat",
@@ -114,10 +123,11 @@
     "rank": 10,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/kawa/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "22 Av. Victoria, 75001, Paris, France"
+    "address": null,
+    "lat": 48.8584219,
+    "lng": 2.3462519,
+    "place_id": "ChIJxzzYox9u5kcRfmIu6OqmgMw",
+    "formatted_address": "22 Av. Victoria, 75001 Paris, France"
   },
   {
     "name": "FANKØR",
@@ -126,9 +136,10 @@
     "rank": 11,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/fankor/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": -0.20011,
+    "lng": -78.4819266,
+    "place_id": "ChIJaRWpbnOa1ZERnyD484I3qtQ",
     "formatted_address": "Whymper N27-55 y, Quito 170518, Ecuador"
   },
   {
@@ -138,9 +149,10 @@
     "rank": 12,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/arcane-estate-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 40.7312804,
+    "lng": -74.00275979999999,
+    "place_id": "ChIJ3W4UsJNZwokRk16HbJqo1sc",
     "formatted_address": "37 Cornelia St, New York, NY 10014, USA"
   },
   {
@@ -150,10 +162,11 @@
     "rank": 13,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/beta-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "76 Devonshire St, Surry Hills, Sydney, Australia 2010"
+    "address": null,
+    "lat": -33.8859385,
+    "lng": 151.2077186,
+    "place_id": "ChIJ1UykriGuEmsRc8p8bWZULc8",
+    "formatted_address": "76 Devonshire St, Surry Hills NSW 2010, Australia"
   },
   {
     "name": "Nomadic Specialty Coffee",
@@ -162,9 +175,10 @@
     "rank": 14,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/nomadic-specialty-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 30.0659289,
+    "lng": 31.22163459999999,
+    "place_id": "ChIJ1SrbduNAWBQRjLyZnFyJ2jI",
     "formatted_address": "17 Ahmed Heshmat, Mohammed Mazhar, Zamalek, Cairo Governorate 4271160, Egypt"
   },
   {
@@ -174,9 +188,10 @@
     "rank": 15,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/nemesis-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 49.28280119999999,
+    "lng": -123.1102881,
+    "place_id": "ChIJyzkVp3lxhlQR8a-kek7Ql_s",
     "formatted_address": "302 W Hastings St, Vancouver, BC V6B 2N4, Canada"
   },
   {
@@ -186,9 +201,10 @@
     "rank": 16,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/nomad-frutas-selectas/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 41.397966,
+    "lng": 2.1956227,
+    "place_id": "ChIJc7PCoBejpBIREP_Tn2a4s08",
     "formatted_address": "Carrer de Pujades, 95, Sant Martí, 08005 Barcelona, Spain"
   },
   {
@@ -198,9 +214,10 @@
     "rank": 17,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/kafi-wasi-cafe-tostaduria/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": -16.3986215,
+    "lng": -71.5392097,
+    "place_id": "ChIJw9QmKVpKQpERNCLCkfpyCw0",
     "formatted_address": "Calle Pte. Bolognesi 216, Arequipa 04001, Peru"
   },
   {
@@ -210,10 +227,11 @@
     "rank": 18,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/benchmark-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Aljada, Boulevard-1 - Units # BLV1-FB2/BLV1-R07 - Sharjah - UAE"
+    "address": null,
+    "lat": 25.3184047,
+    "lng": 55.4742758,
+    "place_id": "ChIJG-AcxVxfXz4RZm4nv-1CiQI",
+    "formatted_address": "Aljada Discovery Centre Aljada - Muwaileh Commercial - Sharjah - United Arab Emirates"
   },
   {
     "name": "Hola Coffee Lagasca",
@@ -222,10 +240,11 @@
     "rank": 19,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/hola-coffee-lagasca/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Calle Lagasca, 42, 28001, Madrid, Spain"
+    "address": null,
+    "lat": 40.4250325,
+    "lng": -3.685306299999999,
+    "place_id": "ChIJi2D7CpcoQg0Rr5w4FbRHfSU",
+    "formatted_address": "Calle de Lagasca, 42, Salamanca, 28001 Madrid, Spain"
   },
   {
     "name": "BlendIn Coffee Club",
@@ -234,10 +253,11 @@
     "rank": 20,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/blendin-coffee-club/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "8410 Highway 90A, Bldg B Sugar Land, TX 77478, USA"
+    "address": null,
+    "lat": 29.6198189,
+    "lng": -95.6296198,
+    "place_id": "ChIJ_Trg0d7mQIYRRhhrhtSRN4M",
+    "formatted_address": "8410 Hwy 90 Alt Bldg B, Sugar Land, TX 77478, USA"
   },
   {
     "name": "Holaste! Specialty Coffee",
@@ -246,10 +266,11 @@
     "rank": 21,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/holaste-specialty-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Carlos Bories 385, 6160000 Natales, Magallanes y la Antártica Chilena, Chile"
+    "address": null,
+    "lat": -51.7261499,
+    "lng": -72.50746,
+    "place_id": "ChIJ2ehQLBror70RRPdloMC8JDA",
+    "formatted_address": "Carlos Bories 385, 6160492 Ultima Esperanza, Natales, Magallanes y la Antártica Chilena, Chile"
   },
   {
     "name": "Momos Coffee Flagship Store",
@@ -258,10 +279,11 @@
     "rank": 22,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/momos-coffee-flagship-store/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "20 Osige-ro, Geumjeong-gu, Busan, Republic of Korea"
+    "address": null,
+    "lat": 35.2192553,
+    "lng": 129.086493,
+    "place_id": "ChIJV52dAJqTaDURx7ul1qYFsko",
+    "formatted_address": "20 Osige-ro, Geumjeong-gu, Busan, South Korea"
   },
   {
     "name": "Monotono Specialty Coffee",
@@ -270,9 +292,10 @@
     "rank": 23,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/monotono-specialty-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": -12.1402626,
+    "lng": -77.0219778,
+    "place_id": "ChIJf5I-TeW3BZERvrgs8C-9MhQ",
     "formatted_address": "Jirón Fedelli 103, Barranco 15063, Peru"
   },
   {
@@ -282,10 +305,11 @@
     "rank": 24,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/ult-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "1 Chome-11-6 Kyomachibori, Nishi Ward, Osaka, 550-0003, Japan"
+    "address": null,
+    "lat": 34.6877502,
+    "lng": 135.4950316,
+    "place_id": "ChIJHbyDA_vmAGARrMki_gm2NRA",
+    "formatted_address": "1-chōme-11-6 Kyōmachibori, Nishi Ward, Osaka, 550-0003, Japan"
   },
   {
     "name": "El Injerto",
@@ -294,10 +318,11 @@
     "rank": 25,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/el-injerto/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "9 Calle 15-15, Cdad. de Guatemala 01013, Guatemala"
+    "address": null,
+    "lat": 14.5881773,
+    "lng": -90.52142450000001,
+    "place_id": "ChIJy9LGqeCjiYURxwBWZq_Ttb8",
+    "formatted_address": "9 Calle 1515, Cdad. de Guatemala 01013, Guatemala"
   },
   {
     "name": "Three Monkeys Coffee",
@@ -306,10 +331,11 @@
     "rank": 26,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/three-monkeys-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Pje. Pampa de la Alianza 474, Cusco 08000, Peru"
+    "address": null,
+    "lat": -13.5177829,
+    "lng": -71.9749574,
+    "place_id": "ChIJAaegWgvWbZERxik3jk3YIxM",
+    "formatted_address": "Pje. Pampa de la Alianza 474, Cusco 08002, Peru"
   },
   {
     "name": "Proud Mary Coffee",
@@ -318,10 +344,11 @@
     "rank": 27,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/proud-mary-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "172 Oxford St, Collingwood VIC, Melbourne, Australia"
+    "address": null,
+    "lat": -37.8023383,
+    "lng": 144.9851717,
+    "place_id": "ChIJ6f2VOeBC1moRMzJudEH_BQs",
+    "formatted_address": "172 Oxford St, Collingwood VIC 3066, Australia"
   },
   {
     "name": "Koffee Mameya Kakeru",
@@ -330,10 +357,11 @@
     "rank": 28,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/koffee-mameya-kakeru/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "2 Chome-16-14 Hirano, Koto City, Tokyo 135-0023, Japan"
+    "address": null,
+    "lat": 35.6764629,
+    "lng": 139.8041913,
+    "place_id": "ChIJS47TehqJGGARHdSdLdci5L4",
+    "formatted_address": "2-chōme-16-14 Hirano, Koto City, Tokyo 135-0023, Japan"
   },
   {
     "name": "Coffee Anthology",
@@ -342,10 +370,11 @@
     "rank": 29,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/coffee-anthology/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "155, Charlotte St, Brisbane City QLD 4000, Australia"
+    "address": null,
+    "lat": -27.4704616,
+    "lng": 153.0280493,
+    "place_id": "ChIJw3MRaBtakWsRo-BawYnuu70",
+    "formatted_address": "155 Charlotte St, Brisbane City QLD 4000, Australia"
   },
   {
     "name": "7g Roaster",
@@ -354,9 +383,10 @@
     "rank": 30,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/7g-roaster/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 41.13695,
+    "lng": -8.61402,
+    "place_id": "ChIJXVSKr99kJA0R0SDEIvQdji0",
     "formatted_address": "R. de França 52, 4400-174 Vila Nova de Gaia, Portugal"
   },
   {
@@ -366,10 +396,11 @@
     "rank": 31,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/espresso-alchemy/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "1, B116, B1/F Mira Place, 132 Nathan Rd, Tsim Sha Tsui, Hong Kong, China"
+    "address": null,
+    "lat": 22.3008171,
+    "lng": 114.1721995,
+    "place_id": "ChIJz3I7OewABDQRKfpX9szTycI",
+    "formatted_address": "Shop 113B, 1/F, Mira Place 1, 132 Nathan Rd, Tsim Sha Tsui, Hong Kong"
   },
   {
     "name": "Coffeewerk + Press",
@@ -378,10 +409,11 @@
     "rank": 32,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/coffeewek-press/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "4 Quay St, Galway, Ireland"
+    "address": null,
+    "lat": 53.2713459,
+    "lng": -9.0539731,
+    "place_id": "ChIJkURO3_qWW0gRmKg_s27KDPw",
+    "formatted_address": "4 Quay St, Galway, H91 E2K6, Ireland"
   },
   {
     "name": "Typica Café",
@@ -390,10 +422,11 @@
     "rank": 33,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/typica-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Edificio Tres Cruces, Batallón Colorados 40, La Paz, Bolivia"
+    "address": null,
+    "lat": -16.5034865,
+    "lng": -68.1302809,
+    "place_id": "ChIJvW59R2UgX5ER8eyZ-y9WzGo",
+    "formatted_address": "Edificio Tres Cruces N, Batallón Colorados 40, La Paz, Bolivia"
   },
   {
     "name": "Yardstick",
@@ -402,10 +435,11 @@
     "rank": 34,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/yardstick/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "106, Esteban Street, Makati, Metro Manila"
+    "address": null,
+    "lat": 14.5569031,
+    "lng": 121.0172259,
+    "place_id": "ChIJawDSkQ7JlzMRjYW47xKcRGQ",
+    "formatted_address": "Princess Building, 106 Esteban, Legazpi Village, Makati City, 1229 Metro Manila, Philippines"
   },
   {
     "name": "Histórico",
@@ -414,10 +448,11 @@
     "rank": 35,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/historico/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Miguel Hidalgo 1, Centro, 29200 San Cristóbal de las Casas, Chis., México"
+    "address": null,
+    "lat": 16.7364632,
+    "lng": -92.6379528,
+    "place_id": "ChIJRddj4T1F7YURvHRs5JWVF7A",
+    "formatted_address": "Miguel Hidalgo 1, Zona Centro, 29200 San Cristóbal de las Casas, Chis., Mexico"
   },
   {
     "name": "Coffee Sind",
@@ -426,9 +461,10 @@
     "rank": 36,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/coffee-sind/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 25.0410858,
+    "lng": 121.5321404,
+    "place_id": "ChIJ8VZ0R9KrQjQRBCANnVHpH0k",
     "formatted_address": "No. 8號, Lane 56, Section 1, Xinsheng S Rd, Zhongzheng District, Taipei City, Taiwan 100"
   },
   {
@@ -438,10 +474,11 @@
     "rank": 37,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/delafinca-specialty-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Costado Sur del Parque, Managua 11169, Managua, Nicaragua"
+    "address": null,
+    "lat": 12.1310778,
+    "lng": -86.2473138,
+    "place_id": "ChIJ-cQaSx3_c48RkSWC6jvp1Jg",
+    "formatted_address": "Semaforos del Dorado 600mts al sur, sobre la pista a mano izquierda, 11169, Nicaragua"
   },
   {
     "name": "Ottoman Coffee House",
@@ -450,10 +487,11 @@
     "rank": 38,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/ottoman-coffee-house/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "73 Berkeley St., Glasgow G3 7DX, United Kingdom"
+    "address": null,
+    "lat": 55.8650191,
+    "lng": -4.2748397,
+    "place_id": "ChIJC3Ir0StEiEgRgwMFrySDRjw",
+    "formatted_address": "The Shah Noor, 73 Berkeley St., Glasgow G3 7DX, UK"
   },
   {
     "name": "Casa Canela",
@@ -462,10 +500,11 @@
     "rank": 39,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/casa-canela/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "C5GF+8RC, C. Bolivar las Marias, Caracas 1083, Miranda, Venezuela"
+    "address": null,
+    "lat": 10.424004,
+    "lng": -66.8258463,
+    "place_id": "ChIJqw7a9JP3KowRJBDX8qRsuAs",
+    "formatted_address": "C. Bolivar las Marias, Caracas 1083, Miranda, Venezuela"
   },
   {
     "name": "Espressolab",
@@ -474,10 +513,11 @@
     "rank": 40,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/espresso-lab/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "The Old Biscuit Mill 375 Albert Road Woodstock 7925 Cape Town, South Africa"
+    "address": null,
+    "lat": -33.9274763,
+    "lng": 18.45716,
+    "place_id": "ChIJmb1qtKZdzB0RQGPrsOVHzDk",
+    "formatted_address": "375 Albert Rd, Woodstock, Cape Town, 7915, South Africa"
   },
   {
     "name": "Seven Mystery",
@@ -486,10 +526,11 @@
     "rank": 41,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/seven-mystery/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "50 Weybright Court, unit 13, Toronto, Ontario M1S 5A8"
+    "address": null,
+    "lat": 43.7815254,
+    "lng": -79.2788527,
+    "place_id": "ChIJ__8_VZ3R1IkRY-MOtIE-Xa8",
+    "formatted_address": "50 Weybright Ct #13, Scarborough, ON M1S 5C1, Canada"
   },
   {
     "name": "Faro",
@@ -498,10 +539,11 @@
     "rank": 42,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/faro/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Via Piave 55, 00187 Rome, Italy"
+    "address": null,
+    "lat": 41.9101357,
+    "lng": 12.4984435,
+    "place_id": "ChIJJzodIQlhLxMRAaMqrA6CpcA",
+    "formatted_address": "Via Piave, 55, 00187 Roma RM, Italy"
   },
   {
     "name": "Domestique",
@@ -510,9 +552,10 @@
     "rank": 43,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/domestique/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 33.5242119,
+    "lng": -86.7745711,
+    "place_id": "ChIJTa1vIVEaiYgRwWc9-2XWBVA",
     "formatted_address": "200 41st St S, Birmingham, AL 35222, USA"
   },
   {
@@ -522,10 +565,11 @@
     "rank": 44,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/harvest-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Water Taxi PA-1, Marina Way One, Doha, Qatar"
+    "address": null,
+    "lat": 25.3648787,
+    "lng": 51.5409049,
+    "place_id": "ChIJyR59ZGvDRT4RWrsAjwPtwK4",
+    "formatted_address": "Marina Way One, Doha, Qatar"
   },
   {
     "name": "Origen Tostadores de Café",
@@ -534,10 +578,11 @@
     "rank": 45,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/origen-tostadores-de-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Av. Simón Bolívar 1199, Pueblo Libre 15084, Lima, Peru"
+    "address": null,
+    "lat": -12.0725883,
+    "lng": -77.06629579999999,
+    "place_id": "ChIJK9g8XRrJBZER0pk3UpwRtVg",
+    "formatted_address": "Av. Simón Bolívar 1199, Pueblo Libre 15084, Peru"
   },
   {
     "name": "KEEP Coffee Roastery",
@@ -546,10 +591,11 @@
     "rank": 46,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/keep-coffee-roastery/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "No. 113號, Huaian St, Sanmin District, Kaohsiung City, Taiwan 807045"
+    "address": null,
+    "lat": 22.6407171,
+    "lng": 120.3174687,
+    "place_id": "ChIJuaokdekEbjQR2-HGrYNTJE8",
+    "formatted_address": "No. 113號, Huaian St, Sanmin District, Kaohsiung City, Taiwan 807"
   },
   {
     "name": "Meet LAB Coffee",
@@ -558,10 +604,11 @@
     "rank": 47,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/meet-lab-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Caddebostan, Selin Sk. No:6A/13, 34000 Kadıköy/İstanbul, Turkey"
+    "address": null,
+    "lat": 40.9660062,
+    "lng": 29.0682909,
+    "place_id": "EklDYWRkZWJvc3RhbiwgU2VsaW4gU2suIE5vOjZBLzEzIEQ6MTMsIDM0MDAwIEthZMSxa8O2eS_EsHN0YW5idWwsIFTDvHJraXllIh4aHAoWChQKEglbOB25dMfKFBGQBgWJhhHJOxICMTM",
+    "formatted_address": "Caddebostan, Selin Sk. No:6A/13 D:13, 34000 Kadıköy/İstanbul, Türkiye"
   },
   {
     "name": "Mulano Coffee Shop",
@@ -570,10 +617,11 @@
     "rank": 48,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/mulano-coffee-shop/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Av. Loja y Juan León Mera, Piñas, Ecuador"
+    "address": null,
+    "lat": -3.680046,
+    "lng": -79.6816087,
+    "place_id": "Ei9BdmVuaWRhIExvamEgJiBKdWFuIExlw7NuIE1lcmEsIFBpw7FhcywgRWN1YWRvciJmImQKFAoSCWfsZgVjXzOQERC8V9y_YqXKEhQKEgln7GYFY18zkBEQvFfcv2KlyhoUChIJV0wsB2NfM5ARkIyFvDZyPlkaFAoSCacxNOViXzOQEYp9YSW0tpKHIgoNNHjO_RUpjYHQ",
+    "formatted_address": "Avenida Loja & Juan León Mera, Piñas, Ecuador"
   },
   {
     "name": "La Cabra",
@@ -582,10 +630,11 @@
     "rank": 49,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/la-cabra/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Møntergade 3A, 1116 København K, Denmark"
+    "address": null,
+    "lat": 55.6815858,
+    "lng": 12.5790398,
+    "place_id": "ChIJhxU6DxpTUkYRf16Gw-D5Oxw",
+    "formatted_address": "Møntergade 3A, 1116 København, Denmark"
   },
   {
     "name": "Birch Coffee",
@@ -594,10 +643,11 @@
     "rank": 50,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/birch-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Bayfield Rd, Portree IV51 9EL, United Kingdom"
+    "address": null,
+    "lat": 57.41152289999999,
+    "lng": -6.194154,
+    "place_id": "ChIJQbZ0ay0yjEgRzZAaKowNO3U",
+    "formatted_address": "Bayfield Rd, Portree, UK"
   },
   {
     "name": "Ruli Coffee",
@@ -606,9 +656,10 @@
     "rank": 51,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/ruli-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 37.5588412,
+    "lng": 126.9861996,
+    "place_id": "ChIJnQghVfeifDURIE7bYd4gsIQ",
     "formatted_address": "31 Toegye-ro 20-gil, Jung District, Seoul, South Korea"
   },
   {
@@ -618,10 +669,11 @@
     "rank": 52,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/atte-for-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "OG Cuatro, Vía 6, 3-56, zona 4, Cdad. de Guatemala, Guatemala"
+    "address": null,
+    "lat": 14.619461,
+    "lng": -90.5148127,
+    "place_id": "ChIJFdIeuTGiiYURZgH9pBt4-co",
+    "formatted_address": "Via 6 3-56, Cdad. de Guatemala, Guatemala"
   },
   {
     "name": "Single O",
@@ -630,9 +682,10 @@
     "rank": 53,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/single-o/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": -33.881047,
+    "lng": 151.2096577,
+    "place_id": "ChIJPegthSKuEmsR0zTRTYOv1Qs",
     "formatted_address": "60/64 Reservoir St, Surry Hills NSW 2010, Australia"
   },
   {
@@ -642,9 +695,10 @@
     "rank": 54,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/rubia-coffee-roasters/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": -1.9543794,
+    "lng": 30.0828131,
+    "place_id": "ChIJ21aMVYmm3BkRhWzOy-0drJo",
     "formatted_address": "KG 2 Ave, Kigali, Rwanda"
   },
   {
@@ -654,10 +708,11 @@
     "rank": 55,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/bob-coffee-lab/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Piața Charles de Gaulle 3, Bucharest, Romania"
+    "address": null,
+    "lat": 44.4654555,
+    "lng": 26.0854922,
+    "place_id": "ChIJo7BE1Q8CskARSTW99tJfUyc",
+    "formatted_address": "Piața Charles de Gaulle 3, 011857 București, Romania"
   },
   {
     "name": "Unfiltered coffee",
@@ -666,9 +721,10 @@
     "rank": 56,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/unfiltered-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 53.3395689,
+    "lng": -6.320501,
+    "place_id": "ChIJaf8N-FgMZ0gRQFmKUKv6VAI",
     "formatted_address": "205B Emmet Rd, Inchicore, Dublin 8, D08 EN29, Ireland"
   },
   {
@@ -678,10 +734,11 @@
     "rank": 57,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/tomorrow-coffee-roasters/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "20號, Lane 198, Gancheng St, Nantun District, Taichung City, Taiwan 408"
+    "address": null,
+    "lat": 24.1536683,
+    "lng": 120.6281729,
+    "place_id": "ChIJeUJufOc9aTQRfmTEwo98duI",
+    "formatted_address": "No. 20, Lane 198, Gancheng St, Nantun District, Taichung City, Taiwan 408"
   },
   {
     "name": "Ca Passe Creme",
@@ -690,9 +747,10 @@
     "rank": 58,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/ca-passe-creme/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 46.516405,
+    "lng": 6.625384899999999,
+    "place_id": "ChIJIwgVPdMvjEcRLkAcU21ONa0",
     "formatted_address": "Bd de Grancy 49, 1006 Lausanne, Switzerland"
   },
   {
@@ -702,9 +760,10 @@
     "rank": 59,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/eco-mapu/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": -39.2843333,
+    "lng": -72.224107,
+    "place_id": "ChIJTyO8tjpiFJYR-A4dCOvJirc",
     "formatted_address": "Julio Zegers 530, 4930000 Villarrica, Araucanía, Chile"
   },
   {
@@ -714,9 +773,10 @@
     "rank": 60,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/43-12-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 43.1997418,
+    "lng": 27.9154545,
+    "place_id": "ChIJX-BpqzBTpEAR5epGdNZggEo",
     "formatted_address": "Varna CenterOdesos, ul. \"Preslav\" 15, 9000 Varna, Bulgaria"
   },
   {
@@ -726,9 +786,10 @@
     "rank": 61,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/fika-co-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 13.7485011,
+    "lng": 100.5642094,
+    "place_id": "ChIJhQyrwKWf4jAR-19b465sv0U",
     "formatted_address": "1788 Singha Complex Bang Kapi, Huai Khwang, Bangkok 10310, Thailand"
   },
   {
@@ -738,9 +799,10 @@
     "rank": 62,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/ditta-artigianale-specialty-coffee-roasters/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 45.4658289,
+    "lng": 9.175969799999999,
+    "place_id": "ChIJSaquBVHBhkcRfaxZvrAfl54",
     "formatted_address": "Corso Magenta, 31, 20123 Milano MI, Italy"
   },
   {
@@ -750,9 +812,10 @@
     "rank": 63,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/cafe-nativo/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 14.1001875,
+    "lng": -87.1911719,
+    "place_id": "EjM0UjI1KzNHRywgVGVndWNpZ2FscGEsIEZyYW5jaXNjbyBNb3JhesOhbiwgSG9uZHVyYXMiJjokCgoNk4RnCBXZrgfMEAsaFAoSCVE9dL-6om-PEdPJaiA4Is9o",
     "formatted_address": "4R25+3GG, Tegucigalpa, Francisco Morazán, Honduras"
   },
   {
@@ -762,9 +825,10 @@
     "rank": 64,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/caferatto/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 5.057979899999999,
+    "lng": -75.4877292,
+    "place_id": "ChIJ4csiMnxlR44RfMfHdrMP4X0",
     "formatted_address": "Cra. 23c #62-72, Manizales, Caldas, Colombia"
   },
   {
@@ -774,10 +838,11 @@
     "rank": 65,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/kross-coffee-roasters/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "73, Tsouderon Str., Chania, Crete PC 73134, Greece"
+    "address": null,
+    "lat": 35.515193,
+    "lng": 24.0209797,
+    "place_id": "ChIJO4kg8b59nBQRdDrRslC7nEI",
+    "formatted_address": "Tsouderon 73, Chania 731 34, Greece"
   },
   {
     "name": "Prevail Coffee",
@@ -786,10 +851,11 @@
     "rank": 66,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/prevail-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "39, Dexter Ave suite 102, Montgomery, AL 36104, USA"
+    "address": null,
+    "lat": 32.3777176,
+    "lng": -86.3082994,
+    "place_id": "Ei0zOSBEZXh0ZXIgQXZlICMxMDIsIE1vbnRnb21lcnksIEFMIDM2MTA0LCBVU0EiHxodChYKFAoSCfckDzlugY6IETn5nfzavTSiEgMxMDI",
+    "formatted_address": "39 Dexter Ave #102, Montgomery, AL 36104, USA"
   },
   {
     "name": "MOK Coffee",
@@ -798,22 +864,37 @@
     "rank": 67,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/mok-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Rue Antoine Dansaert, 196, 1000 Brussels, Belgium"
+    "address": null,
+    "lat": 50.8528174,
+    "lng": 4.341749399999999,
+    "place_id": "ChIJleDmRYnDw0cRdur3w4KDCrE",
+    "formatted_address": "Rue Antoine Dansaert 196, 1000 Bruxelles, Belgium"
   },
   {
-    "name": "Azura &#8211; The Coffee Company",
-    "city": "",
-    "country": "69",
+    "name": "Azure The Coffee Company",
+    "city": "Muscat",
+    "country": "Oman",
     "rank": 68,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/azura-the-coffee-company/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Way Number: 9203 Building Number: 790, Muscat, Oman"
+    "address": null,
+    "lat": 23.6453963,
+    "lng": 58.148331,
+    "place_id": "ChIJwQKF64HkjT4RYWS4rBynEtY",
+    "formatted_address": "A Salam St, Seeb, Oman"
+  },
+  {
+    "name": "Puku Puku",
+    "city": "",
+    "country": "Peru",
+    "rank": 69,
+    "category": "Top 100",
+    "source_url": "https://theworlds100bestcoffeeshops.com/locales/puku-puku/",
+    "address": null,
+    "lat": -12.1324766,
+    "lng": -77.0300644,
+    "place_id": "ChIJRZH-reG3BZERkyuz3_3qWo8",
+    "formatted_address": "Larcomar, Mal. de la Reserva 610, Miraflores 15074, Peru"
   },
   {
     "name": "The Golden Pig",
@@ -822,10 +903,11 @@
     "rank": 70,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/the-golden-pig/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Blvr. Los Próceres, 21100 San Pedro Sula, Cortés, Honduras"
+    "address": null,
+    "lat": 15.507472,
+    "lng": -88.0440769,
+    "place_id": "ChIJCxDm1HNbZo8RoTPNIwbOvww",
+    "formatted_address": "Boulevard Los Próceres, San Pedro Sula, Cortés, Honduras"
   },
   {
     "name": "Little Victories Coffee",
@@ -834,10 +916,11 @@
     "rank": 71,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/little-victories-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Boulevard Los Próceres, 21100 San Pedro Sula, Cortés, Honduras"
+    "address": null,
+    "lat": 15.507472,
+    "lng": -88.0440769,
+    "place_id": "ChIJCxDm1HNbZo8RoTPNIwbOvww",
+    "formatted_address": "Boulevard Los Próceres, San Pedro Sula, Cortés, Honduras"
   },
   {
     "name": "Push x Pull",
@@ -846,9 +929,10 @@
     "rank": 72,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/push-x-pull/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 45.5194845,
+    "lng": -122.6568709,
+    "place_id": "ChIJ3cWqo6aglVQRfkxiVfBxrKQ",
     "formatted_address": "821 SE Stark St, Portland, OR 97214, USA"
   },
   {
@@ -858,9 +942,10 @@
     "rank": 73,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/galani-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 9.011787199999999,
+    "lng": 38.8217566,
+    "place_id": "ChIJJ_S0kTOFSxYRDUr_NGoTwVw",
     "formatted_address": "Jacros - Salite Mehret Rd, Addis Ababa, Ethiopia"
   },
   {
@@ -870,10 +955,11 @@
     "rank": 74,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/wake-up/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Errázuriz 944, Punta Arenas, Chile"
+    "address": null,
+    "lat": -53.1650489,
+    "lng": -70.90637699999999,
+    "place_id": "ChIJKazIcXpjsr0RkM2py-VtBek",
+    "formatted_address": "Pdte. Federico Errázuriz 944, 6201064 Punta Arenas, Magallanes y la Antártica Chilena, Chile"
   },
   {
     "name": "Bouche",
@@ -882,10 +968,11 @@
     "rank": 75,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/bouche/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Rue de Namur 4, 1000 Brussels, Belgium"
+    "address": null,
+    "lat": 50.8416133,
+    "lng": 4.3596525,
+    "place_id": "ChIJG-djIofEw0cRt-Vwxo_1YxA",
+    "formatted_address": "Rue de Namur 4, 1000 Bruxelles, Belgium"
   },
   {
     "name": "Café de Reyes",
@@ -894,10 +981,11 @@
     "rank": 76,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/cafe-de-reyes/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "14 Avenida 5-19A, Quetzaltenango, 09001, Guatemala"
+    "address": null,
+    "lat": 14.8450544,
+    "lng": -91.5174066,
+    "place_id": "ChIJKbUDwauijoURvv4GigEVJNM",
+    "formatted_address": "14 Avenida 5-19A, Quetzaltenango 09001, Guatemala"
   },
   {
     "name": "Savaya Coffee Market",
@@ -906,9 +994,10 @@
     "rank": 77,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/savaya-coffee-market/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 32.2455883,
+    "lng": -110.8529403,
+    "place_id": "ChIJY_8Frv9u1oYR2OxKWU1ivXU",
     "formatted_address": "6540 E Tanque Verde Rd, Tucson, AZ 85715, USA"
   },
   {
@@ -918,10 +1007,11 @@
     "rank": 78,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/coffee-stopover-black/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "403, Taiwan, Taichung City, West District, Fulong St, 7號1樓"
+    "address": null,
+    "lat": 24.1454638,
+    "lng": 120.671868,
+    "place_id": "EiY0MDPlj7DngaPoh7rkuK3luILopb_ljYDnpo_pvo3ooZc36JmfMSIdGhsKFgoUChIJnYmJYXM9aTQRk02EnOsO9vYSATE",
+    "formatted_address": "1, No. 7, Fulong St, West District, Taichung City, Taiwan 403"
   },
   {
     "name": "Fuku",
@@ -930,9 +1020,10 @@
     "rank": 79,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/fuku/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 52.3812737,
+    "lng": 4.855158100000001,
+    "place_id": "ChIJ1V3kG2XixUcRH1nQwIBJwmg",
     "formatted_address": "Bos en Lommerweg 136 HS, 1055 ED Amsterdam, Netherlands"
   },
   {
@@ -942,10 +1033,11 @@
     "rank": 80,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/the-miners-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Železná 490/14, 110 00 Staré Město, Prague, Czech Republic"
+    "address": null,
+    "lat": 50.0864025,
+    "lng": 14.4218479,
+    "place_id": "ChIJgWbZU-mUC0cR8ohJfa5HNWk",
+    "formatted_address": "Železná 490/14, 110 00 Staré Město, Czechia"
   },
   {
     "name": "Cupping Café",
@@ -954,9 +1046,10 @@
     "rank": 81,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/cupping-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": -23.5549482,
+    "lng": -46.68882139999999,
+    "place_id": "ChIJxdLkNJZXzpQReUwGK4nyk8Y",
     "formatted_address": "R. Wisard, 171 - Vila Madalena, São Paulo - SP, 05434-080, Brazil"
   },
   {
@@ -966,10 +1059,11 @@
     "rank": 82,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/coffea-guatemala/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "7A, Calle Poniente 15, Antigua Guatemala 03001, Guatemala"
+    "address": null,
+    "lat": 14.554013,
+    "lng": -90.7348663,
+    "place_id": "ChIJaYF_SA0OiYUR7_L_wAjopQA",
+    "formatted_address": "7a Calle Poniente 15, Antigua Guatemala, Guatemala"
   },
   {
     "name": "D·Origen Coffee Roasters Barcelona",
@@ -978,10 +1072,11 @@
     "rank": 83,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/d%c2%b7origen-coffee-roasters-barcelona/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Carrer de Casp, 48, L'Eixample, 08010 Barcelona, Spain"
+    "address": null,
+    "lat": 41.3908624,
+    "lng": 2.1731053,
+    "place_id": "ChIJ8T0QH_CipBIR6Zr1g9aKad4",
+    "formatted_address": "Carrer de Casp, 48, Eixample, 08010 Barcelona, Spain"
   },
   {
     "name": "Coffee Stain",
@@ -990,10 +1085,11 @@
     "rank": 84,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/coffee-stain/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "D4-G3-01, Solaris Dutamas, Kuala Lumpur, Malaysia, 50480"
+    "address": null,
+    "lat": 3.1715266,
+    "lng": 101.6664314,
+    "place_id": "ChIJ5e6wBV5IzDERXANPx1NBcVM",
+    "formatted_address": "D4-G3-01, Jln Dutamas 1, Solaris Dutamas, 50480 Kuala Lumpur, Federal Territory of Kuala Lumpur, Malaysia"
   },
   {
     "name": "The Dude Specialty Coffee",
@@ -1002,9 +1098,10 @@
     "rank": 85,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/the-dude-specialty-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 41.9978065,
+    "lng": 21.4198181,
+    "place_id": "ChIJETlcOUkUVBMRtcm2yJn0VBE",
     "formatted_address": "Apostle Guslarot 16, Skopje 1000, North Macedonia"
   },
   {
@@ -1014,9 +1111,10 @@
     "rank": 86,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/story-and-soil-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 41.7637176,
+    "lng": -72.6885137,
+    "place_id": "ChIJzw6G3UJT5okRsVg-WQhzdG8",
     "formatted_address": "387 Capitol Ave, Hartford, CT 06106, USA"
   },
   {
@@ -1026,9 +1124,10 @@
     "rank": 87,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/exploradores/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 19.3554536,
+    "lng": -99.275689,
+    "place_id": "ChIJ635zgLUA0oURwUDZfOwFplg",
     "formatted_address": "Av. Santa Fe 601, Lomas de Santa Fe, Contadero, Cuajimalpa de Morelos, 05310 Cuajimalps, CDMX, Mexico"
   },
   {
@@ -1038,10 +1137,11 @@
     "rank": 88,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/the-folks/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "R. dos Sapateiros 111, 1100-619 Lisbon, Portugal"
+    "address": null,
+    "lat": 38.7110619,
+    "lng": -9.1383587,
+    "place_id": "ChIJi7Bh4Xg0GQ0RdvZDEXy8w_E",
+    "formatted_address": "R. dos Sapateiros 111, 1100-051 Lisboa, Portugal"
   },
   {
     "name": "Casa Barista &#038; Co.,Casco Historico",
@@ -1050,10 +1150,11 @@
     "rank": 89,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/casa-barista-co-casco-historico/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Casa Barista & Co.,Casco Historico, Santo Domingo, Dominican Republic"
+    "address": null,
+    "lat": 18.474361,
+    "lng": -69.88477809999999,
+    "place_id": "ChIJo71akESJr44RaP_SBr6uIuw",
+    "formatted_address": "C. Arzobispo Meriño 268, Santo Domingo 10210, Dominican Republic"
   },
   {
     "name": "Cypher Urban Roastery",
@@ -1062,9 +1163,10 @@
     "rank": 90,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/cypher-urban-roastery/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 25.1224432,
+    "lng": 55.20919560000001,
+    "place_id": "ChIJgT7BrsZrXz4RQuTOVL5PY4o",
     "formatted_address": "Al Quoz Industrial Area 3, Street 6b, Complex 76, Warehouse no. 2 - Dubai - United Arab Emirates"
   },
   {
@@ -1074,10 +1176,11 @@
     "rank": 91,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/cafetano-coffee-roasters/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Av. República de Costa Rica, 11101, Tegucigalpa, Francisco Morazán, Honduras"
+    "address": null,
+    "lat": 14.0891693,
+    "lng": -87.18622409999999,
+    "place_id": "ChIJhaSZedSib48RdofAX4Tytn0",
+    "formatted_address": "Av. República de Costa Rica, Tegucigalpa, Francisco Morazán, Honduras"
   },
   {
     "name": "Coffee Five",
@@ -1086,9 +1189,10 @@
     "rank": 92,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/coffee-five/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": -22.9025663,
+    "lng": -43.1767791,
+    "place_id": "ChIJhVec0o5_mQARZO8ND6SrAgA",
     "formatted_address": "R. da Quitanda, 86 - quiosque 01 - Centro, Rio de Janeiro - RJ, 20091-902, Brazil"
   },
   {
@@ -1098,10 +1202,11 @@
     "rank": 93,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/kima-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "C. Carretería, 67, Distrito Centro, 29008 Malaga, Spain"
+    "address": null,
+    "lat": 36.7238288,
+    "lng": -4.4229259,
+    "place_id": "ChIJwb6Oe773cg0REmFojy7gtJg",
+    "formatted_address": "C. Carretería, 67, Distrito Centro, 29008 Málaga, Spain"
   },
   {
     "name": "Negro",
@@ -1110,10 +1215,11 @@
     "rank": 94,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/negro/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Suipacha 637, C1006, Buenos Aires, Argentina"
+    "address": null,
+    "lat": -34.600878,
+    "lng": -58.3795636,
+    "place_id": "ChIJ3cNOI8nKvJURtT20WMypHg8",
+    "formatted_address": "Suipacha 637, C1008AAM C1008AAM, Cdad. Autónoma de Buenos Aires, Argentina"
   },
   {
     "name": "Metric",
@@ -1122,10 +1228,11 @@
     "rank": 95,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/metric/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "2021 W Fulton St, Chicago, IL 60612, United States"
+    "address": null,
+    "lat": 41.8866605,
+    "lng": -87.6778477,
+    "place_id": "ChIJzTsrAUgtDogR-cUahY0UaOE",
+    "formatted_address": "2021 W Fulton St, Chicago, IL 60612, USA"
   },
   {
     "name": "El Terrible Juan Café",
@@ -1134,10 +1241,11 @@
     "rank": 96,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/el-terrible-juan-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "C. Colonias 440, Col Americana, Americana, 44160 Guadalajara, Jal., Mexico"
+    "address": null,
+    "lat": 20.6694613,
+    "lng": -103.3662362,
+    "place_id": "ChIJ27y2mQauKIQRJa8IIPKMvHQ",
+    "formatted_address": "C. Colonias 440, Col Americana, Americana, 44150 Guadalajara, Jal., Mexico"
   },
   {
     "name": "Flat White Specialty Coffee",
@@ -1146,10 +1254,11 @@
     "rank": 97,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/flat-white-specialty-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Student Center, Doha, Qatar"
+    "address": null,
+    "lat": 25.3146714,
+    "lng": 51.4418359,
+    "place_id": "ChIJn_jQI_jbRT4RUv7nkbiKmmA",
+    "formatted_address": "Education City, Education City Student Center, Al Huqoul St, Doha, Qatar"
   },
   {
     "name": "Cafeoteca",
@@ -1158,10 +1267,11 @@
     "rank": 98,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/cafeoteca/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "C. 31, San José, Barrio Escalante, 10101, San Jose, Costa Rica"
+    "address": null,
+    "lat": 9.9283386,
+    "lng": -84.06454730000002,
+    "place_id": "ChIJFcTu0nbjoI8Rvg4fmBnwvGw",
+    "formatted_address": "C. 31, San José, Costa Rica"
   },
   {
     "name": "Surry Hills Coffee",
@@ -1170,10 +1280,11 @@
     "rank": 99,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/surry-hills-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Arévalo 2877, C1426, Buenos Aires, Argentina"
+    "address": null,
+    "lat": -34.5722912,
+    "lng": -58.4312759,
+    "place_id": "ChIJqU4u0pe1vJURXATY3_gGrqQ",
+    "formatted_address": "Arévalo 2877, C1426DJC Cdad. Autónoma de Buenos Aires, Argentina"
   },
   {
     "name": "Vacation Coffee",
@@ -1182,9 +1293,10 @@
     "rank": 100,
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/vacation-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": -37.8157952,
+    "lng": 144.9720338,
+    "place_id": "ChIJv1on_7dC1moRDAYeaq0BIGs",
     "formatted_address": "1 Exhibition St, Melbourne VIC 3000, Australia"
   },
   {
@@ -1194,9 +1306,10 @@
     "rank": 1,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/tropicalia-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 4.6637286,
+    "lng": -74.0506899,
+    "place_id": "ChIJTVQUVWCaP44RZT7-gUaccBg",
     "formatted_address": "Cl. 81a #8-23, Bogotá, Colombia"
   },
   {
@@ -1206,10 +1319,11 @@
     "rank": 2,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/kafi-wasi-cafe-tostaduria/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Calle, Calle Pte. Bolognesi 216, Arequipa, Perú"
+    "address": null,
+    "lat": -16.3986215,
+    "lng": -71.5392097,
+    "place_id": "ChIJw9QmKVpKQpERH3VzVL5rquQ",
+    "formatted_address": "Calle Pte. Bolognesi 216, Arequipa 04001, Peru"
   },
   {
     "name": "Holaste! Specialty Coffee",
@@ -1218,10 +1332,11 @@
     "rank": 3,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/holaste-specialty-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Carlos Bories 385, Ultima Esperanza, Natales, Región de Magallanes, Chile"
+    "address": null,
+    "lat": -51.7261499,
+    "lng": -72.50746,
+    "place_id": "ChIJ2ehQLBror70RRPdloMC8JDA",
+    "formatted_address": "Carlos Bories 385, 6160492 Ultima Esperanza, Natales, Magallanes y la Antártica Chilena, Chile"
   },
   {
     "name": "FANKØR",
@@ -1230,9 +1345,10 @@
     "rank": 4,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/fankor/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": -0.20011,
+    "lng": -78.4819266,
+    "place_id": "ChIJaRWpbnOa1ZERnyD484I3qtQ",
     "formatted_address": "Whymper N27-55 y, Quito 170518, Ecuador"
   },
   {
@@ -1242,9 +1358,10 @@
     "rank": 5,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/tributo-casa-de-cafe-chacao/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 10.4954806,
+    "lng": -66.854226,
+    "place_id": "ChIJG5Tj08RZKowR_BP9qXBm_Wk",
     "formatted_address": "local G, edifico Donatello, C. Cecilio Acosta, Caracas 1060, Miranda, Venezuela"
   },
   {
@@ -1254,10 +1371,11 @@
     "rank": 6,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/fruto-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Jorge Luis Borges 2021, C1414 Cdad. Autónoma de Buenos Aires, Argentina"
+    "address": null,
+    "lat": -34.5859867,
+    "lng": -58.42579749999999,
+    "place_id": "ChIJialHiIa1vJUR2tIRJX51uXI",
+    "formatted_address": "Jorge Luis Borges 2021, C1425FFA Cdad. Autónoma de Buenos Aires, Argentina"
   },
   {
     "name": "Monotono Specialty Coffee",
@@ -1266,10 +1384,11 @@
     "rank": 7,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/monotono-specialty-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Jirón Fedelli 103, Barranco 15063, Perú"
+    "address": null,
+    "lat": -12.1402626,
+    "lng": -77.0219778,
+    "place_id": "ChIJf5I-TeW3BZERvrgs8C-9MhQ",
+    "formatted_address": "Jirón Fedelli 103, Barranco 15063, Peru"
   },
   {
     "name": "Cupping Café",
@@ -1278,10 +1397,11 @@
     "rank": 8,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/cupping-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "R. Wisard, 171 - Vila Madalena, São Paulo - SP, 05434-080, Brasil"
+    "address": null,
+    "lat": -23.5549482,
+    "lng": -46.68882139999999,
+    "place_id": "ChIJxdLkNJZXzpQReUwGK4nyk8Y",
+    "formatted_address": "R. Wisard, 171 - Vila Madalena, São Paulo - SP, 05434-080, Brazil"
   },
   {
     "name": "Puku Puku",
@@ -1290,10 +1410,11 @@
     "rank": 9,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/puku-puku/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Av. la Paz 463, Miraflores, Perú"
+    "address": null,
+    "lat": -12.1220962,
+    "lng": -77.0265031,
+    "place_id": "ChIJYUdgzhvIBZERBeR6x_DRTJU",
+    "formatted_address": "Av. la Paz 463, Miraflores 15074, Peru"
   },
   {
     "name": "Eco Mapu Coffee Villarica",
@@ -1302,10 +1423,11 @@
     "rank": 10,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/eco-mapu-coffee-villarica/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Julio Zegers 530, Villarrica, Región de La Araucanía, Chile"
+    "address": null,
+    "lat": -39.2843333,
+    "lng": -72.224107,
+    "place_id": "ChIJTyO8tjpiFJYR-A4dCOvJirc",
+    "formatted_address": "Julio Zegers 530, 4930000 Villarrica, Araucanía, Chile"
   },
   {
     "name": "Typica Café",
@@ -1314,10 +1436,11 @@
     "rank": 11,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/typica-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "La Paz 661, Cochabamba, Bolivia"
+    "address": null,
+    "lat": -17.4031996,
+    "lng": -66.1545245,
+    "place_id": "ChIJq6BPke9z45MRCx_ad5rdpb8",
+    "formatted_address": "HRWW+P5H, Cochabamba, Bolivia"
   },
   {
     "name": "Pergamino Café Laureles",
@@ -1326,10 +1449,11 @@
     "rank": 12,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/pergamino-cafe-laureles/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Cq 73 #34 - 65, Laureles - Estadio, Medellín, Laureles, Medellín, Antioquia, Colombia"
+    "address": null,
+    "lat": 6.2413788,
+    "lng": -75.59618689999999,
+    "place_id": "ChIJzcFcU8spRI4RKdDH5QXv8LU",
+    "formatted_address": "Tv 34 #34 - 65, Laureles - Estadio, Medellín, Laureles, Medellín, Antioquia, Colombia"
   },
   {
     "name": "Caferatto Café Especial",
@@ -1338,9 +1462,10 @@
     "rank": 13,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/caferatto-cafe-especial/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 5.057979899999999,
+    "lng": -75.4877292,
+    "place_id": "ChIJ4csiMnxlR44RfMfHdrMP4X0",
     "formatted_address": "Cra. 23c #62-72, Manizales, Caldas, Colombia"
   },
   {
@@ -1350,10 +1475,11 @@
     "rank": 14,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/wake-up-coffee-lab/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Errazuriz 944, Punta Arenas, Región de Magallanes, Chile"
+    "address": null,
+    "lat": -53.1650489,
+    "lng": -70.90637699999999,
+    "place_id": "ChIJKazIcXpjsr0RkM2py-VtBek",
+    "formatted_address": "Pdte. Federico Errázuriz 944, 6201064 Punta Arenas, Magallanes y la Antártica Chilena, Chile"
   },
   {
     "name": "Masaro Café",
@@ -1362,10 +1488,11 @@
     "rank": 15,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/masaro-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "La Florida 576, Chiclayo 14000, Perú"
+    "address": null,
+    "lat": -6.7798677,
+    "lng": -79.83960569999999,
+    "place_id": "ChIJ6R2yly_vTJAR27NqQxo3NGI",
+    "formatted_address": "La Florida 576, Chiclayo 14000, Peru"
   },
   {
     "name": "Mulano Coffee Shop",
@@ -1374,10 +1501,11 @@
     "rank": 16,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/mulano-coffee-shop/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Avenida Loja, Piñas, Ecuador"
+    "address": null,
+    "lat": -3.6800524,
+    "lng": -79.6816882,
+    "place_id": "ChIJV0wsB2NfM5ARkIyFvDZyPlk",
+    "formatted_address": "Av Loja, Piñas, Ecuador"
   },
   {
     "name": "Origen Tostadores de Café",
@@ -1386,10 +1514,11 @@
     "rank": 17,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/origen-tostadores-de-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Av. Simón Bolívar 1199, Pueblo Libre 15084, Perú"
+    "address": null,
+    "lat": -12.0725883,
+    "lng": -77.06629579999999,
+    "place_id": "ChIJK9g8XRrJBZER0pk3UpwRtVg",
+    "formatted_address": "Av. Simón Bolívar 1199, Pueblo Libre 15084, Peru"
   },
   {
     "name": "Casa Canela",
@@ -1398,10 +1527,11 @@
     "rank": 18,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/casa-canela/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "C5GF+8RC, C. Bolivar las Marias, Caracas 1083, Miranda, Venezuela"
+    "address": null,
+    "lat": 10.424004,
+    "lng": -66.8258463,
+    "place_id": "ChIJqw7a9JP3KowRJBDX8qRsuAs",
+    "formatted_address": "C. Bolivar las Marias, Caracas 1083, Miranda, Venezuela"
   },
   {
     "name": "Mugen Coffee Project",
@@ -1410,9 +1540,10 @@
     "rank": 19,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/mugen-coffee-project/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": -16.5104006,
+    "lng": -68.1260746,
+    "place_id": "ChIJ9bS0MWIgX5ERUcivbh5wA-0",
     "formatted_address": "Av.20 de Octubre 2475, La Paz, Bolivia"
   },
   {
@@ -1422,10 +1553,11 @@
     "rank": 20,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/coffee-five/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Rua da quitanda 86, centro , Rio de Janeiro, Brazil"
+    "address": null,
+    "lat": -22.9026279,
+    "lng": -43.17691079999999,
+    "place_id": "ChIJfezBJl9_mQARDoAuxj2X1OE",
+    "formatted_address": "R. da Quitanda, 86 - Centro, Rio de Janeiro - RJ, 20091-005, Brazil"
   },
   {
     "name": "Café Guayasamin &#8211; Centro Quito",
@@ -1434,10 +1566,11 @@
     "rank": 21,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/cafe-guayasamin-centro-quito/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Calle García Moreno y Mejía, esquina, Quito, Ecuador"
+    "address": null,
+    "lat": -0.2189069,
+    "lng": -78.5116685,
+    "place_id": "Ei5HYXJjw61hIE1vcmVubyAmIE1lasOtYSwgMTcwNDAxIFF1aXRvLCBFY3VhZG9yImYiZAoUChIJgT1rNiia1ZERC7WmUPLF7O8SFAoSCYE9azYomtWREQu1plDyxezvGhQKEgkF3LpMKJrVkRGFIWxoSvkn7RoUChIJn0DWSSia1ZERWicT_nk8vrIiCg3zmN7_FfMRNNE",
+    "formatted_address": "García Moreno & Mejía, 170401 Quito, Ecuador"
   },
   {
     "name": "Café de Barrio",
@@ -1446,10 +1579,11 @@
     "rank": 22,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/cafe-de-barrio/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Buenos Aires 601 Local 4, X5000, Córdoba, Argentina"
+    "address": null,
+    "lat": -31.4238479,
+    "lng": -64.1856615,
+    "place_id": "ChIJQeKnhY-iMpQRRjF-jKQ9qak",
+    "formatted_address": "Buenos Aires 601 Local 4, X5000IMM Córdoba, Argentina"
   },
   {
     "name": "Three Monkeys Coffee Cusco",
@@ -1458,10 +1592,11 @@
     "rank": 23,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/three-monkeys-coffee-cusco/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Pje. Pampa de la Alianza 474, Cusco 08000, Perú"
+    "address": null,
+    "lat": -13.5177829,
+    "lng": -71.9749574,
+    "place_id": "ChIJAaegWgvWbZERxik3jk3YIxM",
+    "formatted_address": "Pje. Pampa de la Alianza 474, Cusco 08002, Peru"
   },
   {
     "name": "Abstrakto Café de Especialidad",
@@ -1470,10 +1605,11 @@
     "rank": 24,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/abstrakto-cafe-de-especialidad/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Calderon de la Barca, 20000 Maldonado, Departamento de Maldonado, Uruguay"
+    "address": null,
+    "lat": -34.9185261,
+    "lng": -54.9416513,
+    "place_id": "ChIJpym-37gadZURy9Feqm-ekSk",
+    "formatted_address": "Calderon de la Barca, 20000 Punta del Este, Departamento de Maldonado, Uruguay"
   },
   {
     "name": "Neira Café Lab",
@@ -1482,10 +1618,11 @@
     "rank": 25,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/neira-cafe-lab/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Calle Enrique Palacios 1074, Miraflores 15074, Perú"
+    "address": null,
+    "lat": -12.1169774,
+    "lng": -77.0398428,
+    "place_id": "ChIJRZHCeTvIBZERSLmJgVfl7yY",
+    "formatted_address": "Ca. Enrique Palacios 1074, Miraflores 15074, Peru"
   },
   {
     "name": "Café Local",
@@ -1494,10 +1631,11 @@
     "rank": 26,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/cafe-local/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "General Urrutia 630, Región de La Araucanía, Villarrica, Chile"
+    "address": null,
+    "lat": -39.27974529999999,
+    "lng": -72.225757,
+    "place_id": "ChIJ20K7QyNiFJYR9EfoV9UWTQU",
+    "formatted_address": "General Urrutia 630, 4931458 Villarrica, Araucanía, Chile"
   },
   {
     "name": "Tasta Café",
@@ -1506,10 +1644,11 @@
     "rank": 27,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/tasta-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Challhuamayo, Capiro, 12310, Perú"
+    "address": null,
+    "lat": -13.3545463,
+    "lng": -70.3483682,
+    "place_id": "ChIJG1D289V9ZZERZl9C4gWaKQs",
+    "formatted_address": "JMR2+5HH, Carr. Interoceánica 28, Limapampa 21260, Peru"
   },
   {
     "name": "Oso Café",
@@ -1518,10 +1657,11 @@
     "rank": 28,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/oso-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Cl. San Francisco 217, Arequipa, 04001, Perú"
+    "address": null,
+    "lat": -16.3968981,
+    "lng": -71.5356616,
+    "place_id": "ChIJMYNLkVBKQpER71GBgsPIP3I",
+    "formatted_address": "Cl. San Francisco 217, Arequipa 04001, Peru"
   },
   {
     "name": "Insignia Coffee",
@@ -1530,10 +1670,11 @@
     "rank": 29,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/insignia-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Cl. 41 #41-43 F25, Ibagué, Tolima, Colombia"
+    "address": null,
+    "lat": 4.4358149,
+    "lng": -75.2132865,
+    "place_id": "ChIJTzlpL_LFOI4RmoXkOE4Wrds",
+    "formatted_address": "Cra. 5 # 41-16, Ibagué, Tolima, Colombia"
   },
   {
     "name": "Alquimia Specialty Coffee Shop",
@@ -1542,10 +1683,11 @@
     "rank": 30,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/alquimia-specialty-coffee-shop/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "6RQ2+WQ2, C. F, Santa Cruz de la Sierra, Santa Cruz de la Sierra, Bolivia 0000"
+    "address": null,
+    "lat": -17.7602375,
+    "lng": -63.19810939999999,
+    "place_id": "Eio2UlEyK1dRMiwgU2FudGEgQ3J1eiBkZSBsYSBTaWVycmEsIEJvbGl2aWEiJjokCgoNuQBq9RXau1TaEAsaFAoSCWMawKcc6PGTERthZ6RTCotc",
+    "formatted_address": "6RQ2+WQ2, Santa Cruz de la Sierra, Bolivia"
   },
   {
     "name": "Antaqa Café",
@@ -1554,10 +1696,11 @@
     "rank": 31,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/antaqa-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Jirón Tres Máscaras 510, Ayacucho, 05003, Perú"
+    "address": null,
+    "lat": -13.1589265,
+    "lng": -74.2235208,
+    "place_id": "ChIJ-wxIC_R9EpERTavTK9l4Wdk",
+    "formatted_address": "Jirón Tres Máscaras 510, Ayacucho 05003, Peru"
   },
   {
     "name": "Café 4 Llamas &#8211; Santa Cruz",
@@ -1566,10 +1709,11 @@
     "rank": 32,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/cafe-4-llamas-santa-cruz/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Condominio You Plaza, Santa Cruz de la Sierra, Bolivia"
+    "address": null,
+    "lat": -17.7585218,
+    "lng": -63.19784619999999,
+    "place_id": "ChIJFRztKxvn8ZMR1hDuGLatBTg",
+    "formatted_address": "Av. Salvador esquina, Santa Cruz de la Sierra, Bolivia"
   },
   {
     "name": "Café Micelio Puerto Varas",
@@ -1578,10 +1722,11 @@
     "rank": 33,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/cafe-micelio-puerto-varas/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Calle Estación 262, Región de Los Lagos, Puerto Varas, Chile"
+    "address": null,
+    "lat": -41.3153911,
+    "lng": -72.98651509999999,
+    "place_id": "ChIJZ7T64iknGJYRaaTqMiudync",
+    "formatted_address": "Estación 262, 5550492 Puerto Varas, Los Lagos, Chile"
   },
   {
     "name": "Rua &#8211; Café de especialidad curado",
@@ -1590,10 +1735,11 @@
     "rank": 34,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/rua-cafe-de-especialidad-curado/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Victor Emilio Estrada 419 y, Guayaquil, 090511, Ecuador"
+    "address": null,
+    "lat": -2.1718812,
+    "lng": -79.908406,
+    "place_id": "ChIJX8h-g_JtLZARAt6fMIEUA6Q",
+    "formatted_address": "Victor Emilio Estrada 419 y, Guayaquil 090511, Ecuador"
   },
   {
     "name": "Café 18 &#8211; El Chicó",
@@ -1602,9 +1748,10 @@
     "rank": 35,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/cafe-18-el-chico/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 4.6799577,
+    "lng": -74.04628380000001,
+    "place_id": "ChIJaaiUQJGaP44Rtw9jb5K3sLw",
     "formatted_address": "Cra. 11B #96-54, Bogotá, Colombia"
   },
   {
@@ -1614,9 +1761,10 @@
     "rank": 36,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/cronopios-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": -4.0003898,
+    "lng": -79.2006097,
+    "place_id": "ChIJ_W3bS-43y5ERwXO17FZFORo",
     "formatted_address": "Bernardo Valdivieso, y, Loja 110108, Ecuador"
   },
   {
@@ -1626,10 +1774,11 @@
     "rank": 37,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/abisinia-cafe-y-tostaduria/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Rodríguez de Mendoza 245, Pueblo Libre 15084, Perú"
+    "address": null,
+    "lat": -12.0732751,
+    "lng": -77.06032309999999,
+    "place_id": "ChIJ4zBK8RzJBZER0-oribi0Y7Q",
+    "formatted_address": "Rodríguez de Mendoza 245, Pueblo Libre 15084, Peru"
   },
   {
     "name": "Slow Brew Coffee Shop Cuenca",
@@ -1638,9 +1787,10 @@
     "rank": 38,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/slow-brew-coffee-shop-cuenca/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": -2.9039769,
+    "lng": -79.0078211,
+    "place_id": "ChIJMQ50V20YzZERa7b3ljuAF1w",
     "formatted_address": "Aurelio Aguilar V. 1-93 y, Cuenca 010107, Ecuador"
   },
   {
@@ -1650,10 +1800,11 @@
     "rank": 39,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/hb-bronze-coffeebar/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Plaza Tomas Frias Illimani 1570, La Paz, Bolivia"
+    "address": null,
+    "lat": -16.498013,
+    "lng": -68.13051999999999,
+    "place_id": "ChIJAaJ4Im4gX5ERHL3PRVd9F1M",
+    "formatted_address": "Plaza Tomas Frias 1570, La Paz, Bolivia"
   },
   {
     "name": "Tres",
@@ -1662,9 +1813,10 @@
     "rank": 40,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/tres/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": -34.5732721,
+    "lng": -58.4482811,
+    "place_id": "ChIJ76bahKG1vJUR2-IDXihpbIU",
     "formatted_address": "Teodoro García 2806, C1426DNB Cdad. Autónoma de Buenos Aires, Argentina"
   },
   {
@@ -1674,10 +1826,11 @@
     "rank": 41,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/don-salazar/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Calle Las Camelias 185 San Isidro, Peru"
+    "address": null,
+    "lat": -12.0925341,
+    "lng": -77.0292387,
+    "place_id": "ChIJ9e7z6mbIBZERvEwJLv9y1lA",
+    "formatted_address": "C. las Camelias 185, San Isidro 15046, Peru"
   },
   {
     "name": "Cuervo Café",
@@ -1686,10 +1839,11 @@
     "rank": 42,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/cuervo-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "El Salvador 4580, C1414 Cdad. Autónoma de Buenos Aires, Argentina"
+    "address": null,
+    "lat": -34.5903852,
+    "lng": -58.42586310000001,
+    "place_id": "ChIJu-jhgHjKvJURM8CrABqAshc",
+    "formatted_address": "El Salvador 4580, C1414BPH Cdad. Autónoma de Buenos Aires, Argentina"
   },
   {
     "name": "Punto Café",
@@ -1698,10 +1852,11 @@
     "rank": 43,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/punto-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "C. Piura 1251, Miraflores, 15074, Perú"
+    "address": null,
+    "lat": -12.1162995,
+    "lng": -77.0413763,
+    "place_id": "ChIJsxZ4rzvIBZERJw6ZHIPvwgY",
+    "formatted_address": "C. Piura 1251, Miraflores 15048, Peru"
   },
   {
     "name": "Famosta Café",
@@ -1710,9 +1865,10 @@
     "rank": 44,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/famosta-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 4.8034417,
+    "lng": -75.6844211,
+    "place_id": "ChIJL0Ga5D2HOI4RGR-jF8RiWB8",
     "formatted_address": "Av. Juan B Gutierrez #17-55, Pereira, Risaralda, Colombia"
   },
   {
@@ -1722,10 +1878,11 @@
     "rank": 45,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/negro-cueva-de-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Suipacha 637, C1006 Cdad. Autónoma de Buenos Aires, Argentina"
+    "address": null,
+    "lat": -34.600878,
+    "lng": -58.3795636,
+    "place_id": "ChIJ3cNOI8nKvJURtT20WMypHg8",
+    "formatted_address": "Suipacha 637, C1008AAM C1008AAM, Cdad. Autónoma de Buenos Aires, Argentina"
   },
   {
     "name": "Libertario Coffee Roasters &#8211; Calle 70a",
@@ -1734,10 +1891,11 @@
     "rank": 46,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/libertario-coffee-roasters-calle-70a/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Cl. 70a # 5 - 37, Bogotá, Colombia"
+    "address": null,
+    "lat": 4.6528621,
+    "lng": -74.0550531,
+    "place_id": "ChIJtawQQkKaP44RQsr2TEkjmBY",
+    "formatted_address": "Cl. 70a #5-37, Bogotá, Colombia"
   },
   {
     "name": "Surry Hills Coffee Palermo",
@@ -1746,9 +1904,10 @@
     "rank": 47,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/surry-hills-coffee-palermo/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": -34.5722688,
+    "lng": -58.43125309999999,
+    "place_id": "ChIJpa7VK7G1vJURB2vsGd0I19Q",
     "formatted_address": "Arévalo 2877, C1426 Cdad. Autónoma de Buenos Aires, Argentina"
   },
   {
@@ -1758,9 +1917,10 @@
     "rank": 48,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/azahar-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 4.6780191,
+    "lng": -74.0500933,
+    "place_id": "ChIJcUflUJKaP44R9FSV0WUYTPw",
     "formatted_address": "Cl 93b #13-91, Bogotá, Colombia"
   },
   {
@@ -1770,10 +1930,11 @@
     "rank": 49,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/dsala-caffe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Jr Gonzalez Prada 543 Surquillo, Peru"
+    "address": null,
+    "lat": -12.1164962,
+    "lng": -77.0244886,
+    "place_id": "ChIJi27cVhDIBZERc5XdJmBR-h0",
+    "formatted_address": "Gonzáles Prada 543, Lima 15047, Peru"
   },
   {
     "name": "Cafe Folks",
@@ -1782,10 +1943,11 @@
     "rank": 50,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/cafe-folks/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "O'Higgins 624, Puerto Varas, Región de Los Lagos, Chile"
+    "address": null,
+    "lat": -41.3191461,
+    "lng": -72.9886654,
+    "place_id": "ChIJtxYmOdQmGJYR7DAE2ia4lEQ",
+    "formatted_address": "O'Higgins 624, Puerto Varas, Los Lagos, Chile"
   },
   {
     "name": "Café Melosa",
@@ -1794,10 +1956,11 @@
     "rank": 51,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/cafe-melosa/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Centro San Ignacio, C. Elice, Caracas 1060, Distrito Capital, Venezuela"
+    "address": null,
+    "lat": 10.497567,
+    "lng": -66.8566818,
+    "place_id": "ChIJTxAspQBZKowRo_3flzancfs",
+    "formatted_address": "Centro San Ignacio, C. Elice, Caracas 1060, Miranda, Venezuela"
   },
   {
     "name": "Florencia y Fortunata Specialty Coffee",
@@ -1806,10 +1969,11 @@
     "rank": 52,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/florencia-y-fortunata-specialty-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Suecia 332, Cusco 08000, Perú"
+    "address": null,
+    "lat": -13.5154928,
+    "lng": -71.9789421,
+    "place_id": "ChIJORlopnPWbZERKzNPdtOcSkY",
+    "formatted_address": "Suecia 332, Cusco 08000, Peru"
   },
   {
     "name": "Roaster Specialty Coffee",
@@ -1818,10 +1982,11 @@
     "rank": 53,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/roaster-specialty-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Calle Rene Moreno Bloque E N20 San Miguel, La Paz, Bolivia 20"
+    "address": null,
+    "lat": -16.5415834,
+    "lng": -68.0787612,
+    "place_id": "ChIJvfRcgTAhX5ER5WBQ6bvsABo",
+    "formatted_address": "Gabriel René Moreno, La Paz, Bolivia"
   },
   {
     "name": "Stratto Bodega de Café + Coffee Shop",
@@ -1830,10 +1995,11 @@
     "rank": 54,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/stratto-bodega-de-cafe-coffee-shop/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Vizcaya, y E13-18, Quito 170525, Ecuador"
+    "address": null,
+    "lat": -0.180305,
+    "lng": -78.48703669999999,
+    "place_id": "ChIJdbfZUPmb1ZERbYL8qv1PTZ4",
+    "formatted_address": "Juan González &, Quito 170135, Ecuador"
   },
   {
     "name": "Raiz Coffee",
@@ -1842,10 +2008,11 @@
     "rank": 55,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/raiz-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Calle Porta 152, Miraflores, 15074, Perú"
+    "address": null,
+    "lat": -12.1234781,
+    "lng": -77.031477,
+    "place_id": "ChIJPzxSwhjIBZERk8_c3Zh1rdU",
+    "formatted_address": "Calle Porta 152, Miraflores 15074, Peru"
   },
   {
     "name": "Café Buena Vista",
@@ -1854,10 +2021,11 @@
     "rank": 56,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/cafe-buena-vista/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Calle los robles, C. los Claveles, Santa Cruz de la Sierra, Bolivia"
+    "address": null,
+    "lat": -17.7657214,
+    "lng": -63.2034664,
+    "place_id": "ChIJ2a7WCljd8ZMRgmpf3izFsko",
+    "formatted_address": "y calles, Calle los robles, C. los Claveles, Santa Cruz de la Sierra, Bolivia"
   },
   {
     "name": "Buho Nomada",
@@ -1866,10 +2034,11 @@
     "rank": 57,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/buho-nomada/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Avenida Lago Peñuelas 1987, Región de Los Lagos, Puerto Montt, Chile"
+    "address": null,
+    "lat": -41.4480761,
+    "lng": -72.93654049999999,
+    "place_id": "ChIJf9w0ZuY6GJYRHBM95o_pbw0",
+    "formatted_address": "Av. Lago Peñuelas 1987, 8000600 Puerto Montt, Los Lagos, Chile"
   },
   {
     "name": "Colo Coffee",
@@ -1878,10 +2047,11 @@
     "rank": 58,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/colo-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Cra. 6a #117-26, Usaquén, Bogotá, Cundinamarca, Colombia"
+    "address": null,
+    "lat": 4.6944672,
+    "lng": -74.03150409999999,
+    "place_id": "ChIJz8gjwKeaP44RSfQDP-RbmtQ",
+    "formatted_address": "Cra. 6a #117-26, Usaquén, Bogotá, Colombia"
   },
   {
     "name": "Atmosférico Cafetería de Especialidad",
@@ -1890,10 +2060,11 @@
     "rank": 59,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/atmosferico-cafeteria-de-especialidad/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "CC Diana Quintana 2. Locales 3-4 PB, Av. Samborondón, Samborondón 092301, Ecuador"
+    "address": null,
+    "lat": -2.1282086,
+    "lng": -79.86440619999999,
+    "place_id": "ChIJMw-9suFsLZARAsH9j1Q_CDA",
+    "formatted_address": "C. Diana Quintana, Samborondón 092301, Ecuador"
   },
   {
     "name": "Indera Experience Cafetería de especialidad",
@@ -1902,10 +2073,11 @@
     "rank": 60,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/indera-experience-cafeteria-de-especialidad/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Junto a, Av. Lateral de Paso Angel F. Rojas, Loja 110102, Ecuador"
+    "address": null,
+    "lat": -3.9824605,
+    "lng": -79.2330048,
+    "place_id": "ChIJB5F5F4I3y5ERViWxgo6Jf6Q",
+    "formatted_address": "Av. Lateral de Paso Angel F. Rojas, Ecuador"
   },
   {
     "name": "Kofi &amp; Co",
@@ -1914,10 +2086,11 @@
     "rank": 61,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/kofi-co/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Rua Alexandre Dumas, 1518 - Chácara Santo Antônio (Zona Sul), São Paulo - SP, 04717-003, Brasil"
+    "address": null,
+    "lat": -23.631267,
+    "lng": -46.70532559999999,
+    "place_id": "ChIJx9whweBQzpQR4AxXIl7xgIg",
+    "formatted_address": "Rua Alexandre Dumas, 1518 - Chácara Santo Antônio, São Paulo - SP, 04717-003, Brazil"
   },
   {
     "name": "TIPICA CAFÉ Milla de Oro",
@@ -1926,9 +2099,10 @@
     "rank": 62,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/tipica-cafe-milla-de-oro/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 6.1991438,
+    "lng": -75.5727,
+    "place_id": "ChIJjQE-ooeCRo4RKtXAh3bTCno",
     "formatted_address": "Cl. 5 Sur #42-17, El Poblado, Medellín, El Poblado, Medellín, Antioquia, Colombia"
   },
   {
@@ -1938,10 +2112,11 @@
     "rank": 63,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/coffee-busters-roastery/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Av. Dos de Mayo 412, San Isidro, 15073, Perú"
+    "address": null,
+    "lat": -12.0909295,
+    "lng": -77.03658999999999,
+    "place_id": "ChIJQX6Whl7IBZERPooMOpHzYRg",
+    "formatted_address": "Av. Dos de Mayo 412, San Isidro 15073, Peru"
   },
   {
     "name": "Mato Café",
@@ -1950,10 +2125,11 @@
     "rank": 64,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/mato-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "R. Francisco Otaviano, 67 - Loja 13 - Ipanema, Rio de Janeiro - RJ, 22080-040, Brasil"
+    "address": null,
+    "lat": -22.9872443,
+    "lng": -43.191019,
+    "place_id": "ChIJOcTCzzzVmwARXlT7_80UMYY",
+    "formatted_address": "R. Francisco Otaviano, 67 - Loja 13 - Arpoador, Rio de Janeiro - RJ, 22080-040, Brazil"
   },
   {
     "name": "Cafetería Tunki Katari",
@@ -1962,10 +2138,11 @@
     "rank": 65,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/cafeteria-tunki-katari/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Av. San Borja Sur 610, Lima 15037, Perú"
+    "address": null,
+    "lat": -12.1011967,
+    "lng": -77.0013429,
+    "place_id": "ChIJVYnlg9zHBZER3uJ2Q9S9fSo",
+    "formatted_address": "Av. San Borja Sur 610, Lima 15037, Peru"
   },
   {
     "name": "KOF &#8211; king of the fork",
@@ -1974,10 +2151,11 @@
     "rank": 66,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/kof-king-of-the-fork/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "R. Artur de Azevedo, 1317 - Pinheiros, São Paulo - SP, 05404-013, Brasil"
+    "address": null,
+    "lat": -23.5640501,
+    "lng": -46.6837871,
+    "place_id": "ChIJZSlWlZ1XzpQRCIgl7f-tGTY",
+    "formatted_address": "R. Artur de Azevedo, 1317 - Pinheiros, São Paulo - SP, 05404-013, Brazil"
   },
   {
     "name": "Cafe Ao Leu",
@@ -1986,10 +2164,11 @@
     "rank": 67,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/cafe-ao-leu/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "R. Alm. Gonçalves, 50 - Loja L - Copacabana, Rio de Janeiro - RJ, 22060-040, Brasil"
+    "address": null,
+    "lat": -22.9798128,
+    "lng": -43.1905087,
+    "place_id": "ChIJn9QMFj_VmwAR3bImF9zei0A",
+    "formatted_address": "R. Alm. Gonçalves, 50 - Copacabana, Rio de Janeiro - RJ, 22060-040, Brazil"
   },
   {
     "name": "Primates Tostadores",
@@ -1998,10 +2177,11 @@
     "rank": 68,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/primates-tostadores/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Calle 30 Oriente 1562, Región del Maule, Talca, Chile"
+    "address": null,
+    "lat": -35.428329,
+    "lng": -71.6260985,
+    "place_id": "ChIJoVI7H9rGZZYRXmccKrBOVgU",
+    "formatted_address": "Calle 30 Ote. 1562, 3460000 Talca, Maule, Chile"
   },
   {
     "name": "Lucca Cafes Especiais",
@@ -2010,10 +2190,11 @@
     "rank": 69,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/lucca-cafes-especiais/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Alameda Pres. Taunay, 40 - Batel, Curitiba - PR, 80420-180, Brasil"
+    "address": null,
+    "lat": -25.4379587,
+    "lng": -49.28228679999999,
+    "place_id": "ChIJK38-uHXk3JQRIRQwbya0nC4",
+    "formatted_address": "R. Pres. Taunay, 40 - Batel, Curitiba - PR, 80420-180, Brazil"
   },
   {
     "name": "María Julio Coffee Shop",
@@ -2022,10 +2203,11 @@
     "rank": 70,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/maria-julio-coffee-shop/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Cl. 29 #25-38, Manga, Cartagena de Indias, Provincia de Cartagena, Bolívar, Colombia"
+    "address": null,
+    "lat": 10.4100715,
+    "lng": -75.53251480000002,
+    "place_id": "ChIJY32TTmMv9o4RcXpqyw_vnwI",
+    "formatted_address": "Cl. 29 #25-38, Manga, Cartagena de Indias, Bolívar, Colombia"
   },
   {
     "name": "Kaweh Coffee Shop",
@@ -2034,9 +2216,10 @@
     "rank": 71,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/kaweh-coffee-shop/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": -4.0013035,
+    "lng": -79.20147399999999,
+    "place_id": "ChIJQ_eCDxk3y5ER9Tmv1o_JMdg",
     "formatted_address": "XQXX+FCC, entre Bolivar &, Bernardo Valdivieso, Loja, Ecuador"
   },
   {
@@ -2046,10 +2229,11 @@
     "rank": 72,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/puma-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Sargento Enrique Villar 101, Lima 15074, Perú"
+    "address": null,
+    "lat": -12.07669,
+    "lng": -77.0366619,
+    "place_id": "ChIJxQoAWvLIBZERpt57O9t_pA4",
+    "formatted_address": "Sargento Enrique Villar 101, Lima 15074, Peru"
   },
   {
     "name": "Dagadá",
@@ -2058,9 +2242,10 @@
     "rank": 73,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/dagada/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": -3.9989485,
+    "lng": -79.1979398,
+    "place_id": "ChIJA0jFRAA4y5ER9tzGY36RVhI",
     "formatted_address": "24 de Mayo, Loja, Ecuador"
   },
   {
@@ -2070,10 +2255,11 @@
     "rank": 74,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/somos-specialty-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Km 7 73, Sucre, Bolivia"
+    "address": null,
+    "lat": -19.043792,
+    "lng": -65.262736,
+    "place_id": "ChIJP8kzEQDP-5MR_ebtCVletJ0",
+    "formatted_address": "km 7 73, Sucre, Bolivia"
   },
   {
     "name": "Coffeestylers",
@@ -2082,10 +2268,11 @@
     "rank": 75,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/coffeestylers/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Calle 57 #19-35, Bogotá, Colombia 110111"
+    "address": null,
+    "lat": 4.6448595,
+    "lng": -74.07016159999999,
+    "place_id": "EiBBYy4gNTcgIzE5LTM1LCBCb2dvdMOhLCBDb2xvbWJpYSIwEi4KFAoSCaf0VG42mj-OEScGu2f41L8aECMqFAoSCf_9dnM1mj-OEaYupsR6JrHG",
+    "formatted_address": "Ac. 57 #19-35, Bogotá, Colombia"
   },
   {
     "name": "Amanecer Coffee Store",
@@ -2094,10 +2281,11 @@
     "rank": 76,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/amanecer-coffee-store/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "C.C. Plaza Mayor, Av. Via la Tapa de Pieda, Araure 3303, Portuguesa, Venezuela"
+    "address": null,
+    "lat": 9.5865393,
+    "lng": -69.22166469999999,
+    "place_id": "ChIJB71DKE3BfY4Rez_arkhUdWc",
+    "formatted_address": "HQPH+J88, AvenidaVencedores de Araure &, Av. Via la Tapa de Pieda, Araure 3303, Portuguesa, Venezuela"
   },
   {
     "name": "ARTEMISA Coffee &amp; Cocktail Bar",
@@ -2106,10 +2294,11 @@
     "rank": 77,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/artemisa-coffee-cocktail-bar/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Tajamar 287, R. Metropolitana, Las Condes, Chile"
+    "address": null,
+    "lat": -33.4169162,
+    "lng": -70.60438789999999,
+    "place_id": "EkBUYWphbWFyIDI4NywgciwgNzU1MDU5NCBMYXMgQ29uZGVzLCBSZWdpw7NuIE1ldHJvcG9saXRhbmEsIENoaWxlIh0aGwoWChQKEgnv95_9ac9ilhHaJn87KZzorRIBcg",
+    "formatted_address": "Tajamar 287, r, 7550594 Las Condes, Región Metropolitana, Chile"
   },
   {
     "name": "Alto Tostado Coffee Roasters &#8211; Santa Cruz",
@@ -2118,10 +2307,11 @@
     "rank": 78,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/alto-tostado-coffee-roasters-santa-cruz/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Patio Design Lifestyle Centr, Av. Busch y, Santa Cruz de la Sierra, Bolivia"
+    "address": null,
+    "lat": -17.7715198,
+    "lng": -63.2019765,
+    "place_id": "ChIJp705uPjn8ZMRLVGIEte3aR4",
+    "formatted_address": "6QHX+96R, Av. Noel Kempff Mercado, Santa Cruz de la Sierra, Bolivia"
   },
   {
     "name": "Eleganza Coffee Roasters",
@@ -2130,10 +2320,11 @@
     "rank": 79,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/eleganza-coffee-roasters/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "589R+4J Melipeuco, Melipeuco, Región de La Araucanía"
+    "address": null,
+    "lat": -38.8321875,
+    "lng": -71.65843749999999,
+    "place_id": "EiU1ODlSKzRKLCBNZWxpcGV1Y28sIEFyYXVjYW7DrWEsIENoaWxlIiY6JAoKDa2t2ugVScpJ1RAKGhQKEgkNrqwo52kTlhFwpWEo2FpTSg",
+    "formatted_address": "589R+4J, Melipeuco, Araucanía, Chile"
   },
   {
     "name": "Ciclos Café",
@@ -2142,10 +2333,11 @@
     "rank": 80,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/ciclos-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Jr. Colina 111, Lima, 15063, Perú"
+    "address": null,
+    "lat": -12.1460237,
+    "lng": -77.0223139,
+    "place_id": "ChIJi3GwBO63BZERltScTAmnvxg",
+    "formatted_address": "Jr. Colina 111, Barranco 15063, Peru"
   },
   {
     "name": "BlackSoul Café Brewing Lab",
@@ -2154,9 +2346,10 @@
     "rank": 81,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/blacksoul-cafe-brewing-lab/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": -17.3726904,
+    "lng": -66.14554520000002,
+    "place_id": "ChIJpXW_nR5045MRW4bMSQ72nRE",
     "formatted_address": "A.Quijarro 1746, Cochabamba, Bolivia"
   },
   {
@@ -2166,10 +2359,11 @@
     "rank": 82,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/marron-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "6X5J+GHJ, Av. 107, Valencia 2001, Carabobo, Venezuela"
+    "address": null,
+    "lat": 10.2126537,
+    "lng": -68.0173307,
+    "place_id": "ChIJGVD0QYxdgI4R5ZulgETwvIA",
+    "formatted_address": "Av. 107, Valencia 2001, Carabobo, Venezuela"
   },
   {
     "name": "Laurino Coffee",
@@ -2178,10 +2372,11 @@
     "rank": 83,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/laurino-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "630004, Cl. 3 Nte. #17-34, Armenia, Quindío, Colombia"
+    "address": null,
+    "lat": 4.5476746,
+    "lng": -75.66401189999999,
+    "place_id": "ChIJO4q0Tvz0OI4RPwzMSE4K71s",
+    "formatted_address": "Cl. 3 Nte. # 17-34, Armenia, Quindío, Colombia"
   },
   {
     "name": "Cafe Nexos",
@@ -2190,10 +2385,11 @@
     "rank": 84,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/cafe-nexos/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "entre calles 16 y 17 Avenida 5, Mérida 5115, Mérida, Venezuela"
+    "address": null,
+    "lat": 8.5629745,
+    "lng": -71.1935134,
+    "place_id": "ChIJnyU8hBx9ZI4RWzF06Q2GEcI",
+    "formatted_address": "entre calles 16 y 17 Avenida 3, Mérida 5101, Mérida, Venezuela"
   },
   {
     "name": "9 Gramos Café",
@@ -2202,9 +2398,10 @@
     "rank": 85,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/9-gramos-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 4.8042492,
+    "lng": -75.68796619999999,
+    "place_id": "ChIJRQpGtD-HOI4RwGRAj0JJ9SA",
     "formatted_address": "Cra. 17 #10-07, Pereira, Risaralda, Colombia"
   },
   {
@@ -2214,10 +2411,11 @@
     "rank": 86,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/manva-natural-market/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Calle Miranda edificio Elvira, Local 5 Chacao, planta baja, Caracas 1060, Miranda, Venezuela"
+    "address": null,
+    "lat": 10.495994,
+    "lng": -66.8526217,
+    "place_id": "ChIJR6BxVahZKowR1AIBJiVbp8k",
+    "formatted_address": "planta baja, Calle Miranda edificio Elvira, Local 5 Chacao, Caracas 1060, Miranda, Venezuela"
   },
   {
     "name": "Rita Specialty Coffee Armenia",
@@ -2226,10 +2424,11 @@
     "rank": 87,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/rita-specialty-coffee-armenia/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Armenia 1595, C1414 Cdad. Autónoma de Buenos Aires, Argentina"
+    "address": null,
+    "lat": -34.5901672,
+    "lng": -58.42827149999999,
+    "place_id": "ChIJ-fRY5Ie1vJURrA3jarr_dhg",
+    "formatted_address": "Armenia 1595, C1414DKG Cdad. Autónoma de Buenos Aires, Argentina"
   },
   {
     "name": "Café Black Mamba",
@@ -2238,10 +2437,11 @@
     "rank": 88,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/cafe-black-mamba/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Eliodoro Yáñez 1228, local 104, R. Metropolitana, Providencia, Chile"
+    "address": null,
+    "lat": -33.4333121,
+    "lng": -70.6183506,
+    "place_id": "ElZFbGlvZG9ybyBZw6HDsWV6IDEyMjgsIGxvY2FsIDEwNCwgUiwgNzUwMDYwNSBQcm92aWRlbmNpYSwgUmVnacOzbiBNZXRyb3BvbGl0YW5hLCBDaGlsZSIoGiYKFgoUChIJ-9_jTXzPYpYRMMoeNK0T17kSDGxvY2FsIDEwNCwgUg",
+    "formatted_address": "Eliodoro Yáñez 1228, local 104, R, 7500605 Providencia, Región Metropolitana, Chile"
   },
   {
     "name": "Kaffe&#8217;i",
@@ -2250,9 +2450,10 @@
     "rank": 89,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/kaffei/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": -25.2814154,
+    "lng": -57.63593820000001,
+    "place_id": "ChIJoT4qr_OnXZQRL4gOCwTTzAc",
     "formatted_address": "Palma 438, Asunción 001013, Paraguay"
   },
   {
@@ -2262,10 +2463,11 @@
     "rank": 90,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/elevaria-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Av. Fátima 285, Trujillo, 13008, Perú"
+    "address": null,
+    "lat": -8.128140199999999,
+    "lng": -79.0398141,
+    "place_id": "ChIJjaZ5cm09rZERIwKf87rpGXo",
+    "formatted_address": "Av. Fátima 285, Trujillo 13008, Peru"
   },
   {
     "name": "Casa Berracos",
@@ -2274,9 +2476,10 @@
     "rank": 91,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/casa-berracos/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": -34.8888744,
+    "lng": -56.15733969999999,
+    "place_id": "ChIJxVQi6_iAn5URi5YfB0oboWU",
     "formatted_address": "Estero Bellaco 2835, 11600 Montevideo, Departamento de Montevideo, Uruguay"
   },
   {
@@ -2286,10 +2489,11 @@
     "rank": 92,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/senzuru-coffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Las Palmeras 205, San Isidro 15073, Perú"
+    "address": null,
+    "lat": -12.0916239,
+    "lng": -77.0387137,
+    "place_id": "ChIJo4ghAlzIBZERA6c27pf0g2U",
+    "formatted_address": "Ca. las Palmeras 205, San Isidro 15073, Peru"
   },
   {
     "name": "Anella Café",
@@ -2298,9 +2502,10 @@
     "rank": 93,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/anella-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 10.2200669,
+    "lng": -68.0145359,
+    "place_id": "ChIJJ-jlmY1dgI4R-yeKWOVmdaM",
     "formatted_address": "6XCP+25H, Av. 104 La Victoria, Valencia 2001, Carabobo, Venezuela"
   },
   {
@@ -2310,10 +2515,11 @@
     "rank": 94,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/kajue-cafe/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Guatemala 4665, C1425 Cdad. Autónoma de Buenos Aires, Argentina"
+    "address": null,
+    "lat": -34.5863954,
+    "lng": -58.4240992,
+    "place_id": "ChIJdxQPxIa1vJUR6yfXvuP-70w",
+    "formatted_address": "Guatemala 4665, C1425BUK Cdad. Autónoma de Buenos Aires, Argentina"
   },
   {
     "name": "Varietale Chapinero",
@@ -2322,9 +2528,10 @@
     "rank": 95,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/varietale-chapinero/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": 4.642371499999999,
+    "lng": -74.06060339999999,
+    "place_id": "ChIJpVlgQTmaP44R7Or64eDPfO0",
     "formatted_address": "Cra. 4a #57-02, Bogotá, Colombia"
   },
   {
@@ -2334,10 +2541,11 @@
     "rank": 96,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/ninina/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Gorriti 4738, C1414BJL Cdad. Autónoma de Buenos Aires, Argentina"
+    "address": null,
+    "lat": -34.5912677,
+    "lng": -58.42860640000001,
+    "place_id": "ChIJy9gfAXjKvJURdgkuK0by_RE",
+    "formatted_address": "Gorriti 4738, C1414 BJL, Cdad. Autónoma de Buenos Aires, Argentina"
   },
   {
     "name": "Guanacoffee",
@@ -2346,10 +2554,11 @@
     "rank": 97,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/guanacoffee/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Sta Isabel 140, Pueblo Libre, 15084, Perú"
+    "address": null,
+    "lat": -12.0817184,
+    "lng": -77.0678185,
+    "place_id": "ChIJp-BlAAbJBZERZGib1FitHJM",
+    "formatted_address": "Sta. Isabel 140, Pueblo Libre 15084, Peru"
   },
   {
     "name": "Barista Coffee House",
@@ -2358,9 +2567,10 @@
     "rank": 98,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/barista-coffee-house/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
+    "address": null,
+    "lat": -32.9655823,
+    "lng": -60.6474489,
+    "place_id": "ChIJp3NNcwqrt5URIV1lNjIMi94",
     "formatted_address": "Ocampo 1404, S2000EYD Rosario, Santa Fe, Argentina"
   },
   {
@@ -2370,10 +2580,11 @@
     "rank": 99,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/cafe-bauda/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Pedro Montt 431, Castro, Región de Los Lagos, Chile"
+    "address": null,
+    "lat": -42.4767972,
+    "lng": -73.760192,
+    "place_id": "ChIJAwvrMOMZIpYRV9KZKt9zZkA",
+    "formatted_address": "Pedro Montt 431, 5700000 Castro, Los Lagos, Chile"
   },
   {
     "name": "Calu&#8217;s",
@@ -2382,9 +2593,10 @@
     "rank": 100,
     "category": "South America",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales-south/calus/",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": "Conesa 3705, C1429 C1429ALQ, Cdad. Autónoma de Buenos Aires, Argentina"
+    "address": null,
+    "lat": -34.5508173,
+    "lng": -58.4742451,
+    "place_id": "ChIJ5yLTdZq2vJURFH6u_oQ0pvw",
+    "formatted_address": "Conesa 3705, C1429 Cdad. Autónoma de Buenos Aires, Argentina"
   }
 ]
