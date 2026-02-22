@@ -329,7 +329,7 @@
         border-radius: 14px;
         overflow: hidden;
         border: 1px solid var(--line);
-        background: rgba(8, 9, 13, 0.9);
+        background: rgba(22, 27, 38, 0.78);
         box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04), 0 12px 28px rgba(0, 0, 0, 0.35);
       }
 
@@ -340,8 +340,8 @@
         pointer-events: none;
         z-index: 2;
         background:
-          linear-gradient(to top, rgba(7, 8, 12, 0.45), transparent 16%),
-          linear-gradient(to bottom, rgba(7, 8, 12, 0.35), transparent 12%);
+          linear-gradient(to top, rgba(17, 23, 34, 0.22), transparent 16%),
+          linear-gradient(to bottom, rgba(17, 23, 34, 0.18), transparent 12%);
       }
 
       .overview-map-panel::after {
@@ -350,14 +350,14 @@
         inset: 0;
         pointer-events: none;
         z-index: 1;
-        opacity: 0.2;
+        opacity: 0.11;
         background-image: linear-gradient(
           45deg,
-          rgba(255, 255, 255, 0.04) 25%,
+          rgba(255, 255, 255, 0.03) 25%,
           transparent 25%,
           transparent 50%,
-          rgba(255, 255, 255, 0.04) 50%,
-          rgba(255, 255, 255, 0.04) 75%,
+          rgba(255, 255, 255, 0.03) 50%,
+          rgba(255, 255, 255, 0.03) 75%,
           transparent 75%,
           transparent
         );
@@ -376,7 +376,7 @@
         place-items: center;
         text-align: center;
         padding: 20px;
-        background: rgba(7, 8, 12, 0.86);
+        background: rgba(15, 20, 31, 0.82);
         color: #f0f1f8;
         font-size: 0.9rem;
         z-index: 3;
@@ -657,6 +657,28 @@
         padding-top: 10px;
         color: #a9aebf;
         font-size: 0.69rem;
+      }
+
+      .site-footer {
+        border-top: 1px solid var(--line);
+        margin-top: 12px;
+        padding: 14px 20px 8px;
+        text-align: center;
+      }
+
+      .site-footer p {
+        margin: 0;
+        color: var(--brand-gray);
+        font-size: 0.72rem;
+      }
+
+      .site-footer a {
+        color: var(--brand-orange);
+        text-decoration: none;
+      }
+
+      .site-footer a:hover {
+        text-decoration: underline;
       }
 
       .link-list {
@@ -940,6 +962,12 @@
           </div>
         </aside>
       </main>
+      <footer class="site-footer">
+        <p>
+          &copy; 2026 World's Best Coffee Shops Complete Map &middot; YFC &middot;
+          <a href="https://buymeacoffee.com/opheliachen" target="_blank" rel="noopener">https://buymeacoffee.com/opheliachen</a>
+        </p>
+      </footer>
     </div>
 
     <script>
@@ -953,6 +981,7 @@
         activeCategories: new Set(overviewFilters.defaults.active_categories),
         country: overviewFilters.defaults.country,
         rankBand: overviewFilters.defaults.rank_band,
+        focusCountry: null,
         selectedCountry: null,
         selectedShopId: null,
         map: null,
@@ -1034,6 +1063,7 @@
         countrySelect.value = state.country;
         countrySelect.onchange = (event) => {
           state.country = event.target.value;
+          state.focusCountry = state.country === "All" ? null : state.country;
           state.selectedCountry = state.country === "All" ? null : state.country;
           state.selectedShopId = null;
           refreshView();
@@ -1083,6 +1113,7 @@
         state.activeCategories = new Set(overviewFilters.defaults.active_categories);
         state.country = overviewFilters.defaults.country;
         state.rankBand = overviewFilters.defaults.rank_band;
+        state.focusCountry = null;
         state.selectedCountry = null;
         state.selectedShopId = null;
         renderFilterControls();
@@ -1383,7 +1414,7 @@
 
           marker.addListener("click", () => {
             state.selectedCountry = row.country;
-            state.country = row.country;
+            state.focusCountry = row.country;
             const featuredShop = shops
               .filter((shop) => shop.country_normalized === row.country)
               .sort((a, b) => a.rank - b.rank || a.name.localeCompare(b.name))[0];
@@ -1391,9 +1422,6 @@
               state.selectedShopId = featuredShop.id;
               updateDetailPanel(featuredShop);
             }
-            document.getElementById("country-filter").value = row.country;
-            renderFilterControls();
-            renderListRows();
             if ((state.map.getZoom() || 2) < SHOP_ZOOM_THRESHOLD) {
               state.map.setZoom(SHOP_ZOOM_THRESHOLD);
             }
@@ -1487,6 +1515,14 @@
 
         const countries = filteredCountries();
         const shops = filteredShops().slice().sort((a, b) => a.rank - b.rank || a.name.localeCompare(b.name));
+        let mapShops =
+          state.country === "All" && state.focusCountry
+            ? shops.filter((shop) => shop.country_normalized === state.focusCountry)
+            : shops;
+        if (!mapShops.length && shops.length) {
+          state.focusCountry = null;
+          mapShops = shops;
+        }
         if (!countries.length || !shops.length) {
           showMapMessage("No countries match the current filters.");
           setMapHint("Adjust category/country/rank filters to repopulate the map.");
@@ -1501,7 +1537,7 @@
           renderCountryMarkers(countries, shops, maxCount);
           return;
         }
-        renderShopMarkers(shops, countriesByName, maxCount);
+        renderShopMarkers(mapShops, countriesByName, maxCount);
       }
 
       function refreshView() {
@@ -1531,21 +1567,26 @@
           streetViewControl: false,
           fullscreenControl: true,
           styles: [
-            { elementType: "geometry", stylers: [{ color: "#1a1a1e" }] },
-            { elementType: "labels.text.stroke", stylers: [{ color: "#15151a" }] },
-            { elementType: "labels.text.fill", stylers: [{ color: "#6b6b78" }] },
-            { featureType: "administrative.country", elementType: "geometry.stroke", stylers: [{ color: "#2a2a32" }, { weight: 0.8 }] },
-            { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [{ color: "#555566" }] },
+            { elementType: "geometry", stylers: [{ color: "#2d3443" }] },
+            { elementType: "labels.text.stroke", stylers: [{ color: "#2d3443" }] },
+            { elementType: "labels.text.fill", stylers: [{ color: "#d5dbea" }] },
+            { featureType: "administrative.country", elementType: "geometry.stroke", stylers: [{ color: "#8ea1c0" }, { weight: 1.1 }] },
+            { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [{ color: "#e6ecfa" }] },
+            { featureType: "administrative.province", elementType: "labels.text.fill", stylers: [{ color: "#c9d2e5" }] },
             { featureType: "road", stylers: [{ visibility: "off" }] },
             { featureType: "poi", stylers: [{ visibility: "off" }] },
             { featureType: "transit", stylers: [{ visibility: "off" }] },
-            { featureType: "water", elementType: "geometry", stylers: [{ color: "#111116" }] },
-            { featureType: "landscape.natural", elementType: "geometry", stylers: [{ color: "#1e1e24" }] },
+            { featureType: "water", elementType: "geometry", stylers: [{ color: "#5f7f9e" }] },
+            { featureType: "landscape.natural", elementType: "geometry", stylers: [{ color: "#3a465a" }] },
           ],
         });
         state.tooltip = new google.maps.InfoWindow();
 
         state.map.addListener("zoom_changed", () => {
+          const currentZoom = state.map.getZoom() || 2;
+          if (currentZoom < SHOP_ZOOM_THRESHOLD && state.country === "All") {
+            state.focusCountry = null;
+          }
           renderMapMarkers();
         });
 
