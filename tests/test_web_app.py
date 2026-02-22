@@ -73,6 +73,7 @@ def test_home_page_renders_roast_overview_with_south_america_label(tmp_path: Pat
     assert "#ffd47a" in response.text
     assert "function shopTooltipText(shop)" in response.text
     assert 'id="map-click-dialog"' in response.text
+    assert "new google.maps.InfoWindow()" not in response.text
     assert "focusCountry: null" in response.text
     assert "World's Best Coffee Shops Complete Map" in response.text
     assert "https://buymeacoffee.com/opheliachen" in response.text

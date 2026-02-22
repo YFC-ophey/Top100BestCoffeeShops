@@ -1008,7 +1008,6 @@
         map: null,
         countryMarkers: [],
         shopMarkers: [],
-        tooltip: null,
         pulseTimer: null,
         dialogTimer: null,
       };
@@ -1262,7 +1261,6 @@
       function showMapClickDialog(message) {
         const node = document.getElementById("map-click-dialog");
         if (!node) return;
-        state.tooltip?.close();
         const text = String(message || "").trim();
         node.textContent = text || "Marker selected";
         node.classList.remove("hidden");
@@ -1386,14 +1384,14 @@
 
       function countryMarkerIcon(row, active, maxCount) {
         const ratio = row.shop_count / Math.max(1, maxCount);
-        const markerSize = Math.max(16, Math.min(48, Number(row.marker_size_px) || 16 + ratio * 32));
+        const markerSize = Math.max(15, Math.min(44, Number(row.marker_size_px) || 15 + ratio * 29));
         const baseColor = flagColorFor(row.country, row.marker_color || "#888899");
         return {
           path: PIN_PATH,
-          fillColor: active ? "#ffe4a8" : baseColor,
-          fillOpacity: active ? 0.94 : 0.84,
-          strokeColor: active ? "#ff9a3a" : "#f5f6fb",
-          strokeWeight: active ? 2.1 : 1.4,
+          fillColor: active ? "#f8e0b2" : baseColor,
+          fillOpacity: active ? 0.9 : 0.8,
+          strokeColor: active ? "#e2ab67" : "#f2f4fa",
+          strokeWeight: active ? 1.7 : 1.2,
           scale: Math.max(1, markerSize / 12),
           anchor: new google.maps.Point(0, 0),
           labelOrigin: new google.maps.Point(0, -14),
@@ -1404,11 +1402,11 @@
         const baseColor = flagColorFor(shop.country_normalized, "#888899");
         return {
           path: PIN_PATH,
-          fillColor: active ? "#ffe8b8" : baseColor,
-          fillOpacity: faded ? 0.52 : active ? 0.93 : 0.9,
-          strokeColor: active ? "#ff9a3a" : "#f5f6fb",
-          strokeWeight: active ? 2 : 1.3,
-          scale: active ? 1.2 : 1,
+          fillColor: active ? "#f6e0b8" : baseColor,
+          fillOpacity: faded ? 0.5 : active ? 0.9 : 0.86,
+          strokeColor: active ? "#e2ab67" : "#f2f4fa",
+          strokeWeight: active ? 1.6 : 1.1,
+          scale: active ? 1.12 : 0.96,
           anchor: new google.maps.Point(0, 0),
           labelOrigin: new google.maps.Point(0, -14),
         };
@@ -1432,12 +1430,12 @@
           grow = !grow;
           const icon = iconFactory();
           const baseScale = Number(icon.scale) || 1;
-          icon.scale = grow ? baseScale * 1.08 : baseScale;
+          icon.scale = grow ? baseScale * 1.04 : baseScale;
           icon.fillOpacity = grow
-            ? Math.min(1, Number(icon.fillOpacity || 0.9) + 0.03)
+            ? Math.min(1, Number(icon.fillOpacity || 0.9) + 0.02)
             : Number(icon.fillOpacity || 0.9);
           marker.setIcon(icon);
-        }, 780);
+        }, 900);
       }
 
       function hasValidCoordinates(shop) {
@@ -1489,16 +1487,6 @@
             }
             state.map.panTo({ lat: row.lat, lng: row.lng });
             renderMapMarkers();
-          });
-
-          marker.addListener("mouseover", () => {
-            if (!state.tooltip) return;
-            state.tooltip.setContent(tooltipText);
-            state.tooltip.open({ map: state.map, anchor: marker, shouldFocus: false });
-          });
-
-          marker.addListener("mouseout", () => {
-            state.tooltip?.close();
           });
 
           if (active) startPulse(marker, () => countryMarkerIcon(row, true, maxCount));
@@ -1556,16 +1544,6 @@
             updateDetailPanel(shop);
             showMapClickDialog(tooltipText);
             renderMapMarkers();
-          });
-
-          marker.addListener("mouseover", () => {
-            if (!state.tooltip) return;
-            state.tooltip.setContent(tooltipText);
-            state.tooltip.open({ map: state.map, anchor: marker, shouldFocus: false });
-          });
-
-          marker.addListener("mouseout", () => {
-            state.tooltip?.close();
           });
 
           if (active) startPulse(marker, () => shopMarkerIcon(shop, true, false));
@@ -1649,8 +1627,6 @@
             { featureType: "landscape.natural", elementType: "geometry", stylers: [{ color: "#8199b5" }] },
           ],
         });
-        state.tooltip = new google.maps.InfoWindow();
-
         state.map.addListener("zoom_changed", () => {
           const currentZoom = state.map.getZoom() || 2;
           if (currentZoom < SHOP_ZOOM_THRESHOLD && state.country === "All") {
