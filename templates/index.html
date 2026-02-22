@@ -11,17 +11,17 @@
     />
     <style>
       :root {
-        --brand-gold: #ffd030;
-        --brand-orange: #ff7600;
-        --brand-dark: #0b0c10;
-        --brand-black: #000000;
-        --brand-surface: #18191e;
-        --brand-card: #24252c;
-        --brand-pink: #e2acb7;
-        --brand-green: #36462e;
-        --brand-gray: #888899;
-        --brand-white: #f5f6fb;
-        --line: rgba(255, 255, 255, 0.1);
+        --brand-gold: #f7c69a;
+        --brand-orange: #df6e2e;
+        --brand-dark: #130a08;
+        --brand-black: #070303;
+        --brand-surface: #1d100d;
+        --brand-card: #2b1712;
+        --brand-pink: #c88f75;
+        --brand-green: #4a3528;
+        --brand-gray: #b8a08f;
+        --brand-white: #f8efe6;
+        --line: rgba(247, 198, 154, 0.22);
       }
 
       * {
@@ -33,9 +33,9 @@
         color: var(--brand-white);
         font-family: "General Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
         background:
-          radial-gradient(circle at 12% 0%, rgba(255, 118, 0, 0.18), transparent 35%),
-          radial-gradient(circle at 88% 12%, rgba(255, 208, 48, 0.14), transparent 34%),
-          linear-gradient(160deg, #050507 0%, #0b0c10 38%, #111219 100%);
+          radial-gradient(circle at 12% 0%, rgba(223, 110, 46, 0.22), transparent 35%),
+          radial-gradient(circle at 88% 12%, rgba(247, 198, 154, 0.14), transparent 34%),
+          linear-gradient(158deg, #080403 0%, #130a08 40%, #21120d 100%);
       }
 
       .app-shell {
@@ -52,16 +52,16 @@
         inset: 0;
         pointer-events: none;
         background:
-          radial-gradient(circle at 15% 85%, rgba(255, 118, 0, 0.12), transparent 38%),
-          radial-gradient(circle at 85% 15%, rgba(226, 172, 183, 0.08), transparent 34%);
+          radial-gradient(circle at 15% 85%, rgba(223, 110, 46, 0.12), transparent 38%),
+          radial-gradient(circle at 85% 15%, rgba(200, 143, 117, 0.1), transparent 34%);
         z-index: -1;
       }
 
       .glass-panel {
-        background: rgba(30, 36, 52, 0.86);
+        background: rgba(31, 18, 14, 0.86);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 208, 48, 0.15);
+        border: 1px solid rgba(247, 198, 154, 0.2);
       }
 
       .topbar {
@@ -72,7 +72,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 12px;
-        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+        box-shadow: 0 20px 44px rgba(0, 0, 0, 0.44);
       }
 
       .brand {
@@ -172,7 +172,7 @@
       .workspace {
         min-height: 0;
         display: grid;
-        grid-template-columns: 260px minmax(0, 1fr) 380px;
+        grid-template-columns: 250px minmax(0, 1fr) 395px;
         gap: 12px;
       }
 
@@ -330,8 +330,10 @@
         border-radius: 14px;
         overflow: hidden;
         border: 1px solid var(--line);
-        background: rgba(84, 101, 124, 0.42);
-        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07), 0 12px 28px rgba(6, 10, 18, 0.2);
+        background:
+          linear-gradient(175deg, rgba(23, 13, 10, 0.9), rgba(45, 25, 17, 0.88)),
+          #130a08;
+        box-shadow: inset 0 0 0 1px rgba(247, 198, 154, 0.12), 0 14px 32px rgba(0, 0, 0, 0.32);
       }
 
       .overview-map-panel::before {
@@ -341,8 +343,8 @@
         pointer-events: none;
         z-index: 2;
         background:
-          linear-gradient(to top, rgba(28, 40, 58, 0.08), transparent 24%),
-          linear-gradient(to bottom, rgba(22, 31, 45, 0.08), transparent 18%);
+          linear-gradient(to top, rgba(16, 9, 7, 0.24), transparent 32%),
+          linear-gradient(to bottom, rgba(16, 9, 7, 0.18), transparent 26%);
       }
 
       .overview-map-panel::after {
@@ -351,18 +353,12 @@
         inset: 0;
         pointer-events: none;
         z-index: 1;
-        opacity: 0.04;
-        background-image: linear-gradient(
-          45deg,
-          rgba(255, 255, 255, 0.03) 25%,
-          transparent 25%,
-          transparent 50%,
-          rgba(255, 255, 255, 0.03) 50%,
-          rgba(255, 255, 255, 0.03) 75%,
-          transparent 75%,
-          transparent
-        );
-        background-size: 48px 48px;
+        opacity: 0.14;
+        background:
+          radial-gradient(circle, rgba(244, 120, 48, 0.5) 1px, transparent 1.7px) 0 0 / 8px 8px,
+          radial-gradient(circle, rgba(248, 213, 183, 0.22) 1px, transparent 2px) 4px 4px / 16px 16px,
+          url("/map-style-inspo.png") center / cover no-repeat;
+        mix-blend-mode: screen;
       }
 
       #overview-map {
@@ -377,8 +373,8 @@
         place-items: center;
         text-align: center;
         padding: 20px;
-        background: rgba(34, 44, 61, 0.74);
-        color: #f0f1f8;
+        background: rgba(28, 16, 12, 0.8);
+        color: #fff2e6;
         font-size: 0.9rem;
         z-index: 3;
       }
@@ -393,9 +389,9 @@
         left: 12px;
         max-width: 280px;
         border-radius: 10px;
-        border: 1px solid rgba(255, 208, 48, 0.3);
-        background: rgba(18, 24, 36, 0.8);
-        color: #ffe8b7;
+        border: 1px solid rgba(247, 198, 154, 0.4);
+        background: rgba(28, 16, 12, 0.82);
+        color: #ffe2c7;
         font-size: 0.72rem;
         font-weight: 700;
         padding: 8px 10px;
@@ -417,7 +413,8 @@
         max-width: 260px;
         padding: 8px 9px;
         z-index: 4;
-        border: 1px solid rgba(255, 208, 48, 0.18);
+        border: 1px solid rgba(247, 198, 154, 0.22);
+        background: rgba(28, 16, 12, 0.65);
       }
 
       .map-legend {
@@ -427,21 +424,22 @@
         z-index: 3;
         border-radius: 10px;
         padding: 8px 10px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(247, 198, 154, 0.2);
         font-size: 0.66rem;
-        color: #dce0f0;
+        color: #f7deca;
         display: grid;
         gap: 5px;
+        background: rgba(28, 16, 12, 0.68);
       }
 
       .map-source {
         margin: 8px 2px 0;
-        color: #b9bfd2;
+        color: #cab5a5;
         font-size: 0.7rem;
       }
 
       .map-source a {
-        color: #ffd37a;
+        color: #f4b985;
         text-decoration: none;
       }
 
@@ -463,11 +461,13 @@
       }
 
       .legend-dot.country {
-        background: var(--brand-orange);
+        background: #d86b33;
+        box-shadow: 0 0 0 2px rgba(247, 198, 154, 0.25);
       }
 
       .legend-dot.shop {
-        background: var(--brand-gold);
+        background: #f8e8d8;
+        box-shadow: 0 0 0 1px rgba(223, 110, 46, 0.4);
       }
 
       .overview-list {
@@ -507,9 +507,27 @@
         flex-direction: column;
         overflow: hidden;
         position: relative;
+        position: sticky;
+        top: 18px;
+        max-height: calc(100vh - 36px);
         background:
           linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 30%),
           rgba(26, 29, 46, 0.9);
+      }
+
+      .preview-head {
+        padding: 12px 14px 10px;
+        border-bottom: 1px solid rgba(247, 198, 154, 0.18);
+        background: linear-gradient(180deg, rgba(247, 198, 154, 0.08), rgba(247, 198, 154, 0.01));
+      }
+
+      .preview-head p {
+        margin: 0;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #f1d0b1;
+        font-weight: 700;
       }
 
       .drawer-toggle {
@@ -688,13 +706,6 @@
         font-weight: 700;
       }
 
-      .source-note {
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
-        padding-top: 10px;
-        color: #a9aebf;
-        font-size: 0.69rem;
-      }
-
       .site-footer {
         border-top: 1px solid var(--line);
         margin-top: 12px;
@@ -765,7 +776,7 @@
         animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
       }
 
-      @media (max-width: 1240px) {
+      @media (max-width: 1080px) {
         .workspace {
           grid-template-columns: 240px minmax(0, 1fr);
         }
@@ -773,6 +784,8 @@
         .sidebar-right {
           grid-column: 1 / -1;
           max-height: 340px;
+          position: relative;
+          top: auto;
         }
 
         .hero {
@@ -915,7 +928,7 @@
                 <div class="legend-row"><span class="legend-dot country"></span><span>Country bubble (zoomed out)</span></div>
                 <div class="legend-row"><span class="legend-dot shop"></span><span>Individual shop (zoomed in)</span></div>
               </div>
-              <div class="map-hint glass-panel">Pins use national flag colors. Zoom out for country density, zoom in for individual shops.</div>
+              <div class="map-hint glass-panel">Warm espresso map mode: zoom out for country bubbles, zoom in for individual shops.</div>
             </div>
             <p class="map-source">
               Source: <a href="https://theworlds100bestcoffeeshops.com/" target="_blank" rel="noopener">https://theworlds100bestcoffeeshops.com/</a>
@@ -954,6 +967,9 @@
           <button class="drawer-toggle" id="detail-drawer-toggle" type="button" aria-expanded="true">
             Shop Details
           </button>
+          <div class="preview-head">
+            <p>Coffee Shop Preview</p>
+          </div>
           <div class="hero">
             <img
               src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1200&auto=format&fit=crop"
@@ -998,7 +1014,6 @@
               </div>
             </section>
 
-            <p class="source-note">Only source-backed fields from the scraped dataset are shown in this panel.</p>
           </div>
         </aside>
       </main>
@@ -1016,6 +1031,7 @@
       const overviewFilters = {{ overview_filters | tojson }};
       const googleMapsKey = {{ google_maps_js_api_key | tojson }};
       const SHOP_ZOOM_THRESHOLD = 4;
+      const GLOBAL_COUNTRY_MIN_SHOPS = 2;
 
       const state = {
         activeCategories: new Set(overviewFilters.defaults.active_categories),
@@ -1194,10 +1210,22 @@
         });
 
         const baseCountries = new Map(overviewCountries.map((country) => [country.country, country]));
-        return Array.from(byCountry.values())
+        const countries = Array.from(byCountry.values())
           .map((row) => ({ ...(baseCountries.get(row.country) || {}), ...row }))
-          .filter((row) => Boolean(row && row.lat !== undefined && row.lng !== undefined))
+          .filter((row) => Boolean(row && row.lat !== undefined && row.lng !== undefined && row.country !== "Unknown"))
           .sort((a, b) => b.shop_count - a.shop_count || a.country.localeCompare(b.country));
+        return pruneGlobalCountries(countries);
+      }
+
+      function pruneGlobalCountries(countries) {
+        if (state.country !== "All" || state.focusCountry) {
+          return countries;
+        }
+        const multiShopCountries = countries.filter((row) => row.shop_count >= GLOBAL_COUNTRY_MIN_SHOPS);
+        if (multiShopCountries.length >= 10) {
+          return multiShopCountries;
+        }
+        return countries;
       }
 
       function renderListRows() {
@@ -1366,7 +1394,7 @@
         Venezuela: "#FFCC00",
       };
 
-      const PIN_PATH = "M 0,-24 C -6.6,-24 -12,-18.6 -12,-12 C -12,-4.8 0,0 0,0 C 0,0 12,-4.8 12,-12 C 12,-18.6 6.6,-24 0,-24 Z";
+      const SHOP_PIN_PATH = "M 0,-19 C -5.8,-19 -10.8,-14.5 -10.8,-8.8 C -10.8,-1.9 0,5.8 0,5.8 C 0,5.8 10.8,-1.9 10.8,-8.8 C 10.8,-14.5 5.8,-19 0,-19 Z M 0,-12.5 C -2.3,-12.5 -4.2,-10.6 -4.2,-8.3 C -4.2,-6 -2.3,-4.1 0,-4.1 C 2.3,-4.1 4.2,-6 4.2,-8.3 C 4.2,-10.6 2.3,-12.5 0,-12.5 Z";
 
       function flagColorFor(country, fallbackColor = "#888899") {
         return FLAG_COLORS[country] || fallbackColor;
@@ -1408,29 +1436,31 @@
         const ratio = row.shop_count / Math.max(1, maxCount);
         const markerSize = Math.max(15, Math.min(44, Number(row.marker_size_px) || 15 + ratio * 29));
         const baseColor = flagColorFor(row.country, row.marker_color || "#888899");
+        const bubbleRadius = Math.max(8.8, markerSize / 2.2);
+        const bubbleFill = colorWithIntensity(baseColor, 0.64 + ratio * 0.32);
         return {
-          path: PIN_PATH,
-          fillColor: active ? "#f8e0b2" : baseColor,
-          fillOpacity: active ? 0.9 : 0.8,
-          strokeColor: active ? "#e2ab67" : "#f2f4fa",
-          strokeWeight: active ? 1.7 : 1.2,
-          scale: Math.max(1, markerSize / 12),
+          path: google.maps.SymbolPath.CIRCLE,
+          fillColor: active ? "#ffe9d7" : bubbleFill,
+          fillOpacity: active ? 0.98 : 0.9,
+          strokeColor: active ? "#fff8ed" : "#f6d7bd",
+          strokeWeight: active ? 2.4 : 1.9,
+          scale: bubbleRadius,
           anchor: new google.maps.Point(0, 0),
-          labelOrigin: new google.maps.Point(0, -14),
+          labelOrigin: new google.maps.Point(0, 1),
         };
       }
 
       function shopMarkerIcon(shop, active, faded) {
         const baseColor = flagColorFor(shop.country_normalized, "#888899");
         return {
-          path: PIN_PATH,
-          fillColor: active ? "#f6e0b8" : baseColor,
-          fillOpacity: faded ? 0.5 : active ? 0.9 : 0.86,
-          strokeColor: active ? "#e2ab67" : "#f2f4fa",
-          strokeWeight: active ? 1.6 : 1.1,
-          scale: active ? 1.12 : 0.96,
+          path: SHOP_PIN_PATH,
+          fillColor: active ? "#fff4eb" : colorWithIntensity(baseColor, 0.75),
+          fillOpacity: faded ? 0.36 : active ? 0.98 : 0.9,
+          strokeColor: active ? "#ffd8b7" : "#ffeada",
+          strokeWeight: active ? 1.95 : 1.45,
+          scale: active ? 1.03 : 0.88,
           anchor: new google.maps.Point(0, 0),
-          labelOrigin: new google.maps.Point(0, -14),
+          labelOrigin: new google.maps.Point(0, -10),
         };
       }
 
@@ -1461,7 +1491,16 @@
       }
 
       function hasValidCoordinates(shop) {
-        return Number.isFinite(Number(shop.lat)) && Number.isFinite(Number(shop.lng));
+        return (
+          shop.lat !== null &&
+          shop.lng !== null &&
+          shop.lat !== undefined &&
+          shop.lng !== undefined &&
+          String(shop.lat).trim() !== "" &&
+          String(shop.lng).trim() !== "" &&
+          Number.isFinite(Number(shop.lat)) &&
+          Number.isFinite(Number(shop.lng))
+        );
       }
 
       function coordinatePosition(shop) {
@@ -1473,8 +1512,13 @@
         return ` ${unresolvedCount} shops have no verified coordinates and remain represented in country bubbles.`;
       }
 
-      function renderCountryMarkers(countries, shops, maxCount) {
-        setMapHint("Pins use national flag colors. Zoom out for country density, zoom in for individual shops.");
+      function renderCountryMarkers(
+        countries,
+        shops,
+        maxCount,
+        hintText = "Warm espresso map mode: zoom out for country bubbles, zoom in for individual shops."
+      ) {
+        setMapHint(hintText);
         countries.forEach((row) => {
           const active = state.selectedCountry === row.country;
           const baseColor = flagColorFor(row.country, row.marker_color || "#888899");
@@ -1524,7 +1568,8 @@
         );
 
         if (!resolvedShops.length) {
-          showMapMessage("No verified coordinates available at this zoom level. Zoom out to use country bubbles.");
+          hideMapMessage();
+          setMapHint("No verified coordinates for the current zoom; country bubbles stay active for exploration.");
           const fallbackShop = shops.find((shop) => shop.id === state.selectedShopId) || shops[0] || null;
           updateDetailPanel(fallbackShop);
           return;
@@ -1598,10 +1643,66 @@
         const countriesByName = new Map(countries.map((row) => [row.country, row]));
         const zoom = state.map.getZoom() || 2;
         if (zoom < SHOP_ZOOM_THRESHOLD) {
-          renderCountryMarkers(countries, shops, maxCount);
+          if (state.country === "All" && !state.focusCountry) {
+            renderCountryMarkers(
+              countries,
+              shops,
+              maxCount,
+              "Warm espresso map mode: zoom out for country bubbles, zoom in for individual shops. Single-shop countries are hidden at global zoom."
+            );
+          } else {
+            renderCountryMarkers(countries, shops, maxCount);
+          }
+          return;
+        }
+        if (!mapShops.some((shop) => hasValidCoordinates(shop))) {
+          const fallbackShop = mapShops.find((shop) => shop.id === state.selectedShopId) || mapShops[0] || null;
+          updateDetailPanel(fallbackShop);
+          const focusedCountries =
+            state.focusCountry && state.country === "All"
+              ? countries.filter((row) => row.country === state.focusCountry)
+              : countries;
+          const countriesForRender = focusedCountries.length ? focusedCountries : countries;
+          const renderMaxCount = Math.max(...countriesForRender.map((row) => row.shop_count), 1);
+          renderCountryMarkers(
+            countriesForRender,
+            shops,
+            renderMaxCount,
+            "No verified shop coordinates yet for this filtered zoom; country bubbles remain interactive."
+          );
           return;
         }
         renderShopMarkers(mapShops, countriesByName, maxCount);
+      }
+
+      const MAP_STYLE_BASE = [
+        { elementType: "geometry", stylers: [{ color: "#1f130f" }] },
+        { elementType: "labels.text.stroke", stylers: [{ color: "#120907" }, { weight: 1.2 }] },
+        { elementType: "labels.text.fill", stylers: [{ color: "#f4d9c0" }] },
+        { featureType: "administrative.country", elementType: "geometry.fill", stylers: [{ color: "#311b14" }] },
+        { featureType: "administrative.country", elementType: "geometry.stroke", stylers: [{ color: "#df6e2e" }, { weight: 1.45 }] },
+        { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [{ color: "#f8e7d6" }] },
+        { featureType: "administrative.province", elementType: "labels.text.fill", stylers: [{ color: "#e6c2a2" }] },
+        { featureType: "road", stylers: [{ visibility: "off" }] },
+        { featureType: "poi", stylers: [{ visibility: "off" }] },
+        { featureType: "transit", stylers: [{ visibility: "off" }] },
+        { featureType: "water", elementType: "geometry", stylers: [{ color: "#130d0b" }] },
+        { featureType: "landscape", elementType: "geometry", stylers: [{ color: "#271710" }] },
+        { featureType: "landscape.natural", elementType: "geometry", stylers: [{ color: "#332117" }] },
+      ];
+
+      const MAP_STYLE_DETAILED = [
+        ...MAP_STYLE_BASE.filter((rule) => !["road", "poi", "transit"].includes(rule.featureType || "")),
+        { featureType: "road", elementType: "geometry", stylers: [{ color: "#5d3d2d" }, { visibility: "on" }] },
+        { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#e8c8ac" }] },
+        { featureType: "road.local", elementType: "geometry", stylers: [{ color: "#4a3024" }] },
+        { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [{ color: "#f0d4bd" }] },
+        { featureType: "poi", elementType: "labels.text.fill", stylers: [{ color: "#deb89a" }, { visibility: "on" }] },
+        { featureType: "transit", stylers: [{ visibility: "off" }] },
+      ];
+
+      function mapStylesForZoom(zoomLevel) {
+        return zoomLevel >= SHOP_ZOOM_THRESHOLD ? MAP_STYLE_DETAILED : MAP_STYLE_BASE;
       }
 
       function refreshView() {
@@ -1627,30 +1728,18 @@
           center: { lat: 10, lng: 0 },
           zoom: 2,
           minZoom: 2,
-          backgroundColor: "#607794",
+          backgroundColor: "#20120d",
           mapTypeControl: false,
           streetViewControl: false,
           fullscreenControl: true,
           zoomControl: true,
           gestureHandling: "greedy",
           clickableIcons: false,
-          styles: [
-            { elementType: "geometry", stylers: [{ color: "#5f7692" }] },
-            { elementType: "labels.text.stroke", stylers: [{ color: "#3a4f67" }, { weight: 1.1 }] },
-            { elementType: "labels.text.fill", stylers: [{ color: "#fff4cf" }] },
-            { featureType: "administrative.country", elementType: "geometry.fill", stylers: [{ color: "#7690ad" }] },
-            { featureType: "administrative.country", elementType: "geometry.stroke", stylers: [{ color: "#ffd47a" }, { weight: 1.35 }] },
-            { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [{ color: "#fff0bd" }] },
-            { featureType: "administrative.province", elementType: "labels.text.fill", stylers: [{ color: "#f0ddb4" }] },
-            { featureType: "road", stylers: [{ visibility: "off" }] },
-            { featureType: "poi", stylers: [{ visibility: "off" }] },
-            { featureType: "transit", stylers: [{ visibility: "off" }] },
-            { featureType: "water", elementType: "geometry", stylers: [{ color: "#97b7d3" }] },
-            { featureType: "landscape.natural", elementType: "geometry", stylers: [{ color: "#8199b5" }] },
-          ],
+          styles: mapStylesForZoom(2),
         });
         state.map.addListener("zoom_changed", () => {
           const currentZoom = state.map.getZoom() || 2;
+          state.map.setOptions({ styles: mapStylesForZoom(currentZoom) });
           if (currentZoom < SHOP_ZOOM_THRESHOLD && state.country === "All") {
             state.focusCountry = null;
           }

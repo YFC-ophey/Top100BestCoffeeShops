@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from typing import Final
 
 UNKNOWN_COUNTRY: Final[str] = "Unknown"
@@ -10,6 +11,14 @@ COUNTRY_ALIASES: Final[dict[str, str]] = {
     "mexico": "Mexico",
     "united states": "USA",
     "united states of america": "USA",
+    "usa": "USA",
+    "uk": "United Kingdom",
+    "u k": "United Kingdom",
+    "united kingdom": "United Kingdom",
+    "england": "United Kingdom",
+    "scotland": "United Kingdom",
+    "texas usa": "USA",
+    "illinois usa": "USA",
 }
 
 COUNTRY_CENTROIDS: Final[dict[str, tuple[float, float]]] = {
@@ -64,6 +73,7 @@ COUNTRY_CENTROIDS: Final[dict[str, tuple[float, float]]] = {
     "The Philippines": (12.8797, 121.7740),
     "Turkey": (38.9637, 35.2433),
     "UAE": (23.4241, 53.8478),
+    "United Kingdom": (55.3781, -3.4360),
     "USA": (37.0902, -95.7129),
     "Uruguay": (-32.5228, -55.7658),
     "Venezuela": (6.4238, -66.5897),
@@ -122,6 +132,7 @@ COUNTRY_BASE_COLORS: Final[dict[str, str]] = {
     "The Philippines": "#0038A8",
     "Turkey": "#E30A17",
     "UAE": "#00732F",
+    "United Kingdom": "#1F3C88",
     "USA": "#3C3B6E",
     "Uruguay": "#001489",
     "Venezuela": "#FFCC00",
@@ -136,14 +147,25 @@ def normalize_country(value: str | None) -> tuple[str, bool]:
     if not cleaned:
         return UNKNOWN_COUNTRY, True
 
-    lowered = cleaned.casefold()
-    if lowered in COUNTRY_ALIASES:
-        return COUNTRY_ALIASES[lowered], False
+    alias_key = _alias_key(cleaned)
+    if alias_key in COUNTRY_ALIASES:
+        return COUNTRY_ALIASES[alias_key], False
+
+    parenthetical = re.fullmatch(r"(.+?)\s*\(([^)]+)\)\s*", cleaned)
+    if parenthetical:
+        inner_value = parenthetical.group(2)
+        inner_key = _alias_key(inner_value)
+        if inner_key in COUNTRY_ALIASES:
+            return COUNTRY_ALIASES[inner_key], False
 
     if any(char.isdigit() for char in cleaned):
         return UNKNOWN_COUNTRY, True
 
     return cleaned, False
+
+
+def _alias_key(value: str) -> str:
+    return re.sub(r"\s{2,}", " ", value.casefold().replace(".", " ").replace(",", " ")).strip()
 
 
 def country_centroid(country: str) -> tuple[float, float]:

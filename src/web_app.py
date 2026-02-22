@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import csv
 from collections import Counter, defaultdict
 import html
 from functools import lru_cache
@@ -87,6 +88,11 @@ _SHOP_FIELD_OVERRIDES: dict[tuple[str, int], dict[str, str]] = {
     }
 }
 
+_ADDRESS_FILE_SPECS = (
+    ("top 100 coffee shops address.csv", TOP_100_CATEGORY),
+    ("south america coffee shops address.csv", SOUTH_AMERICA_CATEGORY),
+)
+
 def create_app(data_file: Path, csv_file: Path, kml_file: Path) -> FastAPI:
     app = FastAPI(title="Top100BestCoffeeShops Preview")
     app.state.data_file = data_file
@@ -139,6 +145,13 @@ def create_app(data_file: Path, csv_file: Path, kml_file: Path) -> FastAPI:
         media_type = "text/csv" if artifact_name == "csv" else "application/vnd.google-earth.kml+xml"
         return FileResponse(path=target, media_type=media_type, filename=target.name)
 
+    @app.get("/map-style-inspo.png")
+    def map_style_inspo():
+        image_path = BASE_DIR / "map-style-inspo.png"
+        if not image_path.exists():
+            raise HTTPException(status_code=404, detail="Map style image not found")
+        return FileResponse(path=image_path, media_type="image/png", filename=image_path.name)
+
     return app
 
 
@@ -179,7 +192,72 @@ def _load_shops(data_file: Path) -> list[CoffeeShop]:
         shop.formatted_address = _normalize_shop_text(shop.formatted_address)
         shop.source_url = _normalize_shop_text(shop.source_url)
         _apply_shop_override(shop)
+    _apply_address_overrides(shops)
     return shops
+
+
+def _apply_address_overrides(shops: list[CoffeeShop]) -> None:
+    exact_matches = _load_address_overrides()
+    if not exact_matches:
+        return
+
+    for shop in shops:
+        if (shop.formatted_address or "").strip():
+            continue
+        category = normalize_category(shop.category)
+        key = _address_match_key(shop.rank, shop.name, category)
+        resolved = exact_matches.get(key)
+        if not resolved:
+            continue
+        shop.formatted_address = resolved
+        if not (shop.address or "").strip():
+            shop.address = resolved
+
+
+@lru_cache(maxsize=1)
+def _load_address_overrides() -> dict[str, str]:
+    exact_matches: dict[str, str] = {}
+    seen_paths: set[Path] = set()
+
+    for output_dir in _candidate_output_dirs():
+        for filename, category in _ADDRESS_FILE_SPECS:
+            path = output_dir / filename
+            if path in seen_paths or not path.exists():
+                continue
+            seen_paths.add(path)
+
+            try:
+                with path.open(encoding="utf-8", newline="") as handle:
+                    for row in csv.DictReader(handle):
+                        rank_raw = (row.get("Rank") or "").strip()
+                        name_raw = _normalize_shop_text(row.get("Coffee Shop") or "")
+                        address_raw = _normalize_shop_text(row.get("Address") or "")
+                        if not rank_raw or not name_raw or not address_raw:
+                            continue
+                        try:
+                            rank = int(rank_raw)
+                        except ValueError:
+                            continue
+
+                        exact_matches[_address_match_key(rank, name_raw, category)] = address_raw
+            except OSError:
+                continue
+
+    return exact_matches
+
+
+def _candidate_output_dirs() -> list[Path]:
+    candidates: list[Path] = [BASE_DIR / "output"]
+    if BASE_DIR.parent.name == ".worktrees":
+        candidates.append(BASE_DIR.parent.parent / "output")
+    return candidates
+
+
+def _address_match_key(rank: int, name: str, category: str) -> str:
+    normalized = unicodedata.normalize("NFKD", _normalize_shop_text(name).casefold())
+    ascii_name = "".join(char for char in normalized if not unicodedata.combining(char))
+    cleaned_name = re.sub(r"\W+", "", ascii_name)
+    return f"{normalize_category(category)}::{int(rank)}::{cleaned_name}"
 
 
 def _normalize_shop_text(value: str | None) -> str:
