@@ -58,7 +58,7 @@
       }
 
       .glass-panel {
-        background: rgba(26, 29, 46, 0.9);
+        background: rgba(30, 36, 52, 0.86);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
         border: 1px solid rgba(255, 208, 48, 0.15);
@@ -329,8 +329,8 @@
         border-radius: 14px;
         overflow: hidden;
         border: 1px solid var(--line);
-        background: rgba(22, 27, 38, 0.78);
-        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04), 0 12px 28px rgba(0, 0, 0, 0.35);
+        background: rgba(66, 79, 98, 0.45);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06), 0 12px 28px rgba(6, 10, 18, 0.24);
       }
 
       .overview-map-panel::before {
@@ -340,8 +340,8 @@
         pointer-events: none;
         z-index: 2;
         background:
-          linear-gradient(to top, rgba(17, 23, 34, 0.22), transparent 16%),
-          linear-gradient(to bottom, rgba(17, 23, 34, 0.18), transparent 12%);
+          linear-gradient(to top, rgba(24, 34, 48, 0.12), transparent 20%),
+          linear-gradient(to bottom, rgba(18, 26, 38, 0.12), transparent 16%);
       }
 
       .overview-map-panel::after {
@@ -350,7 +350,7 @@
         inset: 0;
         pointer-events: none;
         z-index: 1;
-        opacity: 0.11;
+        opacity: 0.06;
         background-image: linear-gradient(
           45deg,
           rgba(255, 255, 255, 0.03) 25%,
@@ -376,7 +376,7 @@
         place-items: center;
         text-align: center;
         padding: 20px;
-        background: rgba(15, 20, 31, 0.82);
+        background: rgba(34, 44, 61, 0.74);
         color: #f0f1f8;
         font-size: 0.9rem;
         z-index: 3;
@@ -1563,21 +1563,26 @@
           center: { lat: 10, lng: 0 },
           zoom: 2,
           minZoom: 2,
+          backgroundColor: "#607794",
           mapTypeControl: false,
           streetViewControl: false,
           fullscreenControl: true,
+          zoomControl: true,
+          gestureHandling: "greedy",
+          clickableIcons: false,
           styles: [
-            { elementType: "geometry", stylers: [{ color: "#2d3443" }] },
-            { elementType: "labels.text.stroke", stylers: [{ color: "#2d3443" }] },
-            { elementType: "labels.text.fill", stylers: [{ color: "#d5dbea" }] },
-            { featureType: "administrative.country", elementType: "geometry.stroke", stylers: [{ color: "#8ea1c0" }, { weight: 1.1 }] },
-            { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [{ color: "#e6ecfa" }] },
-            { featureType: "administrative.province", elementType: "labels.text.fill", stylers: [{ color: "#c9d2e5" }] },
+            { elementType: "geometry", stylers: [{ color: "#4f627a" }] },
+            { elementType: "labels.text.stroke", stylers: [{ color: "#304159" }, { weight: 1.2 }] },
+            { elementType: "labels.text.fill", stylers: [{ color: "#f6f0da" }] },
+            { featureType: "administrative.country", elementType: "geometry.fill", stylers: [{ color: "#627e9d" }] },
+            { featureType: "administrative.country", elementType: "geometry.stroke", stylers: [{ color: "#f6d57c" }, { weight: 1.45 }] },
+            { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [{ color: "#fff2be" }] },
+            { featureType: "administrative.province", elementType: "labels.text.fill", stylers: [{ color: "#ead8ad" }] },
             { featureType: "road", stylers: [{ visibility: "off" }] },
             { featureType: "poi", stylers: [{ visibility: "off" }] },
             { featureType: "transit", stylers: [{ visibility: "off" }] },
-            { featureType: "water", elementType: "geometry", stylers: [{ color: "#5f7f9e" }] },
-            { featureType: "landscape.natural", elementType: "geometry", stylers: [{ color: "#3a465a" }] },
+            { featureType: "water", elementType: "geometry", stylers: [{ color: "#86accd" }] },
+            { featureType: "landscape.natural", elementType: "geometry", stylers: [{ color: "#6d86a2" }] },
           ],
         });
         state.tooltip = new google.maps.InfoWindow();
