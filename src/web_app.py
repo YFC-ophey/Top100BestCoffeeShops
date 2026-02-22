@@ -1,8 +1,12 @@
 from __future__ import annotations
 
 from collections import Counter, defaultdict
+import html
+from functools import lru_cache
 import os
 from pathlib import Path
+import re
+import unicodedata
 from urllib.parse import urlencode
 
 from fastapi import FastAPI, HTTPException, Request
@@ -11,22 +15,77 @@ from fastapi.templating import Jinja2Templates
 
 from src.category_utils import SOUTH_AMERICA_CATEGORY, TOP_100_CATEGORY, normalize_category
 from src.country_centroids import (
+    COUNTRY_ALIASES,
+    COUNTRY_CENTROIDS,
     UNKNOWN_COUNTRY,
     country_base_color,
     country_centroid,
     normalize_country,
 )
-from src.env_utils import load_env_file
 from src.models import CoffeeShop
 from src.state import load_previous_state
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_env_file(BASE_DIR)
 DEFAULT_DATA_FILE = BASE_DIR / "data" / "current_list.json"
 DEFAULT_CSV_FILE = BASE_DIR / "output" / "coffee_shops.csv"
 DEFAULT_KML_FILE = BASE_DIR / "output" / "coffee_shops.kml"
 TEMPLATES = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
+RANK_BANDS = [
+    {"key": "Top 20", "label": "Top 20", "min": 1, "max": 20},
+    {"key": "Top 50", "label": "Top 50", "min": 21, "max": 50},
+    {"key": "The Rest", "label": "The Rest", "min": 51, "max": 100},
+]
+
+_STREET_WORDS = {
+    "st",
+    "street",
+    "rd",
+    "road",
+    "ave",
+    "avenue",
+    "av",
+    "calle",
+    "carrer",
+    "r",
+    "jr",
+    "lane",
+    "ln",
+    "highway",
+    "hwy",
+    "shop",
+    "unit",
+    "local",
+    "bldg",
+    "building",
+    "warehouse",
+    "edificio",
+    "cll",
+    "cra",
+}
+
+_CITY_CANONICAL_ALIASES = {
+    "cdad autonoma de buenos aires": "Buenos Aires",
+    "ciudad autonoma de buenos aires": "Buenos Aires",
+    "ciudad de buenos aires": "Buenos Aires",
+    "capital federal": "Buenos Aires",
+}
+
+_SUBREGION_EXACT_LABELS = {
+    "magallanes y la antartica chilena",
+}
+
+_SHOP_FIELD_OVERRIDES: dict[tuple[str, int], dict[str, str]] = {
+    (
+        TOP_100_CATEGORY,
+        68,
+    ): {
+        "name": "Azure The Coffee Company",
+        "city": "Muscat",
+        "country": "Oman",
+        "formatted_address": "Multiple locations, Muscat, Oman",
+    }
+}
 
 def create_app(data_file: Path, csv_file: Path, kml_file: Path) -> FastAPI:
     app = FastAPI(title="Top100BestCoffeeShops Preview")
@@ -41,18 +100,20 @@ def create_app(data_file: Path, csv_file: Path, kml_file: Path) -> FastAPI:
     @app.get("/")
     def home(request: Request):
         shops = _load_shops(app.state.data_file)
-        category_counts = Counter(shop.category for shop in shops)
-        top_100_links = _build_ordered_links(shops, TOP_100_CATEGORY)
-        south_america_links = _build_ordered_links(shops, SOUTH_AMERICA_CATEGORY)
-        map_shops, missing_coords_count = _build_map_shops(shops)
-        sidebar_shops = _build_sidebar_shops(shops)
-        map_country_aggregates = _build_country_aggregates(sidebar_shops)
-        overview_filters = _build_overview_filters(sidebar_shops)
-        data_quality = _build_data_quality(shops, sidebar_shops, missing_coords_count)
+        normalized_shops = sorted(shops, key=lambda value: (value.rank, value.category, value.name))
+
+        category_counts = Counter(shop.category for shop in normalized_shops)
+        top_100_links = _build_ordered_links(normalized_shops, TOP_100_CATEGORY)
+        south_america_links = _build_ordered_links(normalized_shops, SOUTH_AMERICA_CATEGORY)
+
+        overview_shops, data_quality = _build_overview_shops(normalized_shops)
+        overview_countries = _build_overview_countries(overview_shops)
+        overview_filters = _build_overview_filters(overview_shops, overview_countries)
+
         context = {
             "request": request,
-            "shops": sorted(shops, key=lambda value: (value.rank, value.category, value.name)),
-            "total_shops": len(shops),
+            "shops": normalized_shops,
+            "total_shops": len(normalized_shops),
             "category_counts": dict(sorted(category_counts.items())),
             "csv_available": app.state.csv_file.exists(),
             "kml_available": app.state.kml_file.exists(),
@@ -61,15 +122,11 @@ def create_app(data_file: Path, csv_file: Path, kml_file: Path) -> FastAPI:
             "top_100_links": top_100_links,
             "south_america_links": south_america_links,
             "south_links": south_america_links,
-            "google_maps_js_api_key": _google_maps_js_key(),
-            "map_shops": map_shops,
-            "sidebar_shops": sidebar_shops,
-            "map_country_aggregates": map_country_aggregates,
-            "map_missing_coords_count": missing_coords_count,
-            "overview_countries": map_country_aggregates,
-            "overview_shops": sidebar_shops,
+            "overview_shops": overview_shops,
+            "overview_countries": overview_countries,
             "overview_filters": overview_filters,
             "data_quality": data_quality,
+            "google_maps_js_api_key": _google_maps_js_key(),
         }
         return TEMPLATES.TemplateResponse(request=request, name="index.html", context=context)
 
@@ -87,9 +144,24 @@ def create_app(data_file: Path, csv_file: Path, kml_file: Path) -> FastAPI:
 
 def _google_maps_js_key() -> str:
     for env_key in ("GOOGLE_MAPS_JS_API_KEY", "GOOGLE_MAPS_API_KEY"):
-        value = os.getenv(env_key, "").strip()
-        if value:
-            return value
+        env_value = os.getenv(env_key, "").strip()
+        if env_value:
+            return env_value
+
+    env_candidates = [BASE_DIR / ".env"]
+    if BASE_DIR.parent.name == ".worktrees":
+        env_candidates.append(BASE_DIR.parent.parent / ".env")
+
+    for env_path in env_candidates:
+        if not env_path.exists():
+            continue
+        for line in env_path.read_text(encoding="utf-8").splitlines():
+            cleaned = line.strip()
+            if not cleaned or cleaned.startswith("#") or "=" not in cleaned:
+                continue
+            key, value = cleaned.split("=", 1)
+            if key.strip() in {"GOOGLE_MAPS_JS_API_KEY", "GOOGLE_MAPS_API_KEY"}:
+                return value.strip().strip('"').strip("'")
     return ""
 
 
@@ -100,191 +172,448 @@ def _load_shops(data_file: Path) -> list[CoffeeShop]:
     shops = load_previous_state(data_file)
     for shop in shops:
         shop.category = normalize_category(shop.category)
+        shop.name = _normalize_shop_text(shop.name)
+        shop.city = _normalize_shop_text(shop.city)
+        shop.country = _normalize_shop_text(shop.country)
+        shop.address = _normalize_shop_text(shop.address)
+        shop.formatted_address = _normalize_shop_text(shop.formatted_address)
+        shop.source_url = _normalize_shop_text(shop.source_url)
+        _apply_shop_override(shop)
     return shops
+
+
+def _normalize_shop_text(value: str | None) -> str:
+    if value is None:
+        return ""
+    unescaped = html.unescape(str(value))
+    collapsed = re.sub(r"\s+", " ", unescaped).strip()
+    return collapsed
+
+
+def _apply_shop_override(shop: CoffeeShop) -> None:
+    override = _SHOP_FIELD_OVERRIDES.get((normalize_category(shop.category), int(shop.rank)))
+    if not override:
+        return
+    for key, value in override.items():
+        setattr(shop, key, value)
 
 
 def _build_ordered_links(shops: list[CoffeeShop], category: str) -> list[dict[str, str]]:
     filtered = [shop for shop in shops if normalize_category(shop.category) == category]
     ordered = sorted(filtered, key=lambda value: (value.rank, value.name))
-    return [{"label": f"{shop.rank}. {shop.name}", "url": _google_maps_link(shop)} for shop in ordered]
+    return [
+        {
+            "label": f"{shop.rank}. {shop.name}",
+            "url": _google_maps_link(shop),
+        }
+        for shop in ordered
+    ]
 
 
 def _google_maps_link(shop: CoffeeShop) -> str:
-    query_parts = [shop.name]
-    city = shop.city.strip() if shop.city else ""
-    if city:
-        query_parts.append(city)
-
-    country_value, _ = normalize_country(shop.country)
-    if country_value != UNKNOWN_COUNTRY:
-        query_parts.append(country_value)
-    elif shop.country:
-        query_parts.append(shop.country)
-
-    query = ", ".join(query_parts)
+    query = _best_map_query_text(shop)
     params: dict[str, str] = {"api": "1", "query": query}
     if shop.place_id:
         params["query_place_id"] = shop.place_id
     return f"https://www.google.com/maps/search/?{urlencode(params)}"
 
 
-def _build_map_shops(shops: list[CoffeeShop]) -> tuple[list[dict[str, object]], int]:
-    missing = 0
-    items: list[dict[str, object]] = []
+def _best_map_query_text(shop: CoffeeShop) -> str:
+    formatted_address = _sanitize_map_query((shop.formatted_address or "").strip(), shop.country)
+    if formatted_address:
+        return formatted_address
+
+    address = _sanitize_map_query((shop.address or "").strip(), shop.country)
+    if address:
+        return address
+
+    name = _normalize_shop_text(shop.name)
+    city = _normalize_shop_text(shop.city)
+
+    country_value, _ = normalize_country(shop.country)
+    country = country_value if country_value and country_value != UNKNOWN_COUNTRY else _normalize_shop_text(shop.country)
+
+    query = ""
+    if city:
+        query = ", ".join(part for part in [name, city, country] if part)
+    elif country:
+        query = ", ".join(part for part in [name, country] if part)
+    else:
+        query = name
+    return _sanitize_map_query(query, country) or (name or "Coffee shop")
+
+
+def _sanitize_map_query(text: str, country: str | None = None) -> str:
+    cleaned = _normalize_shop_text(text)
+    if not cleaned:
+        return ""
+    cleaned = re.sub(r"\bway number:\s*\d+\s*building number:\s*\d+\s*,?\s*", "", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"\bbuilding number:\s*\d+\s*,?\s*", "", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"\bunknown\b", "", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"\s*,\s*", ", ", cleaned)
+    cleaned = re.sub(r"(,\s*){2,}", ", ", cleaned)
+    cleaned = re.sub(r"\s{2,}", " ", cleaned).strip(" ,")
+    country_norm = _normalize_text_label(country or "")
+    if country_norm:
+        tokens = [token.strip() for token in cleaned.split(",") if token.strip()]
+        deduped: list[str] = []
+        seen: set[str] = set()
+        for token in tokens:
+            normalized = _normalize_text_label(token)
+            if not normalized:
+                continue
+            if normalized in seen:
+                continue
+            seen.add(normalized)
+            deduped.append(token)
+        cleaned = ", ".join(deduped).strip(" ,")
+    return cleaned
+
+
+def _city_from_shop(shop: CoffeeShop, country_normalized: str) -> str:
+    for address in (shop.formatted_address, shop.address):
+        derived = _city_from_address(address, country_normalized)
+        if derived:
+            return derived
+
+    explicit_city_raw = (shop.city or "").strip()
+    explicit_city = _clean_city_candidate(explicit_city_raw)
+    if explicit_city and _is_valid_explicit_city(explicit_city_raw, explicit_city):
+        return explicit_city
+
+    if explicit_city and (_looks_city_like(explicit_city) or _looks_city_acronym(explicit_city)):
+        return explicit_city
+    return ""
+
+
+def _city_from_address(address: str | None, country_normalized: str) -> str:
+    raw = html.unescape((address or "").strip())
+    if not raw:
+        return ""
+
+    tokens = [token.strip() for token in re.split(r",| - ", raw) if token.strip()]
+    if not tokens:
+        return ""
+
+    while tokens and _looks_like_country_label(tokens[-1], country_normalized):
+        tokens.pop()
+    if not tokens:
+        return ""
+
+    candidates: list[tuple[int, str, str]] = []
+    for index in range(len(tokens) - 1, -1, -1):
+        raw_token = tokens[index]
+        candidate = _clean_city_candidate(raw_token)
+        if candidate:
+            candidates.append((index, raw_token, candidate))
+
+    if not candidates:
+        return ""
+
+    for _, raw_token, candidate in candidates:
+        if _looks_explicit_city_label(raw_token, candidate):
+            return candidate
+
+    for _, raw_token, candidate in candidates:
+        if not _looks_street_like(raw_token) and not _looks_subregion_like(candidate):
+            return candidate
+
+    for _, raw_token, candidate in candidates:
+        if not _looks_street_like(raw_token):
+            return candidate
+
+    return candidates[0][2]
+
+
+def _clean_city_candidate(token: str) -> str:
+    value = token.strip(" -")
+    if not value:
+        return ""
+
+    value = re.sub(r"^[A-Z0-9]{4,8}\+[A-Z0-9]{2,4}\s*", "", value, flags=re.IGNORECASE)
+    value = re.sub(r"\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b", "", value, flags=re.IGNORECASE)
+    value = re.sub(r"\bD\d{1,2}\s*[A-Z0-9]{2,5}\b", "", value, flags=re.IGNORECASE)
+    value = re.sub(r"^[A-Za-z]?\d{3,6}(?:-\d{2,6})?\s+", "", value)
+    value = re.sub(r"\s+[A-Z]{2,4}\s+\d{3,6}$", "", value)
+    value = re.sub(r"\s+[A-Z]\d[A-Z]\s?\d[A-Z]\d$", "", value, flags=re.IGNORECASE)
+    value = re.sub(r"\b\d{3,6}(?:-\d{2,6})?\b", "", value).strip(" -")
+    value = re.sub(r"\s{2,}", " ", value).strip()
+    if not value:
+        return ""
+
+    words = re.findall(r"[A-Za-zÀ-ÿ'.-]+", value)
+    lowered_words = [word.casefold().strip(".") for word in words]
+    street_indexes = [idx for idx, word in enumerate(lowered_words) if word in _STREET_WORDS]
+    if street_indexes:
+        tail = [word for word in words[street_indexes[-1] + 1 :] if len(word) > 1]
+        if tail:
+            value = " ".join(tail[-3:]).strip()
+
+    if any(char.isdigit() for char in value):
+        words = re.findall(r"[A-Za-zÀ-ÿ'.-]+", value)
+        if words:
+            value = " ".join(words[-2:]).strip()
+        else:
+            return ""
+
+    if not re.search(r"[A-Za-zÀ-ÿ]", value):
+        return ""
+
+    lowered = value.casefold()
+    if lowered in {"st", "rd", "ave", "unit", "local", "warehouse", "building"}:
+        return ""
+    if len(value) <= 2 and value.isupper():
+        return ""
+    return _canonical_city_label(value)
+
+
+def _canonical_city_label(value: str) -> str:
+    alias = _CITY_CANONICAL_ALIASES.get(_normalize_text_label(value))
+    return alias or value
+
+
+def _looks_street_like(value: str) -> bool:
+    words = [word.casefold().strip(".") for word in re.findall(r"[A-Za-zÀ-ÿ'.-]+", value)]
+    return any(word in _STREET_WORDS for word in words)
+
+
+def _looks_city_like(value: str) -> bool:
+    words = re.findall(r"[A-Za-zÀ-ÿ'.-]+", value)
+    if not words:
+        return False
+    if not any(any(char.islower() for char in word) for word in words):
+        return False
+    if all(word.isupper() and len(word) <= 4 for word in words):
+        return False
+    if len(words) == 1:
+        return len(words[0]) >= 3
+    return any(len(word) >= 3 for word in words)
+
+
+def _looks_city_acronym(value: str) -> bool:
+    return bool(re.fullmatch(r"[A-Z]{3,5}", value.strip()))
+
+
+def _is_valid_explicit_city(raw_value: str, cleaned_value: str) -> bool:
+    if any(symbol in raw_value for symbol in ("[", "]", "<", ">", "{", "}")):
+        return False
+    if _looks_street_like(raw_value):
+        return False
+    if _looks_subregion_like(cleaned_value):
+        return False
+    if len(cleaned_value) > 34 or cleaned_value.count(" ") > 3:
+        return False
+    return _looks_city_like(cleaned_value) or _looks_city_acronym(cleaned_value)
+
+
+def _looks_explicit_city_label(raw_token: str, candidate: str) -> bool:
+    if _looks_street_like(raw_token):
+        return False
+    normalized = _normalize_text_label(candidate)
+    return bool(re.search(r"\bcity\b|\bciudad\b|\bcidade\b", normalized))
+
+
+def _looks_subregion_like(value: str) -> bool:
+    normalized = _normalize_text_label(value)
+    if normalized in _SUBREGION_EXACT_LABELS:
+        return True
+    return bool(
+        re.search(
+            r"\bregion\b|\bprovince\b|\bstate\b|\bdistrict\b|\bcounty\b|\bdepartamento\b|\bdepartment\b|\bprefecture\b|\bautonoma\b|\bmetropolitana\b|\bterritory\b|\bgovernorate\b",
+            normalized,
+        )
+    )
+
+
+def _looks_like_country_label(value: str, country_normalized: str) -> bool:
+    normalized = _normalize_text_label(value)
+    if not normalized:
+        return False
+
+    known_country_labels = set(_known_country_labels())
+    known_country_labels.add(_normalize_text_label(country_normalized))
+    return normalized in known_country_labels
+
+
+def _normalize_text_label(value: str) -> str:
+    normalized = unicodedata.normalize("NFKD", value)
+    ascii_text = "".join(char for char in normalized if not unicodedata.combining(char))
+    cleaned = re.sub(r"[^a-zA-Z ]+", " ", ascii_text).casefold()
+    return re.sub(r"\s{2,}", " ", cleaned).strip()
+
+
+@lru_cache(maxsize=1)
+def _known_country_labels() -> frozenset[str]:
+    labels = {_normalize_text_label(country) for country in COUNTRY_CENTROIDS}
+    labels.update(_normalize_text_label(alias) for alias in COUNTRY_ALIASES)
+    labels.update(
+        {
+            "united kingdom",
+            "uk",
+            "u k",
+            "united arab emirates",
+            "uae",
+            "south korea",
+            "north macedonia",
+        }
+    )
+    return frozenset(label for label in labels if label)
+
+
+def _build_overview_shops(shops: list[CoffeeShop]) -> tuple[list[dict[str, object]], dict[str, object]]:
+    payload: list[dict[str, object]] = []
+    invalid_country_count = 0
+    unknown_country_count = 0
+    missing_city_count = 0
+    flagged_shop_ids: list[str] = []
+
     for shop in shops:
         country_normalized, invalid_country = normalize_country(shop.country)
         if invalid_country:
             country_normalized = UNKNOWN_COUNTRY
 
-        has_coords = shop.lat is not None and shop.lng is not None
-        if not has_coords:
-            missing += 1
-
-        items.append(
-            {
-                "id": _shop_id(shop),
-                "name": shop.name,
-                "city": shop.city,
-                "country_normalized": country_normalized,
-                "country": country_normalized,
-                "country_raw": shop.country,
-                "rank": shop.rank,
-                "category": normalize_category(shop.category),
-                "lat": shop.lat,
-                "lng": shop.lng,
-                "place_id": shop.place_id or "",
-                "address": shop.formatted_address or shop.address or "",
-                "source_url": shop.source_url or "",
-                "google_maps_url": _google_maps_link(shop),
-            }
-        )
-    return items, missing
-
-
-def _build_sidebar_shops(shops: list[CoffeeShop]) -> list[dict[str, object]]:
-    ordered = sorted(shops, key=lambda value: (value.rank, value.category, value.name))
-    rows: list[dict[str, object]] = []
-    for shop in ordered:
-        country_normalized, invalid_country = normalize_country(shop.country)
         if invalid_country:
-            country_normalized = UNKNOWN_COUNTRY
-        rows.append(
-            {
-                "id": _shop_id(shop),
-                "name": shop.name,
-                "city": shop.city,
-                "country_normalized": country_normalized,
-                "country": country_normalized,
-                "country_raw": shop.country,
-                "rank": shop.rank,
-                "category": normalize_category(shop.category),
-                "lat": shop.lat,
-                "lng": shop.lng,
-                "place_id": shop.place_id or "",
-                "address": shop.formatted_address or shop.address or "",
-                "source_url": shop.source_url or "",
-                "google_maps_url": _google_maps_link(shop),
-            }
-        )
-    return rows
+            invalid_country_count += 1
+
+        if country_normalized == UNKNOWN_COUNTRY:
+            unknown_country_count += 1
+
+        city = _city_from_shop(shop, country_normalized)
+        if not city:
+            missing_city_count += 1
+
+        item = {
+            "id": _shop_id(shop),
+            "name": _normalize_shop_text(shop.name),
+            "rank": shop.rank,
+            "category": normalize_category(shop.category),
+            "country_raw": _normalize_shop_text(shop.country),
+            "country_normalized": country_normalized,
+            "city": city,
+            "address": _normalize_shop_text(shop.address),
+            "source_url": _normalize_shop_text(shop.source_url),
+            "google_maps_url": _google_maps_link(shop),
+            "rank_band": _rank_band(shop.rank),
+            "formatted_address": _normalize_shop_text(shop.formatted_address),
+            "place_id": _normalize_shop_text(shop.place_id),
+            "lat": shop.lat,
+            "lng": shop.lng,
+        }
+        payload.append(item)
+
+        if invalid_country:
+            flagged_shop_ids.append(str(item["id"]))
+
+    data_quality = {
+        "invalid_country_count": invalid_country_count,
+        "unknown_country_count": unknown_country_count,
+        "missing_city_count": missing_city_count,
+        "flagged_shop_ids": flagged_shop_ids,
+    }
+    return payload, data_quality
 
 
-def _build_country_aggregates(shops: list[dict[str, object]]) -> list[dict[str, object]]:
+def _build_overview_countries(overview_shops: list[dict[str, object]]) -> list[dict[str, object]]:
     grouped: dict[str, dict[str, object]] = defaultdict(
         lambda: {
-            "country": UNKNOWN_COUNTRY,
-            "count": 0,
-            "top_count": 0,
-            "south_count": 0,
-            "lat_values": [],
-            "lng_values": [],
+            "shop_count": 0,
+            "top_100_count": 0,
+            "south_america_count": 0,
+            "primary_shop": None,
         }
     )
 
-    for item in shops:
-        country = str(item.get("country") or UNKNOWN_COUNTRY)
+    for shop in overview_shops:
+        country = str(shop["country_normalized"])
         bucket = grouped[country]
-        bucket["country"] = country
-        bucket["count"] = int(bucket["count"]) + 1
-        if item.get("category") == TOP_100_CATEGORY:
-            bucket["top_count"] = int(bucket["top_count"]) + 1
-        if item.get("category") == SOUTH_AMERICA_CATEGORY:
-            bucket["south_count"] = int(bucket["south_count"]) + 1
+        bucket["shop_count"] = int(bucket["shop_count"]) + 1
+        if shop["category"] == TOP_100_CATEGORY:
+            bucket["top_100_count"] = int(bucket["top_100_count"]) + 1
+        if shop["category"] == SOUTH_AMERICA_CATEGORY:
+            bucket["south_america_count"] = int(bucket["south_america_count"]) + 1
 
-        lat = item.get("lat")
-        lng = item.get("lng")
-        if lat is not None and lng is not None:
-            bucket["lat_values"].append(float(lat))
-            bucket["lng_values"].append(float(lng))
+        current = bucket["primary_shop"]
+        if current is None or int(shop["rank"]) < int(current["rank"]):
+            bucket["primary_shop"] = shop
 
-    result: list[dict[str, object]] = []
+    max_count = max((int(item["shop_count"]) for item in grouped.values()), default=1)
+
+    overview_countries: list[dict[str, object]] = []
     for country, bucket in grouped.items():
-        lat_values: list[float] = bucket["lat_values"]  # type: ignore[assignment]
-        lng_values: list[float] = bucket["lng_values"]  # type: ignore[assignment]
-        if lat_values and lng_values:
-            lat = sum(lat_values) / len(lat_values)
-            lng = sum(lng_values) / len(lng_values)
-        else:
-            lat, lng = country_centroid(country)
-        result.append(
+        lat, lng = country_centroid(country)
+        ratio = int(bucket["shop_count"]) / max_count
+        size = round(16 + ratio * 40, 2)
+        overview_countries.append(
             {
                 "country": country,
-                "count": int(bucket["count"]),
-                "top_count": int(bucket["top_count"]),
-                "south_count": int(bucket["south_count"]),
                 "lat": lat,
                 "lng": lng,
-                "color": country_base_color(country),
+                "shop_count": int(bucket["shop_count"]),
+                "top_100_count": int(bucket["top_100_count"]),
+                "south_america_count": int(bucket["south_america_count"]),
+                "marker_color": country_base_color(country),
+                "marker_size_px": size,
+                "primary_shop": bucket["primary_shop"],
             }
         )
 
-    return sorted(result, key=lambda row: (-int(row["count"]), str(row["country"])))
+    return sorted(overview_countries, key=lambda value: (-int(value["shop_count"]), str(value["country"])))
 
 
-def _shop_id(shop: CoffeeShop) -> str:
-    raw = f"{normalize_category(shop.category)}-{shop.rank}-{shop.name}".strip().lower()
-    return "".join(char if char.isalnum() else "-" for char in raw).strip("-")
+def _build_overview_filters(
+    overview_shops: list[dict[str, object]], overview_countries: list[dict[str, object]]
+) -> dict[str, object]:
+    category_counts = Counter(str(shop["category"]) for shop in overview_shops)
+    categories = [
+        {
+            "key": TOP_100_CATEGORY,
+            "label": "Top 100 World",
+            "count": int(category_counts.get(TOP_100_CATEGORY, 0)),
+            "active": True,
+        },
+        {
+            "key": SOUTH_AMERICA_CATEGORY,
+            "label": "South America 100",
+            "count": int(category_counts.get(SOUTH_AMERICA_CATEGORY, 0)),
+            "active": True,
+        },
+    ]
 
+    countries = [
+        {
+            "key": str(country["country"]),
+            "label": str(country["country"]),
+            "count": int(country["shop_count"]),
+        }
+        for country in overview_countries
+    ]
 
-def _build_overview_filters(sidebar_shops: list[dict[str, object]]) -> dict[str, object]:
-    countries = sorted({str(item.get("country") or UNKNOWN_COUNTRY) for item in sidebar_shops})
     return {
-        "categories": [TOP_100_CATEGORY, SOUTH_AMERICA_CATEGORY],
+        "categories": categories,
         "countries": countries,
-        "rank_bands": ["All", "1-10", "11-25", "26-50", "51-100"],
+        "rank_bands": RANK_BANDS,
         "defaults": {
-            "categories": [TOP_100_CATEGORY, SOUTH_AMERICA_CATEGORY],
-            "country": "All Countries",
+            "active_categories": [TOP_100_CATEGORY, SOUTH_AMERICA_CATEGORY],
+            "country": "All",
             "rank_band": "All",
         },
     }
 
 
-def _build_data_quality(
-    shops: list[CoffeeShop],
-    sidebar_shops: list[dict[str, object]],
-    missing_coords_count: int,
-) -> dict[str, int]:
-    invalid_country_values = 0
-    rows_without_city = 0
-    missing_place_id = 0
-    for shop in shops:
-        _, invalid_country = normalize_country(shop.country)
-        if invalid_country:
-            invalid_country_values += 1
-        if not (shop.city or "").strip():
-            rows_without_city += 1
-        if not (shop.place_id or "").strip():
-            missing_place_id += 1
-
-    unknown_country_markers = sum(1 for item in sidebar_shops if item.get("country") == UNKNOWN_COUNTRY)
-    return {
-        "invalid_country_values": invalid_country_values,
-        "unknown_country_markers": unknown_country_markers,
-        "rows_without_city": rows_without_city,
-        "missing_lat_lng": missing_coords_count,
-        "missing_place_id": missing_place_id,
-    }
+def _rank_band(rank: int) -> str:
+    for item in RANK_BANDS:
+        if int(item["min"]) <= rank <= int(item["max"]):
+            return str(item["key"])
+    return "Other"
 
 
-app = create_app(data_file=DEFAULT_DATA_FILE, csv_file=DEFAULT_CSV_FILE, kml_file=DEFAULT_KML_FILE)
+def _shop_id(shop: CoffeeShop) -> str:
+    base = f"{normalize_category(shop.category)}-{shop.rank}-{shop.name}".casefold()
+    normalized = re.sub(r"[^a-z0-9]+", "-", base).strip("-")
+    return normalized or f"shop-{shop.rank}"
+
+app = create_app(
+    data_file=DEFAULT_DATA_FILE,
+    csv_file=DEFAULT_CSV_FILE,
+    kml_file=DEFAULT_KML_FILE,
+)

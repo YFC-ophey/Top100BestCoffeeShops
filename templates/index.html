@@ -3,225 +3,317 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Top100BestCoffeeShops Preview</title>
+    <title>ROAST. | Global Coffee Explorer</title>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,700,800&f[]=general-sans@400,500,600,700&display=swap"
+    />
     <style>
       :root {
         --brand-gold: #ffd030;
         --brand-orange: #ff7600;
         --brand-dark: #0b0c10;
-        --brand-black: #000;
+        --brand-black: #000000;
         --brand-surface: #18191e;
         --brand-card: #24252c;
         --brand-pink: #e2acb7;
         --brand-green: #36462e;
         --brand-gray: #888899;
-        --brand-white: #f8f8ff;
-        --line: rgba(255, 255, 255, 0.09);
+        --brand-white: #f5f6fb;
+        --line: rgba(255, 255, 255, 0.1);
       }
 
-      * { box-sizing: border-box; }
+      * {
+        box-sizing: border-box;
+      }
+
       body {
         margin: 0;
         color: var(--brand-white);
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        background: radial-gradient(circle at 20% -10%, #2a1f1b 0%, transparent 40%),
-          radial-gradient(circle at 90% 8%, #2e2118 0%, transparent 38%),
-          var(--brand-dark);
+        font-family: "General Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+        background:
+          radial-gradient(circle at 12% 0%, rgba(255, 118, 0, 0.18), transparent 35%),
+          radial-gradient(circle at 88% 12%, rgba(255, 208, 48, 0.14), transparent 34%),
+          linear-gradient(160deg, #050507 0%, #0b0c10 38%, #111219 100%);
       }
 
       .app-shell {
         min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        padding: 12px;
+        padding: 18px;
+        display: grid;
+        gap: 14px;
+        position: relative;
       }
 
-      .shell-topbar {
+      .app-shell::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background:
+          radial-gradient(circle at 15% 85%, rgba(255, 118, 0, 0.12), transparent 38%),
+          radial-gradient(circle at 85% 15%, rgba(226, 172, 183, 0.08), transparent 34%);
+        z-index: -1;
+      }
+
+      .glass-panel {
+        background: rgba(30, 36, 52, 0.86);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 208, 48, 0.15);
+      }
+
+      .topbar {
+        position: relative;
+        border-radius: 18px;
+        padding: 12px 16px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 10px;
-        border: 1px solid var(--line);
-        background: rgba(24, 25, 30, 0.88);
-        backdrop-filter: blur(12px);
-        border-radius: 16px;
-        padding: 10px 12px;
+        gap: 12px;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
       }
 
-      .brand-wrap {
+      .brand {
         display: flex;
         align-items: center;
         gap: 10px;
       }
 
       .brand-icon {
-        width: 34px;
-        height: 34px;
+        width: 36px;
+        height: 36px;
         border-radius: 10px;
         background: var(--brand-gold);
         color: var(--brand-dark);
         display: grid;
         place-items: center;
-        font-size: 1rem;
-        font-weight: 900;
+        font-size: 1.1rem;
       }
 
-      .brand-title {
+      .brand-icon iconify-icon {
+        font-size: 1.2rem;
+      }
+
+      .brand h1 {
         margin: 0;
-        font-size: 1.05rem;
+        font-family: "Cabinet Grotesk", "General Sans", sans-serif;
+        font-size: 1.25rem;
         font-weight: 800;
-        letter-spacing: 0.01em;
+        letter-spacing: 0.02em;
+        line-height: 1;
       }
 
-      .brand-sub {
-        margin: 0;
+      .brand p {
+        margin: 2px 0 0;
         color: var(--brand-gray);
-        font-size: 0.66rem;
-        letter-spacing: 0.12em;
+        font-size: 0.62rem;
+        letter-spacing: 0.14em;
         text-transform: uppercase;
       }
 
       .banner-title {
         margin: 0;
-        flex: 1;
-        text-align: center;
-        font-size: 1.05rem;
+        font-family: "Cabinet Grotesk", "General Sans", sans-serif;
+        font-size: clamp(1.15rem, 1.75vw, 1.7rem);
         font-weight: 800;
-        letter-spacing: 0.02em;
+        letter-spacing: 0.01em;
+        line-height: 1.1;
+        color: var(--brand-gold);
       }
 
-      .collection-toggle {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        border: 1px solid var(--line);
-        border-radius: 999px;
-        background: rgba(0, 0, 0, 0.45);
-        padding: 4px;
+      .topbar-center {
+        flex: 1;
+        display: grid;
+        justify-items: center;
+        gap: 3px;
+        text-align: center;
       }
 
-      .category-chip {
-        border: 0;
-        border-radius: 999px;
-        background: transparent;
-        color: #cbccd6;
-        padding: 6px 12px;
-        font-size: 0.74rem;
-        font-weight: 700;
-        cursor: pointer;
-      }
-
-      .category-chip.active {
-        background: var(--brand-gold);
-        color: var(--brand-dark);
-      }
-
-      .topbar-actions {
-        display: flex;
-        align-items: center;
-        gap: 8px;
+      .banner-subtitle {
+        margin: 0;
+        color: #a8adbd;
+        font-size: 0.8rem;
+        font-style: italic;
       }
 
       .view-toggle {
         display: flex;
-        align-items: center;
-        gap: 3px;
-        border: 1px solid var(--line);
-        border-radius: 10px;
-        background: rgba(0, 0, 0, 0.45);
+        gap: 2px;
+        border-radius: 12px;
         padding: 3px;
       }
 
-      .view-btn {
+      .view-toggle button {
         border: 0;
-        border-radius: 8px;
-        padding: 6px 10px;
+        border-radius: 9px;
+        background: transparent;
+        color: #b8bcc9;
+        font-size: 0.73rem;
+        font-weight: 700;
+        padding: 8px 11px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .view-toggle button.active {
+        background: #f3f4fa;
+        color: #111217;
+      }
+
+      .view-toggle button:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .workspace {
+        min-height: 0;
+        display: grid;
+        grid-template-columns: 260px minmax(0, 1fr) 380px;
+        gap: 12px;
+      }
+
+      .sidebar-left,
+      .sidebar-right,
+      .canvas {
+        border-radius: 18px;
+        min-height: 0;
+      }
+
+      .sidebar-left {
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .panel-title {
+        margin: 0;
+        font-size: 0.74rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--brand-gray);
+      }
+
+      .filter-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .reset-btn {
+        border: 0;
+        background: transparent;
+        color: var(--brand-orange);
         font-size: 0.72rem;
         font-weight: 700;
-        color: #aeb0bc;
-        background: transparent;
         cursor: pointer;
       }
 
-      .view-btn.active {
-        background: #f4f5fa;
-        color: var(--brand-dark);
-      }
-
-      .shell-body {
-        flex: 1;
-        min-height: 0;
+      .chip-wrap {
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
       }
 
-      .workspace-main {
+      .chip-wrap button,
+      .rank-wrap button {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 7px 10px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: #d7d9e5;
+        background: rgba(255, 255, 255, 0.04);
+        cursor: pointer;
+        width: 100%;
+      }
+
+      .chip-wrap button.active,
+      .rank-wrap button.active {
+        background: var(--brand-orange);
+        color: #1d1106;
+        border-color: rgba(255, 118, 0, 0.5);
+      }
+
+      .select-wrap select {
+        width: 100%;
+        border-radius: 10px;
         border: 1px solid var(--line);
-        border-radius: 16px;
-        background: rgba(24, 25, 30, 0.78);
-        backdrop-filter: blur(8px);
-        padding: 10px;
-        min-height: 0;
+        color: #eff0f8;
+        background: rgba(0, 0, 0, 0.35);
+        padding: 9px 10px;
+        font-size: 0.78rem;
       }
 
-      .workspace-head {
+      .rank-wrap {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .canvas {
+        padding: 12px;
+        display: grid;
+        grid-template-rows: auto auto minmax(0, 1fr);
+        gap: 10px;
+      }
+
+      .canvas-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .canvas-head h2 {
+        margin: 0;
+        font-family: "Cabinet Grotesk", "General Sans", sans-serif;
+        font-size: clamp(1.35rem, 2vw, 1.9rem);
+        line-height: 1.1;
+      }
+
+      .canvas-head p {
+        margin: 4px 0 0;
+        font-size: 0.8rem;
+        color: #a8adbd;
+      }
+
+      .tabs-head {
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 10px;
-        flex-wrap: wrap;
-        margin-bottom: 10px;
-      }
-
-      .workspace-head h1 {
-        margin: 0;
-        font-size: 1.15rem;
-        line-height: 1.2;
-      }
-
-      .workspace-head p {
-        margin: 4px 0 0;
-        font-size: 0.82rem;
-        color: #9fa3b1;
-      }
-
-      .meta-chips {
-        display: flex;
-        gap: 6px;
-        flex-wrap: wrap;
-      }
-
-      .chip {
-        border: 1px solid var(--line);
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.04);
-        padding: 5px 9px;
-        font-size: 0.72rem;
       }
 
       .tabs {
         display: flex;
         flex-wrap: wrap;
-        gap: 6px;
-        margin-bottom: 10px;
+        gap: 8px;
       }
 
       .tab-btn {
         border: 1px solid var(--line);
-        border-radius: 9px;
+        border-radius: 10px;
         background: rgba(255, 255, 255, 0.04);
-        color: #c7cbd9;
+        color: #cad0e3;
+        font-size: 0.78rem;
+        font-weight: 700;
         padding: 7px 11px;
-        font-size: 0.8rem;
-        font-weight: 600;
         cursor: pointer;
       }
 
       .tab-btn.active {
-        border-color: rgba(255, 208, 48, 0.4);
-        background: rgba(255, 208, 48, 0.16);
-        color: #ffe8a2;
+        border-color: rgba(255, 208, 48, 0.5);
+        background: rgba(255, 208, 48, 0.12);
+        color: #ffe69a;
+      }
+
+      .tab-btn:hover {
+        border-color: rgba(255, 208, 48, 0.28);
       }
 
       .tab-panel {
@@ -232,17 +324,45 @@
         display: block;
       }
 
-      .overview-panel {
+      .overview-map-panel {
         position: relative;
-        border: 1px solid var(--line);
+        height: min(72vh, 760px);
         border-radius: 14px;
         overflow: hidden;
-        background: rgba(5, 5, 8, 0.55);
+        border: 1px solid var(--line);
+        background: rgba(84, 101, 124, 0.42);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07), 0 12px 28px rgba(6, 10, 18, 0.2);
       }
 
-      .overview-stage {
-        position: relative;
-        min-height: clamp(520px, 70vh, 760px);
+      .overview-map-panel::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 2;
+        background:
+          linear-gradient(to top, rgba(28, 40, 58, 0.08), transparent 24%),
+          linear-gradient(to bottom, rgba(22, 31, 45, 0.08), transparent 18%);
+      }
+
+      .overview-map-panel::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
+        opacity: 0.04;
+        background-image: linear-gradient(
+          45deg,
+          rgba(255, 255, 255, 0.03) 25%,
+          transparent 25%,
+          transparent 50%,
+          rgba(255, 255, 255, 0.03) 50%,
+          rgba(255, 255, 255, 0.03) 75%,
+          transparent 75%,
+          transparent
+        );
+        background-size: 48px 48px;
       }
 
       #overview-map {
@@ -250,200 +370,295 @@
         inset: 0;
       }
 
-      .map-unavailable {
+      .map-message {
         position: absolute;
         inset: 0;
         display: grid;
         place-items: center;
-        background: rgba(8, 8, 12, 0.9);
-        color: #f2f3fc;
         text-align: center;
-        padding: 24px;
+        padding: 20px;
+        background: rgba(34, 44, 61, 0.74);
+        color: #f0f1f8;
         font-size: 0.9rem;
+        z-index: 3;
       }
 
-      .map-unavailable.hidden {
+      .map-message.hidden {
         display: none;
       }
 
-      .map-help {
+      .map-click-dialog {
         position: absolute;
-        right: 14px;
-        bottom: 14px;
-        z-index: 5;
-        border: 1px solid var(--line);
-        border-radius: 12px;
-        background: rgba(24, 25, 30, 0.88);
-        padding: 8px 10px;
+        top: 12px;
+        left: 12px;
+        max-width: 280px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 208, 48, 0.3);
+        background: rgba(18, 24, 36, 0.8);
+        color: #ffe8b7;
         font-size: 0.72rem;
-        color: #dbdeea;
+        font-weight: 700;
+        padding: 8px 10px;
+        z-index: 5;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+      }
+
+      .map-click-dialog.hidden {
+        display: none;
+      }
+
+      .map-hint {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        border-radius: 10px;
+        font-size: 0.68rem;
+        line-height: 1.35;
         max-width: 260px;
+        padding: 8px 9px;
+        z-index: 4;
+        border: 1px solid rgba(255, 208, 48, 0.18);
       }
 
-      .detail-panel {
+      .map-legend {
         position: absolute;
-        inset: 10px auto 10px 10px;
-        width: min(350px, calc(100% - 20px));
-        border: 1px solid var(--line);
-        border-radius: 14px;
-        overflow: hidden;
-        background: rgba(9, 10, 14, 0.92);
-        backdrop-filter: blur(12px);
-        z-index: 6;
-        display: flex;
-        flex-direction: column;
-      }
-
-      .hero-image {
-        position: relative;
-        height: 154px;
-        overflow: hidden;
-      }
-
-      .hero-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        filter: brightness(0.75);
-      }
-
-      .hero-overlay {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(180deg, transparent 30%, rgba(0, 0, 0, 0.8) 100%);
-      }
-
-      .badge-row {
-        position: absolute;
-        top: 10px;
         left: 10px;
+        bottom: 10px;
+        z-index: 3;
+        border-radius: 10px;
+        padding: 8px 10px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.66rem;
+        color: #dce0f0;
+        display: grid;
+        gap: 5px;
+      }
+
+      .map-source {
+        margin: 8px 2px 0;
+        color: #b9bfd2;
+        font-size: 0.7rem;
+      }
+
+      .map-source a {
+        color: #ffd37a;
+        text-decoration: none;
+      }
+
+      .map-source a:hover {
+        text-decoration: underline;
+      }
+
+      .legend-row {
         display: flex;
+        align-items: center;
         gap: 6px;
       }
 
-      .badge {
-        border-radius: 8px;
-        padding: 4px 7px;
-        font-size: 0.62rem;
-        text-transform: uppercase;
-        font-weight: 800;
-        letter-spacing: 0.05em;
+      .legend-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.45);
       }
 
-      .badge.rank {
+      .legend-dot.country {
         background: var(--brand-orange);
-        color: #0d0d10;
       }
 
-      .badge.type {
-        background: rgba(0, 0, 0, 0.6);
-        border: 1px solid rgba(255, 255, 255, 0.15);
+      .legend-dot.shop {
+        background: var(--brand-gold);
       }
 
-      .detail-content {
+      .overview-list {
+        display: none;
+      }
+
+      .overview-list.active {
+        display: block;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+      }
+
+      th,
+      td {
+        padding: 8px 8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        text-align: left;
+        font-size: 0.73rem;
+      }
+
+      th {
+        background: rgba(255, 255, 255, 0.06);
+        color: #f5d66a;
+        font-size: 0.66rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      .sidebar-right {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        position: relative;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 30%),
+          rgba(26, 29, 46, 0.9);
+      }
+
+      .drawer-toggle {
+        display: none;
+        border: 0;
+        background: transparent;
+        color: #f5f6fb;
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 11px 14px 8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+      }
+
+      .drawer-toggle::before {
+        content: "";
+        width: 36px;
+        height: 4px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.28);
+      }
+
+      .hero {
+        position: relative;
+        height: 220px;
+      }
+
+      .hero img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: brightness(0.76);
+        transition: transform 0.5s ease, filter 0.5s ease;
+      }
+
+      .hero:hover img {
+        transform: scale(1.04);
+        filter: brightness(0.96);
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(10, 10, 14, 0.92), rgba(10, 10, 14, 0.2));
+      }
+
+      .hero-badges {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        z-index: 2;
+        display: flex;
+        gap: 7px;
+      }
+
+      .hero-badge {
+        border-radius: 8px;
+        padding: 4px 8px;
+        font-size: 0.63rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      .hero-badge.rank {
+        background: var(--brand-orange);
+        color: #1d1208;
+      }
+
+      .hero-badge.country {
+        background: rgba(0, 0, 0, 0.54);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+      }
+
+      .hero-save {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        z-index: 2;
+        width: 34px;
+        height: 34px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(0, 0, 0, 0.48);
+        color: #ffffff;
         display: grid;
-        gap: 10px;
-        padding: 12px;
-        overflow: auto;
+        place-items: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .hero-save:hover {
+        background: var(--brand-orange);
+        color: #1f1406;
+        border-color: rgba(255, 118, 0, 0.75);
+      }
+
+      .detail-body {
+        padding: 14px;
+        display: grid;
+        gap: 12px;
+        overflow-y: auto;
       }
 
       .shop-title {
         margin: 0;
-        line-height: 1.1;
-        font-size: 1.6rem;
-        font-weight: 800;
+        font-family: "Cabinet Grotesk", "General Sans", sans-serif;
+        font-size: 1.9rem;
+        line-height: 1;
       }
 
-      .shop-rating {
-        margin: 3px 0 0;
-        color: #ffd769;
-        font-size: 0.73rem;
-        font-weight: 700;
+      .shop-sub {
+        margin: 4px 0 0;
+        color: #b8bdcf;
+        font-size: 0.78rem;
       }
 
-      .shop-address {
-        margin: 0;
-        color: var(--brand-gray);
-        font-size: 0.74rem;
-      }
-
-      .action-grid {
+      .actions {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 8px;
       }
 
-      .btn-primary,
-      .btn-secondary {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
+      .actions a {
         text-decoration: none;
-        border-radius: 8px;
+        border-radius: 10px;
         border: 1px solid var(--line);
-        padding: 8px;
-        font-size: 0.72rem;
-        font-weight: 800;
-      }
-
-      .btn-primary {
-        grid-column: 1 / -1;
-        border-color: rgba(255, 208, 48, 0.45);
-        background: var(--brand-gold);
-        color: #0f1116;
-      }
-
-      .btn-secondary {
-        background: rgba(255, 255, 255, 0.04);
-        color: #e8ebf7;
-      }
-
-      .detail-section {
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
-        padding-top: 8px;
-      }
-
-      .section-title {
-        margin: 0 0 8px;
-        color: #d7b84e;
-        font-size: 0.63rem;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        font-weight: 800;
-      }
-
-      .menu-item {
-        display: grid;
-        grid-template-columns: 42px 1fr auto;
-        gap: 8px;
-        align-items: center;
-        margin-bottom: 8px;
-      }
-
-      .menu-thumb {
-        width: 42px;
-        height: 42px;
-        border-radius: 8px;
-        object-fit: cover;
-      }
-
-      .menu-name {
-        margin: 0;
-        font-size: 0.74rem;
+        color: #eff1fb;
+        font-size: 0.75rem;
         font-weight: 700;
+        padding: 9px;
+        text-align: center;
       }
 
-      .menu-desc {
-        margin: 2px 0 0;
-        color: var(--brand-gray);
-        font-size: 0.67rem;
-        line-height: 1.35;
+      .actions a.primary {
+        background: var(--brand-orange);
+        color: #1d1306;
+        border-color: rgba(255, 118, 0, 0.7);
       }
 
-      .menu-price {
-        color: var(--brand-orange);
-        font-size: 0.72rem;
-        font-weight: 700;
+      .actions a:hover {
+        transform: translateY(-1px);
+        border-color: rgba(255, 208, 48, 0.38);
       }
 
       .details-grid {
@@ -455,154 +670,168 @@
       .details-card {
         border: 1px solid var(--line);
         border-radius: 10px;
-        padding: 8px;
         background: rgba(255, 255, 255, 0.04);
-      }
-
-      .details-card p {
-        margin: 0;
+        padding: 9px;
       }
 
       .details-label {
-        color: var(--brand-gray);
-        font-size: 0.65rem;
+        margin: 0;
+        color: #9ba1b3;
+        font-size: 0.66rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
       }
 
       .details-value {
-        margin-top: 2px;
-        font-size: 0.79rem;
+        margin: 4px 0 0;
+        font-size: 0.82rem;
         font-weight: 700;
       }
 
-      .review-card {
-        border: 1px solid var(--line);
-        border-radius: 10px;
-        background: rgba(255, 255, 255, 0.04);
-        padding: 9px;
-      }
-
-      .review-card p {
-        margin: 0;
+      .source-note {
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding-top: 10px;
+        color: #a9aebf;
         font-size: 0.69rem;
-        color: #d6dae8;
-        line-height: 1.45;
       }
 
-      .book-btn {
-        width: 100%;
-        border: 0;
-        border-radius: 9px;
-        padding: 9px;
-        background: #f4f5fa;
-        color: #0b0c10;
-        font-size: 0.74rem;
-        font-weight: 800;
+      .site-footer {
+        border-top: 1px solid var(--line);
+        margin-top: 12px;
+        padding: 14px 20px 8px;
+        text-align: center;
       }
 
-      .overview-list {
-        padding: 10px;
+      .site-footer p {
+        margin: 0;
+        color: var(--brand-gray);
+        font-size: 0.72rem;
       }
 
-      .overview-list.is-hidden {
-        display: none;
+      .site-footer a {
+        color: var(--brand-orange);
+        text-decoration: none;
       }
 
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        border: 1px solid var(--line);
-        border-radius: 12px;
-        overflow: hidden;
-        background: rgba(10, 10, 14, 0.75);
-      }
-
-      th,
-      td {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        padding: 8px 7px;
-        text-align: left;
-        font-size: 0.73rem;
-      }
-
-      th {
-        color: #f1d36a;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        font-size: 0.66rem;
-        background: rgba(255, 255, 255, 0.05);
-      }
-
-      .panel {
-        border: 1px solid var(--line);
-        border-radius: 12px;
-        background: rgba(9, 10, 14, 0.65);
-        padding: 10px;
+      .site-footer a:hover {
+        text-decoration: underline;
       }
 
       .link-list {
         margin: 0;
         padding-left: 18px;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: rgba(5, 5, 8, 0.48);
+        padding-top: 12px;
+        padding-bottom: 12px;
       }
 
       .link-list li {
-        margin: 6px 0;
+        margin: 5px 0;
       }
 
       .link-list a {
-        color: #ffdca1;
+        color: #ffe2a2;
         text-decoration: none;
       }
 
       .link-list a:hover {
-        color: #ffb458;
+        color: #ffbf66;
       }
 
       .is-hidden {
         display: none !important;
       }
 
-      @media (max-width: 1080px) {
-        .collection-toggle {
-          order: 3;
-          flex-basis: 100%;
-          justify-content: center;
+      @keyframes pulse-ring {
+        0% {
+          transform: scale(0.8);
+          opacity: 0.8;
+          box-shadow: 0 0 0 0 rgba(255, 208, 48, 0.7);
         }
-
-        .banner-title {
-          order: 4;
-          flex-basis: 100%;
-          text-align: left;
+        70% {
+          transform: scale(1);
+          opacity: 0;
+          box-shadow: 0 0 0 15px rgba(255, 208, 48, 0);
         }
-
-        .detail-panel {
-          position: static;
-          width: 100%;
-          border-radius: 0;
-          border-left: 0;
-          border-right: 0;
-          border-top: 1px solid var(--line);
-          max-height: 360px;
-        }
-
-        .overview-stage {
-          padding-top: 0;
-          min-height: 650px;
+        100% {
+          transform: scale(0.8);
+          opacity: 0;
         }
       }
 
-      @media (max-width: 760px) {
-        .shell-topbar {
+      .marker-pulse {
+        animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+      }
+
+      @media (max-width: 1240px) {
+        .workspace {
+          grid-template-columns: 240px minmax(0, 1fr);
+        }
+
+        .sidebar-right {
+          grid-column: 1 / -1;
+          max-height: 340px;
+        }
+
+        .hero {
+          height: 170px;
+        }
+      }
+
+      @media (max-width: 860px) {
+        .topbar {
           flex-wrap: wrap;
         }
 
-        .topbar-actions {
-          width: 100%;
-          justify-content: space-between;
+        .topbar-center {
+          order: 3;
+          flex: 1 0 100%;
+          justify-items: start;
+          text-align: left;
         }
 
-        .workspace-head {
-          flex-direction: column;
-          align-items: flex-start;
+        .workspace {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar-left {
+          order: 2;
+        }
+
+        .sidebar-right {
+          order: 3;
+          position: fixed;
+          left: 12px;
+          right: 12px;
+          bottom: 10px;
+          z-index: 20;
+          max-height: min(78vh, 560px);
+          border-radius: 16px;
+          box-shadow: 0 16px 34px rgba(0, 0, 0, 0.45);
+          transition: transform 0.28s ease;
+        }
+
+        .drawer-toggle {
+          display: inline-flex;
+        }
+
+        .sidebar-right.is-collapsed .hero,
+        .sidebar-right.is-collapsed .detail-body {
+          display: none;
+        }
+
+        .app-shell {
+          padding-bottom: 110px;
+        }
+
+        .canvas {
+          order: 1;
+        }
+
+        .tabs-head {
+          flex-wrap: wrap;
         }
       }
 
@@ -619,119 +848,80 @@
   </head>
   <body>
     <div class="app-shell">
-      <header class="shell-topbar">
-        <div class="brand-wrap">
-          <div class="brand-icon">☕</div>
+      <header class="topbar glass-panel">
+        <div class="brand">
+          <div class="brand-icon"><iconify-icon icon="ph:coffee-bean-fill"></iconify-icon></div>
           <div>
-            <p class="brand-title">ROAST.</p>
-            <p class="brand-sub">Top100BestCoffeeShops Preview</p>
+            <h1>ROAST<span style="color: var(--brand-orange)">.</span></h1>
+            <p>GLOBAL EXPLORER</p>
           </div>
         </div>
 
-        <p class="banner-title">Top 100 Best Coffee Shops 2026</p>
-
-        <div class="collection-toggle" aria-label="Collection toggle">
-          <button class="category-chip active" data-category="Top 100">Top 100 World</button>
-          <button class="category-chip active" data-category="South America">South America</button>
-        </div>
-
-        <div class="topbar-actions">
-          <div class="view-toggle">
-            <button class="view-btn active" data-overview-view="map">Map</button>
-            <button class="view-btn" data-overview-view="list">List</button>
-          </div>
-          {% if csv_available %}<a class="btn-secondary" href="{{ csv_url }}">CSV</a>{% endif %}
-          {% if kml_available %}<a class="btn-secondary" href="{{ kml_url }}">KML</a>{% endif %}
+        <div class="topbar-center">
+          <h2 class="banner-title">World's 100 Best Coffee Shops</h2>
+          <p class="banner-subtitle">Interactive map with country-level shop density and source-backed shop details.</p>
         </div>
       </header>
 
-      <main class="shell-body">
-        <section class="workspace-main">
-          <div class="workspace-head">
-            <div>
-              <p>Interactive map of Top 100 World + South America coffee shops.</p>
+      <main class="workspace">
+        <aside class="sidebar-left glass-panel">
+          <div class="filter-head">
+            <p class="panel-title">Filters</p>
+            <button class="reset-btn" id="reset-filters">Reset</button>
+          </div>
+
+          <section>
+            <p class="panel-title">Collection</p>
+            <div class="chip-wrap" id="collection-chip-wrap"></div>
+          </section>
+
+          <section>
+            <p class="panel-title">Country</p>
+            <div class="select-wrap">
+              <select id="country-filter"></select>
             </div>
-            <div class="meta-chips">
-              <span class="chip">Total shops: {{ total_shops }}</span>
-              {% for category, count in category_counts.items() %}
-              <span class="chip">{{ category }}: {{ count }}</span>
-              {% endfor %}
-              {% if map_missing_coords_count %}
-              <span class="chip">Missing lat/lng: {{ map_missing_coords_count }}</span>
-              {% endif %}
+          </section>
+
+          <section>
+            <p class="panel-title">Rank Band</p>
+            <div class="rank-wrap" id="rank-band-wrap"></div>
+          </section>
+
+        </aside>
+
+        <section class="canvas glass-panel">
+          <div class="tabs-head">
+            <div class="tabs" role="tablist" aria-label="Coffee views">
+              <button class="tab-btn active" data-tab="overview">Overview</button>
+            </div>
+            <div class="view-toggle glass-panel">
+              <button class="js-overview-mode active" data-mode="map">
+                <iconify-icon icon="ph:map-trifold-fill"></iconify-icon>
+                <span>Map</span>
+              </button>
+              <button class="js-overview-mode" data-mode="list">
+                <iconify-icon icon="ph:list-dashes-bold"></iconify-icon>
+                <span>List</span>
+              </button>
             </div>
           </div>
 
-          <div class="tabs" role="tablist" aria-label="Coffee shop views">
-            <button class="tab-btn active" data-tab="overview" role="tab" aria-selected="true">Overview</button>
-            <button class="tab-btn" data-tab="top100-links" role="tab" aria-selected="false">Top 100 Links</button>
-            <button class="tab-btn" data-tab="south-links" role="tab" aria-selected="false">South America Links</button>
-          </div>
-
-          <section id="overview" class="tab-panel active" role="tabpanel">
-            <div class="overview-panel" id="overview-map-region">
-              <div class="overview-stage">
-                <div id="overview-map" aria-label="Global coffee shops map"></div>
-                <div id="map-unavailable" class="map-unavailable hidden"></div>
-
-                <aside class="detail-panel" id="shop-detail-panel">
-                  <div class="hero-image">
-                    <img
-                      id="shop-hero-img"
-                      src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1200&auto=format&fit=crop"
-                      alt="Coffee shop interior"
-                    />
-                    <div class="hero-overlay"></div>
-                    <div class="badge-row">
-                      <span class="badge rank" id="shop-rank-badge">#1 South America</span>
-                      <span class="badge type">Historic Site</span>
-                    </div>
-                  </div>
-
-                  <div class="detail-content">
-                    <div>
-                      <h2 class="shop-title" id="shop-name">Choose a marker</h2>
-                      <p class="shop-rating" id="shop-rating">Rank and category appear after selection.</p>
-                      <p class="shop-address" id="shop-address">Select a coffee shop marker to inspect details.</p>
-                    </div>
-
-                    <div class="action-grid">
-                      <a class="btn-primary" id="shop-directions" href="#" target="_blank" rel="noopener">Get Directions</a>
-                      <a class="btn-secondary" id="shop-website" href="#" target="_blank" rel="noopener">Source Page</a>
-                      <a class="btn-secondary" id="shop-map-link" href="#" target="_blank" rel="noopener">Google Maps</a>
-                    </div>
-
-                    <section class="detail-section">
-                      <p class="section-title">Scraped Details</p>
-                      <div class="details-grid">
-                        <div class="details-card">
-                          <p class="details-label">Category</p>
-                          <p class="details-value" id="shop-category">-</p>
-                        </div>
-                        <div class="details-card">
-                          <p class="details-label">City / Country</p>
-                          <p class="details-value" id="shop-city-country">-</p>
-                        </div>
-                        <div class="details-card">
-                          <p class="details-label">Coordinates</p>
-                          <p class="details-value" id="shop-coordinates">-</p>
-                        </div>
-                        <div class="details-card">
-                          <p class="details-label">Google Place ID</p>
-                          <p class="details-value" id="shop-place-id">-</p>
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </aside>
-
-                <div class="map-help">
-                  Zoom out for country-level density markers. Zoom in to reveal individual coffee shops.
-                </div>
+          <section id="overview" class="tab-panel active">
+            <div id="overview-map-region" class="overview-map-panel">
+              <div id="overview-map" aria-label="Global coffee map"></div>
+              <div id="map-message" class="map-message hidden"></div>
+              <div id="map-click-dialog" class="map-click-dialog hidden"></div>
+              <div class="map-legend glass-panel">
+                <div class="legend-row"><span class="legend-dot country"></span><span>Country bubble (zoomed out)</span></div>
+                <div class="legend-row"><span class="legend-dot shop"></span><span>Individual shop (zoomed in)</span></div>
               </div>
+              <div class="map-hint glass-panel">Pins use national flag colors. Zoom out for country density, zoom in for individual shops.</div>
             </div>
+            <p class="map-source">
+              Source: <a href="https://theworlds100bestcoffeeshops.com/" target="_blank" rel="noopener">https://theworlds100bestcoffeeshops.com/</a>
+            </p>
 
-            <div class="overview-list is-hidden" id="overview-list-region">
+            <div id="overview-list-region" class="overview-list">
               <table>
                 <thead>
                   <tr>
@@ -740,182 +930,765 @@
                     <th>City</th>
                     <th>Country</th>
                     <th>Category</th>
+                    <th>Map</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {% for shop in shops %}
+                <tbody id="overview-list-body">
+                  {% for shop in overview_shops %}
                   <tr>
                     <td>{{ shop.rank }}</td>
                     <td>{{ shop.name }}</td>
-                    <td>{{ shop.city }}</td>
-                    <td>{{ shop.country }}</td>
+                    <td>{{ shop.city or 'Not provided' }}</td>
+                    <td>{{ shop.country_normalized }}</td>
                     <td>{{ shop.category }}</td>
+                    <td><a href="{{ shop.google_maps_url }}" target="_blank" rel="noopener">Map</a></td>
                   </tr>
                   {% endfor %}
                 </tbody>
               </table>
             </div>
           </section>
-
-          <section id="top100-links" class="tab-panel panel" role="tabpanel">
-            <h2>Main Top 100</h2>
-            <ol class="link-list">
-              {% for item in top_100_links %}
-              <li><a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.label }}</a></li>
-              {% endfor %}
-            </ol>
-          </section>
-
-          <section id="south-links" class="tab-panel panel" role="tabpanel">
-            <h2>South America</h2>
-            <ol class="link-list">
-              {% for item in south_links %}
-              <li><a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.label }}</a></li>
-              {% endfor %}
-            </ol>
-          </section>
         </section>
+
+        <aside class="sidebar-right glass-panel" id="detail-panel">
+          <button class="drawer-toggle" id="detail-drawer-toggle" type="button" aria-expanded="true">
+            Shop Details
+          </button>
+          <div class="hero">
+            <img
+              src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=1200&auto=format&fit=crop"
+              alt="Coffee shop interior"
+            />
+            <div class="hero-badges">
+              <span class="hero-badge rank" id="detail-rank">#1 Top 100</span>
+              <span class="hero-badge country" id="detail-country">Country</span>
+            </div>
+            <button class="hero-save" type="button" aria-label="Save shop">
+              <iconify-icon icon="ph:heart-bold"></iconify-icon>
+            </button>
+          </div>
+
+          <div class="detail-body">
+            <section>
+              <h3 class="shop-title" id="detail-name">Select a marker</h3>
+              <p class="shop-sub" id="detail-address">Pick a country marker to explore the featured coffee shop.</p>
+            </section>
+
+            <section class="actions">
+              <a class="primary" id="detail-directions" href="#" target="_blank" rel="noopener">Get Directions</a>
+              <a id="detail-website" href="#" target="_blank" rel="noopener">Website</a>
+            </section>
+
+            <section class="details-grid">
+              <div class="details-card">
+                <p class="details-label">Category</p>
+                <p class="details-value" id="detail-category">-</p>
+              </div>
+              <div class="details-card">
+                <p class="details-label">Rank</p>
+                <p class="details-value" id="detail-rank-value">-</p>
+              </div>
+              <div class="details-card">
+                <p class="details-label">Country</p>
+                <p class="details-value" id="detail-country-value">-</p>
+              </div>
+              <div class="details-card">
+                <p class="details-label">City</p>
+                <p class="details-value" id="detail-city">Not provided</p>
+              </div>
+            </section>
+
+            <p class="source-note">Only source-backed fields from the scraped dataset are shown in this panel.</p>
+          </div>
+        </aside>
       </main>
+      <footer class="site-footer">
+        <p>
+          &copy; 2026 World's Best Coffee Shops Complete Map &middot; YFC &middot;
+          <a href="https://buymeacoffee.com/opheliachen" target="_blank" rel="noopener">https://buymeacoffee.com/opheliachen</a>
+        </p>
+      </footer>
     </div>
 
     <script>
-      const mapShops = {{ map_shops | tojson }};
-      const sidebarShops = {{ sidebar_shops | tojson }};
-      const mapCountries = {{ map_country_aggregates | tojson }};
+      const overviewShops = {{ overview_shops | tojson }};
+      const overviewCountries = {{ overview_countries | tojson }};
+      const overviewFilters = {{ overview_filters | tojson }};
       const googleMapsKey = {{ google_maps_js_api_key | tojson }};
-      const mapMissingCoordsCount = {{ map_missing_coords_count }};
+      const SHOP_ZOOM_THRESHOLD = 4;
 
-      const tabButtons = document.querySelectorAll(".tab-btn");
-      const tabPanels = document.querySelectorAll(".tab-panel");
-      tabButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          const target = button.dataset.tab;
-          tabButtons.forEach((item) => {
-            const active = item === button;
-            item.classList.toggle("active", active);
-            item.setAttribute("aria-selected", String(active));
-          });
-          tabPanels.forEach((panel) => panel.classList.toggle("active", panel.id === target));
-        });
-      });
-
-      const mapRegion = document.getElementById("overview-map-region");
-      const listRegion = document.getElementById("overview-list-region");
-      document.querySelectorAll(".view-btn").forEach((button) => {
-        button.addEventListener("click", () => {
-          const mode = button.dataset.overviewView;
-          document.querySelectorAll(".view-btn").forEach((item) => item.classList.toggle("active", item === button));
-          if (mode === "list") {
-            mapRegion.classList.add("is-hidden");
-            listRegion.classList.remove("is-hidden");
-          } else {
-            mapRegion.classList.remove("is-hidden");
-            listRegion.classList.add("is-hidden");
-          }
-        });
-      });
-
-      const markerState = {
-        activeCategories: new Set(["Top 100", "South America"]),
+      const state = {
+        activeCategories: new Set(overviewFilters.defaults.active_categories),
+        country: overviewFilters.defaults.country,
+        rankBand: overviewFilters.defaults.rank_band,
+        focusCountry: null,
+        selectedCountry: null,
+        selectedShopId: null,
+        map: null,
         countryMarkers: [],
         shopMarkers: [],
-        selectedShop: null,
-        infoWindow: null,
-        map: null,
+        pulseTimer: null,
+        dialogTimer: null,
       };
 
-      function normalizeCategory(category) {
-        if (category === "South America" || category === "South") return "South America";
-        return "Top 100";
+      const detailPanel = document.getElementById("detail-panel");
+      const detailDrawerToggle = document.getElementById("detail-drawer-toggle");
+
+      document.querySelectorAll(".js-overview-mode").forEach((button) => {
+        button.addEventListener("click", () => {
+          const mode = button.dataset.mode;
+          document.querySelectorAll(".js-overview-mode").forEach((item) => item.classList.toggle("active", item === button));
+          document.getElementById("overview-map-region").classList.toggle("is-hidden", mode !== "map");
+          document.getElementById("overview-list-region").classList.toggle("active", mode === "list");
+          document.getElementById("overview-list-region").classList.toggle("is-hidden", mode !== "list");
+        });
+      });
+
+      function setDetailDrawerState(collapsed) {
+        if (!detailPanel || !detailDrawerToggle) return;
+        detailPanel.classList.toggle("is-collapsed", collapsed);
+        detailDrawerToggle.setAttribute("aria-expanded", String(!collapsed));
+        detailDrawerToggle.textContent = collapsed ? "Show Shop Details" : "Hide Shop Details";
       }
 
-      function getVisibleShops() {
-        return mapShops.filter((shop) => markerState.activeCategories.has(normalizeCategory(shop.category)));
+      function initDetailDrawer() {
+        if (!detailPanel || !detailDrawerToggle || !window.matchMedia) return;
+        const mobileQuery = window.matchMedia("(max-width: 860px)");
+
+        const syncDrawerForViewport = () => {
+          if (mobileQuery.matches) {
+            setDetailDrawerState(true);
+          } else {
+            setDetailDrawerState(false);
+          }
+        };
+
+        detailDrawerToggle.addEventListener("click", () => {
+          setDetailDrawerState(!detailPanel.classList.contains("is-collapsed"));
+        });
+
+        if (mobileQuery.addEventListener) {
+          mobileQuery.addEventListener("change", syncDrawerForViewport);
+        } else {
+          mobileQuery.addListener(syncDrawerForViewport);
+        }
+
+        syncDrawerForViewport();
       }
 
-      function getVisibleSidebarShops() {
-        return sidebarShops.filter((shop) => markerState.activeCategories.has(normalizeCategory(shop.category)));
+      function renderFilterControls() {
+        const chipWrap = document.getElementById("collection-chip-wrap");
+        chipWrap.innerHTML = "";
+        overviewFilters.categories.forEach((category) => {
+          const button = document.createElement("button");
+          button.textContent = category.label;
+          button.dataset.category = category.key;
+          button.classList.toggle("active", state.activeCategories.has(category.key));
+          button.addEventListener("click", () => toggleCategory(category.key));
+          chipWrap.appendChild(button);
+        });
+
+        const countrySelect = document.getElementById("country-filter");
+        countrySelect.innerHTML = "";
+        const allOption = document.createElement("option");
+        allOption.value = "All";
+        allOption.textContent = "All Countries";
+        countrySelect.appendChild(allOption);
+        const countriesSorted = [...overviewFilters.countries].sort((a, b) =>
+          String(a.label).localeCompare(String(b.label), "en", { sensitivity: "base" })
+        );
+        countriesSorted.forEach((country) => {
+          const option = document.createElement("option");
+          option.value = country.key;
+          option.textContent = `${country.label} (${country.count})`;
+          countrySelect.appendChild(option);
+        });
+        countrySelect.value = state.country;
+        countrySelect.onchange = (event) => {
+          state.country = event.target.value;
+          state.focusCountry = state.country === "All" ? null : state.country;
+          state.selectedCountry = state.country === "All" ? null : state.country;
+          state.selectedShopId = null;
+          refreshView();
+        };
+
+        const rankWrap = document.getElementById("rank-band-wrap");
+        rankWrap.innerHTML = "";
+        const allRank = document.createElement("button");
+        allRank.textContent = "All";
+        allRank.classList.toggle("active", state.rankBand === "All");
+        allRank.addEventListener("click", () => {
+          state.rankBand = "All";
+          refreshView();
+        });
+        rankWrap.appendChild(allRank);
+        overviewFilters.rank_bands.forEach((band) => {
+          const button = document.createElement("button");
+          button.textContent = band.label;
+          button.dataset.rankBand = band.key;
+          button.classList.toggle("active", state.rankBand === band.key);
+          button.addEventListener("click", () => {
+            state.rankBand = band.key;
+            refreshView();
+          });
+          rankWrap.appendChild(button);
+        });
+      }
+
+      function toggleCategory(categoryKey) {
+        if (state.activeCategories.has(categoryKey) && state.activeCategories.size === 1) {
+          return;
+        }
+        if (state.activeCategories.has(categoryKey)) {
+          state.activeCategories.delete(categoryKey);
+        } else {
+          state.activeCategories.add(categoryKey);
+        }
+
+        document.querySelectorAll(`[data-category="${categoryKey}"]`).forEach((node) => {
+          node.classList.toggle("active", state.activeCategories.has(categoryKey));
+        });
+        state.selectedShopId = null;
+        refreshView();
+      }
+
+      function resetFilters() {
+        state.activeCategories = new Set(overviewFilters.defaults.active_categories);
+        state.country = overviewFilters.defaults.country;
+        state.rankBand = overviewFilters.defaults.rank_band;
+        state.focusCountry = null;
+        state.selectedCountry = null;
+        state.selectedShopId = null;
+        renderFilterControls();
+        document.querySelectorAll(".js-category-toggle").forEach((button) => {
+          const category = button.dataset.category;
+          button.classList.toggle("active", state.activeCategories.has(category));
+        });
+        refreshView();
+      }
+
+      function filteredShops() {
+        return overviewShops.filter((shop) => {
+          if (!state.activeCategories.has(shop.category)) return false;
+          if (state.country !== "All" && shop.country_normalized !== state.country) return false;
+          if (state.rankBand !== "All" && shop.rank_band !== state.rankBand) return false;
+          return true;
+        });
+      }
+
+      function filteredCountries() {
+        const byCountry = new Map();
+        filteredShops().forEach((shop) => {
+          const current = byCountry.get(shop.country_normalized) || {
+            country: shop.country_normalized,
+            shop_count: 0,
+            top_100_count: 0,
+            south_america_count: 0,
+            primary_shop: shop,
+          };
+          current.shop_count += 1;
+          if (shop.category === "Top 100") current.top_100_count += 1;
+          if (shop.category === "South America") current.south_america_count += 1;
+          if (shop.rank < current.primary_shop.rank) current.primary_shop = shop;
+          byCountry.set(shop.country_normalized, current);
+        });
+
+        const baseCountries = new Map(overviewCountries.map((country) => [country.country, country]));
+        return Array.from(byCountry.values())
+          .map((row) => ({ ...(baseCountries.get(row.country) || {}), ...row }))
+          .filter((row) => Boolean(row && row.lat !== undefined && row.lng !== undefined))
+          .sort((a, b) => b.shop_count - a.shop_count || a.country.localeCompare(b.country));
+      }
+
+      function renderListRows() {
+        const body = document.getElementById("overview-list-body");
+        const rows = filteredShops()
+          .sort((a, b) => a.rank - b.rank || a.name.localeCompare(b.name))
+          .map(
+            (shop) =>
+              `<tr>` +
+              `<td>${shop.rank}</td>` +
+              `<td>${escapeHtml(shop.name)}</td>` +
+              `<td>${escapeHtml(shop.city || "Not provided")}</td>` +
+              `<td>${escapeHtml(shop.country_normalized)}</td>` +
+              `<td>${escapeHtml(shop.category)}</td>` +
+              `<td><a href="${shop.google_maps_url}" target="_blank" rel="noopener">Map</a></td>` +
+              `</tr>`
+          )
+          .join("");
+
+        body.innerHTML =
+          rows ||
+          '<tr><td colspan="6" style="text-align:center;color:#aeb3c6">No shops match the current filters.</td></tr>';
+      }
+
+      function pickDefaultShop() {
+        const shops = filteredShops().slice().sort((a, b) => a.rank - b.rank || a.name.localeCompare(b.name));
+        if (!shops.length) return null;
+        if (state.selectedShopId) {
+          const selected = shops.find((shop) => shop.id === state.selectedShopId);
+          if (selected) return selected;
+        }
+        if (state.selectedCountry) {
+          const countryShop = shops.find((shop) => shop.country_normalized === state.selectedCountry);
+          if (countryShop) return countryShop;
+        }
+        return shops[0];
+      }
+
+      function updateDetailPanel(shop) {
+        if (!shop) {
+          document.getElementById("detail-name").textContent = "No matching shop";
+          document.getElementById("detail-address").textContent = "Adjust filters to view coffee shop details.";
+          document.getElementById("detail-rank").textContent = "No Selection";
+          document.getElementById("detail-country").textContent = "Country";
+          document.getElementById("detail-category").textContent = "-";
+          document.getElementById("detail-rank-value").textContent = "-";
+          document.getElementById("detail-country-value").textContent = "-";
+          document.getElementById("detail-city").textContent = "Not provided";
+          document.getElementById("detail-directions").href = "#";
+          document.getElementById("detail-website").href = "#";
+          return;
+        }
+
+        state.selectedShopId = shop.id;
+        state.selectedCountry = shop.country_normalized;
+        document.getElementById("detail-name").textContent = safeShopName(shop);
+        const address = [shop.formatted_address, shop.city, shop.country_normalized].filter(Boolean).join(", ");
+        document.getElementById("detail-address").textContent = address || shop.country_normalized;
+        document.getElementById("detail-rank").textContent = `#${shop.rank} ${shop.category}`;
+        document.getElementById("detail-country").textContent = shop.country_normalized;
+        document.getElementById("detail-category").textContent = shop.category;
+        document.getElementById("detail-rank-value").textContent = `#${shop.rank}`;
+        document.getElementById("detail-country-value").textContent = shop.country_normalized;
+        document.getElementById("detail-city").textContent = shop.city || "Not provided";
+
+        const directions = document.getElementById("detail-directions");
+        directions.href = shop.google_maps_url;
+
+        const website = document.getElementById("detail-website");
+        website.href = shop.source_url || shop.google_maps_url;
       }
 
       function showMapMessage(message) {
-        const messageBox = document.getElementById("map-unavailable");
-        messageBox.textContent = message;
-        messageBox.classList.remove("hidden");
+        const node = document.getElementById("map-message");
+        node.textContent = message;
+        node.classList.remove("hidden");
       }
 
       function hideMapMessage() {
-        document.getElementById("map-unavailable").classList.add("hidden");
+        document.getElementById("map-message").classList.add("hidden");
       }
 
-      function colorForCategory(category) {
-        return normalizeCategory(category) === "South America" ? "#FF7600" : "#FFD030";
+      function showMapClickDialog(message) {
+        const node = document.getElementById("map-click-dialog");
+        if (!node) return;
+        const text = String(message || "").trim();
+        node.textContent = text || "Marker selected";
+        node.classList.remove("hidden");
+        if (state.dialogTimer) window.clearTimeout(state.dialogTimer);
+        state.dialogTimer = window.setTimeout(() => node.classList.add("hidden"), 2300);
       }
 
-      function hashString(value) {
-        let hash = 0;
-        for (let index = 0; index < value.length; index += 1) {
-          hash = (hash << 5) - hash + value.charCodeAt(index);
-          hash |= 0;
+      function setMapHint(text) {
+        const hint = document.querySelector(".map-hint");
+        if (hint) hint.textContent = text;
+      }
+
+      function colorWithIntensity(baseColor, ratio) {
+        const color = String(baseColor || "").replace("#", "");
+        if (color.length !== 6) return baseColor;
+        const red = parseInt(color.slice(0, 2), 16);
+        const green = parseInt(color.slice(2, 4), 16);
+        const blue = parseInt(color.slice(4, 6), 16);
+        const strength = Math.max(0.35, Math.min(1, ratio));
+        const mix = (channel) => Math.round(255 - (255 - channel) * strength);
+        return `rgb(${mix(red)} ${mix(green)} ${mix(blue)})`;
+      }
+
+      const FLAG_COLORS = {
+        Argentina: "#74ACDF",
+        Australia: "#00008B",
+        Austria: "#ED2939",
+        Belgium: "#FDDA24",
+        Bolivia: "#007934",
+        Brazil: "#009C3B",
+        Bulgaria: "#00966E",
+        Canada: "#FF0000",
+        Chile: "#D52B1E",
+        China: "#DE2910",
+        Colombia: "#FCD116",
+        "Costa Rica": "#002B7F",
+        "Czech Republic": "#D7141A",
+        Denmark: "#C60C30",
+        "Dominican Republic": "#002D62",
+        EEUU: "#3C3B6E",
+        Ecuador: "#FFD100",
+        Egypt: "#CE1126",
+        "El Salvador": "#0F47AF",
+        England: "#CF081F",
+        Ethiopia: "#009A44",
+        France: "#002395",
+        Greece: "#004C98",
+        Guatemala: "#4997D0",
+        Honduras: "#0073CF",
+        Ireland: "#169B62",
+        Italy: "#008C45",
+        Japan: "#BC002D",
+        Macedonia: "#D20000",
+        Malaysia: "#010066",
+        Mexico: "#006847",
+        "México": "#006847",
+        Netherlands: "#AE1C28",
+        Nicaragua: "#0067C6",
+        Norway: "#EF2B2D",
+        Oman: "#DB161B",
+        Paraguay: "#D52B1E",
+        Peru: "#D91023",
+        Portugal: "#006600",
+        Qatar: "#8D1B3D",
+        "Republic of Korea": "#CD2E3A",
+        Romania: "#002B7F",
+        Rwanda: "#20603D",
+        Scotland: "#005EB8",
+        Singapore: "#EF3340",
+        "South Africa": "#007749",
+        Spain: "#AA151B",
+        Switzerland: "#D52B1E",
+        Taiwan: "#000095",
+        Thailand: "#A51931",
+        "The Philippines": "#0038A8",
+        Turkey: "#E30A17",
+        UAE: "#00732F",
+        "United States": "#3C3B6E",
+        Uruguay: "#001489",
+        USA: "#3C3B6E",
+        Venezuela: "#FFCC00",
+      };
+
+      const PIN_PATH = "M 0,-24 C -6.6,-24 -12,-18.6 -12,-12 C -12,-4.8 0,0 0,0 C 0,0 12,-4.8 12,-12 C 12,-18.6 6.6,-24 0,-24 Z";
+
+      function flagColorFor(country, fallbackColor = "#888899") {
+        return FLAG_COLORS[country] || fallbackColor;
+      }
+
+      function labelColor(hexBg) {
+        const color = String(hexBg || "").trim();
+        if (!color.startsWith("#") || color.length !== 7) return "#ffffff";
+        const r = parseInt(color.slice(1, 3), 16);
+        const g = parseInt(color.slice(3, 5), 16);
+        const b = parseInt(color.slice(5, 7), 16);
+        return r * 0.299 + g * 0.587 + b * 0.114 > 140 ? "#111318" : "#ffffff";
+      }
+
+      function safeCountryName(country) {
+        const value = String(country || "").trim();
+        return value || "Unknown country";
+      }
+
+      function safeShopName(shop) {
+        const value = String(shop?.name || "").trim();
+        return value || `Rank #${shop?.rank || "?"} Coffee Shop`;
+      }
+
+      function countryTooltipText(row) {
+        const country = safeCountryName(row?.country);
+        const count = Number(row?.shop_count || 0);
+        return `${country} - ${count} shops`;
+      }
+
+      function shopTooltipText(shop) {
+        const name = safeShopName(shop);
+        const country = safeCountryName(shop?.country_normalized);
+        const rank = Number(shop?.rank || 0);
+        return `#${rank || "?"} ${name} (${country})`;
+      }
+
+      function countryMarkerIcon(row, active, maxCount) {
+        const ratio = row.shop_count / Math.max(1, maxCount);
+        const markerSize = Math.max(15, Math.min(44, Number(row.marker_size_px) || 15 + ratio * 29));
+        const baseColor = flagColorFor(row.country, row.marker_color || "#888899");
+        return {
+          path: PIN_PATH,
+          fillColor: active ? "#f8e0b2" : baseColor,
+          fillOpacity: active ? 0.9 : 0.8,
+          strokeColor: active ? "#e2ab67" : "#f2f4fa",
+          strokeWeight: active ? 1.7 : 1.2,
+          scale: Math.max(1, markerSize / 12),
+          anchor: new google.maps.Point(0, 0),
+          labelOrigin: new google.maps.Point(0, -14),
+        };
+      }
+
+      function shopMarkerIcon(shop, active, faded) {
+        const baseColor = flagColorFor(shop.country_normalized, "#888899");
+        return {
+          path: PIN_PATH,
+          fillColor: active ? "#f6e0b8" : baseColor,
+          fillOpacity: faded ? 0.5 : active ? 0.9 : 0.86,
+          strokeColor: active ? "#e2ab67" : "#f2f4fa",
+          strokeWeight: active ? 1.6 : 1.1,
+          scale: active ? 1.12 : 0.96,
+          anchor: new google.maps.Point(0, 0),
+          labelOrigin: new google.maps.Point(0, -14),
+        };
+      }
+
+      function clearMarkers() {
+        state.countryMarkers.forEach((marker) => marker.setMap(null));
+        state.shopMarkers.forEach((marker) => marker.setMap(null));
+        state.countryMarkers = [];
+        state.shopMarkers = [];
+        if (state.pulseTimer) {
+          window.clearInterval(state.pulseTimer);
+          state.pulseTimer = null;
         }
-        return hash;
       }
 
-      function clamp(value, min, max) {
-        return Math.max(min, Math.min(max, value));
+      function startPulse(marker, iconFactory) {
+        if (state.pulseTimer) window.clearInterval(state.pulseTimer);
+        let grow = false;
+        state.pulseTimer = window.setInterval(() => {
+          grow = !grow;
+          const icon = iconFactory();
+          const baseScale = Number(icon.scale) || 1;
+          icon.scale = grow ? baseScale * 1.04 : baseScale;
+          icon.fillOpacity = grow
+            ? Math.min(1, Number(icon.fillOpacity || 0.9) + 0.02)
+            : Number(icon.fillOpacity || 0.9);
+          marker.setIcon(icon);
+        }, 900);
       }
 
-      function wrapLng(value) {
-        if (!Number.isFinite(value)) return 0;
-        let next = value;
-        while (next > 180) next -= 360;
-        while (next < -180) next += 360;
-        return next;
+      function hasValidCoordinates(shop) {
+        return Number.isFinite(Number(shop.lat)) && Number.isFinite(Number(shop.lng));
       }
 
-      function shopPosition(shop, countriesByName) {
-        if (Number.isFinite(shop.lat) && Number.isFinite(shop.lng)) {
-          return { lat: Number(shop.lat), lng: Number(shop.lng) };
+      function coordinatePosition(shop) {
+        return { lat: Number(shop.lat), lng: Number(shop.lng) };
+      }
+
+      function unresolvedHint(unresolvedCount) {
+        if (unresolvedCount <= 0) return "";
+        return ` ${unresolvedCount} shops have no verified coordinates and remain represented in country bubbles.`;
+      }
+
+      function renderCountryMarkers(countries, shops, maxCount) {
+        setMapHint("Pins use national flag colors. Zoom out for country density, zoom in for individual shops.");
+        countries.forEach((row) => {
+          const active = state.selectedCountry === row.country;
+          const baseColor = flagColorFor(row.country, row.marker_color || "#888899");
+          const tooltipText = countryTooltipText(row);
+          const marker = new google.maps.Marker({
+            map: state.map,
+            position: { lat: row.lat, lng: row.lng },
+            title: tooltipText,
+            icon: countryMarkerIcon(row, active, maxCount),
+            label: {
+              text: String(row.shop_count),
+              color: labelColor(active ? "#ffe4a8" : baseColor),
+              fontWeight: "700",
+              fontSize: "11px",
+            },
+            zIndex: active ? 70 : 20,
+          });
+
+          marker.addListener("click", () => {
+            state.selectedCountry = row.country;
+            state.focusCountry = row.country;
+            const featuredShop = shops
+              .filter((shop) => shop.country_normalized === row.country)
+              .sort((a, b) => a.rank - b.rank || a.name.localeCompare(b.name))[0];
+            if (featuredShop) {
+              state.selectedShopId = featuredShop.id;
+              updateDetailPanel(featuredShop);
+            }
+            showMapClickDialog(tooltipText);
+            if ((state.map.getZoom() || 2) < SHOP_ZOOM_THRESHOLD) {
+              state.map.setZoom(SHOP_ZOOM_THRESHOLD);
+            }
+            state.map.panTo({ lat: row.lat, lng: row.lng });
+            renderMapMarkers();
+          });
+
+          if (active) startPulse(marker, () => countryMarkerIcon(row, true, maxCount));
+          state.countryMarkers.push(marker);
+        });
+      }
+
+      function renderShopMarkers(shops, countriesByName, maxCount) {
+        const resolvedShops = shops.filter((shop) => hasValidCoordinates(shop));
+        const unresolvedCount = shops.length - resolvedShops.length;
+        setMapHint(
+          `Zoomed in: individual coffee shop pins with verified coordinates.${unresolvedHint(unresolvedCount)}`
+        );
+
+        if (!resolvedShops.length) {
+          showMapMessage("No verified coordinates available at this zoom level. Zoom out to use country bubbles.");
+          const fallbackShop = shops.find((shop) => shop.id === state.selectedShopId) || shops[0] || null;
+          updateDetailPanel(fallbackShop);
+          return;
         }
-        const baseCountry = countriesByName.get(shop.country) || { lat: 10, lng: 0 };
-        const key = `${shop.rank}|${shop.name}|${shop.category}`;
-        const seed = Math.abs(hashString(key));
-        const angle = ((seed % 360) * Math.PI) / 180;
-        const ring = 1 + (seed % 8);
-        const radius = 0.06 + ring * 0.045;
-        return {
-          lat: clamp(Number(baseCountry.lat) + Math.sin(angle) * radius * 0.8, -84, 84),
-          lng: wrapLng(Number(baseCountry.lng) + Math.cos(angle) * radius),
+
+        hideMapMessage();
+        const preferredShop = shops.find((shop) => shop.id === state.selectedShopId) || null;
+        const selectedShop = preferredShop && hasValidCoordinates(preferredShop) ? preferredShop : resolvedShops[0];
+        if (preferredShop && !hasValidCoordinates(preferredShop)) {
+          updateDetailPanel(preferredShop);
+        } else if (selectedShop) {
+          state.selectedShopId = selectedShop.id;
+          state.selectedCountry = selectedShop.country_normalized;
+          updateDetailPanel(selectedShop);
+        }
+
+        resolvedShops.forEach((shop) => {
+          const active = Boolean(selectedShop && selectedShop.id === shop.id);
+          const faded = Boolean(selectedShop && selectedShop.id !== shop.id);
+          const baseColor = flagColorFor(shop.country_normalized, countriesByName.get(shop.country_normalized)?.marker_color || "#888899");
+          const tooltipText = shopTooltipText(shop);
+          const marker = new google.maps.Marker({
+            map: state.map,
+            position: coordinatePosition(shop),
+            title: tooltipText,
+            icon: shopMarkerIcon(shop, active, faded),
+            label: {
+              text: String(shop.rank),
+              color: labelColor(active ? "#ffe8b8" : baseColor),
+              fontWeight: "700",
+              fontSize: "9px",
+            },
+            zIndex: active ? 90 : 30,
+          });
+
+          marker.addListener("click", () => {
+            state.selectedCountry = shop.country_normalized;
+            state.selectedShopId = shop.id;
+            updateDetailPanel(shop);
+            showMapClickDialog(tooltipText);
+            renderMapMarkers();
+          });
+
+          if (active) startPulse(marker, () => shopMarkerIcon(shop, true, false));
+          state.shopMarkers.push(marker);
+        });
+      }
+
+      function renderMapMarkers() {
+        if (!state.map) return;
+        clearMarkers();
+
+        const countries = filteredCountries();
+        const shops = filteredShops().slice().sort((a, b) => a.rank - b.rank || a.name.localeCompare(b.name));
+        let mapShops =
+          state.country === "All" && state.focusCountry
+            ? shops.filter((shop) => shop.country_normalized === state.focusCountry)
+            : shops;
+        if (!mapShops.length && shops.length) {
+          state.focusCountry = null;
+          mapShops = shops;
+        }
+        if (!countries.length || !shops.length) {
+          showMapMessage("No countries match the current filters.");
+          setMapHint("Adjust category/country/rank filters to repopulate the map.");
+          return;
+        }
+
+        hideMapMessage();
+        const maxCount = Math.max(...countries.map((row) => row.shop_count), 1);
+        const countriesByName = new Map(countries.map((row) => [row.country, row]));
+        const zoom = state.map.getZoom() || 2;
+        if (zoom < SHOP_ZOOM_THRESHOLD) {
+          renderCountryMarkers(countries, shops, maxCount);
+          return;
+        }
+        renderShopMarkers(mapShops, countriesByName, maxCount);
+      }
+
+      function refreshView() {
+        renderFilterControls();
+        renderListRows();
+
+        const selectedShop = pickDefaultShop();
+        updateDetailPanel(selectedShop);
+        if (!selectedShop) {
+          state.selectedCountry = state.country === "All" ? null : state.country;
+          state.selectedShopId = null;
+        }
+        renderMapMarkers();
+      }
+
+      function initMap() {
+        if (!window.google || !window.google.maps) {
+          showMapMessage("Google Maps failed to load.");
+          return;
+        }
+
+        state.map = new google.maps.Map(document.getElementById("overview-map"), {
+          center: { lat: 10, lng: 0 },
+          zoom: 2,
+          minZoom: 2,
+          backgroundColor: "#607794",
+          mapTypeControl: false,
+          streetViewControl: false,
+          fullscreenControl: true,
+          zoomControl: true,
+          gestureHandling: "greedy",
+          clickableIcons: false,
+          styles: [
+            { elementType: "geometry", stylers: [{ color: "#5f7692" }] },
+            { elementType: "labels.text.stroke", stylers: [{ color: "#3a4f67" }, { weight: 1.1 }] },
+            { elementType: "labels.text.fill", stylers: [{ color: "#fff4cf" }] },
+            { featureType: "administrative.country", elementType: "geometry.fill", stylers: [{ color: "#7690ad" }] },
+            { featureType: "administrative.country", elementType: "geometry.stroke", stylers: [{ color: "#ffd47a" }, { weight: 1.35 }] },
+            { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [{ color: "#fff0bd" }] },
+            { featureType: "administrative.province", elementType: "labels.text.fill", stylers: [{ color: "#f0ddb4" }] },
+            { featureType: "road", stylers: [{ visibility: "off" }] },
+            { featureType: "poi", stylers: [{ visibility: "off" }] },
+            { featureType: "transit", stylers: [{ visibility: "off" }] },
+            { featureType: "water", elementType: "geometry", stylers: [{ color: "#97b7d3" }] },
+            { featureType: "landscape.natural", elementType: "geometry", stylers: [{ color: "#8199b5" }] },
+          ],
+        });
+        state.map.addListener("zoom_changed", () => {
+          const currentZoom = state.map.getZoom() || 2;
+          if (currentZoom < SHOP_ZOOM_THRESHOLD && state.country === "All") {
+            state.focusCountry = null;
+          }
+          renderMapMarkers();
+        });
+
+        refreshView();
+      }
+
+      function loadGoogleMaps() {
+        if (!googleMapsKey) {
+          showMapMessage(
+            "Google Maps API key is not configured. Set GOOGLE_MAPS_JS_API_KEY in .env to enable map rendering."
+          );
+          return;
+        }
+        if (String(googleMapsKey).startsWith("YOUR_")) {
+          showMapMessage("Google Maps API key placeholder detected. Replace it with a real GOOGLE_MAPS_JS_API_KEY value.");
+          return;
+        }
+
+        window.initRoastMap = initMap;
+        window.gm_authFailure = () => {
+          showMapMessage(
+            "Google Maps authentication failed. Confirm Maps JavaScript API is enabled and HTTP referrer restrictions allow http://127.0.0.1:* and http://localhost:*."
+          );
         };
-      }
-
-      function iconForShop(shop, active) {
-        return {
-          path: google.maps.SymbolPath.CIRCLE,
-          fillColor: active ? "#ff7600" : colorForCategory(shop.category),
-          fillOpacity: active ? 1 : 0.95,
-          strokeColor: "#ffffff",
-          strokeWeight: active ? 2.6 : 1.8,
-          scale: active ? 9 : 6,
-        };
-      }
-
-      function iconForCountry(color, scale) {
-        return {
-          path: google.maps.SymbolPath.CIRCLE,
-          fillColor: color,
-          fillOpacity: 0.88,
-          strokeColor: "#ffffff",
-          strokeWeight: 2,
-          scale,
-        };
-      }
-
-      function toCountryDisplay(shop) {
-        return shop.country || "Unknown";
-      }
-
-      function shopKey(shop) {
-        return `${shop.rank}|${shop.category}|${shop.name}`;
+        const script = document.createElement("script");
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(
+          googleMapsKey
+        )}&callback=initRoastMap&loading=async`;
+        script.async = true;
+        script.defer = true;
+        script.onerror = () =>
+          showMapMessage(
+            "Google Maps failed to load. Verify key restrictions, billing setup, and that Maps JavaScript API is enabled."
+          );
+        document.head.appendChild(script);
       }
 
       function escapeHtml(value) {
@@ -924,261 +1697,22 @@
           .replaceAll("<", "&lt;")
           .replaceAll(">", "&gt;")
           .replaceAll('"', "&quot;")
-          .replaceAll("'", "&#39;");
+          .replaceAll("'", "&#039;");
       }
 
-      function updateDetailPanel(shop) {
-        if (!shop) {
-          return;
-        }
-        document.getElementById("shop-name").textContent = shop.name;
-        document.getElementById("shop-rank-badge").textContent = `#${shop.rank} ${shop.category}`;
-        document.getElementById("shop-rating").textContent = `Rank #${shop.rank} · ${shop.category}`;
+      document.getElementById("reset-filters").addEventListener("click", resetFilters);
 
-        const location = [shop.address, shop.city, shop.country].filter(Boolean).join(", ");
-        document.getElementById("shop-address").textContent = location || "Address unavailable";
-
-        const directions = document.getElementById("shop-directions");
-        directions.href = shop.google_maps_url;
-
-        const website = document.getElementById("shop-website");
-        website.href = shop.source_url || shop.google_maps_url;
-        website.textContent = shop.source_url ? "Source Page" : "Source Unavailable";
-
-        const mapLink = document.getElementById("shop-map-link");
-        mapLink.href = shop.google_maps_url;
-
-        const cityCountry = [shop.city, shop.country].filter(Boolean).join(", ");
-        document.getElementById("shop-category").textContent = shop.category || "Unknown";
-        document.getElementById("shop-city-country").textContent = cityCountry || "Unknown";
-        const hasCoords = Number.isFinite(shop.lat) && Number.isFinite(shop.lng);
-        document.getElementById("shop-coordinates").textContent = hasCoords
-          ? `${Number(shop.lat).toFixed(4)}, ${Number(shop.lng).toFixed(4)}`
-          : "Unavailable";
-        document.getElementById("shop-place-id").textContent = shop.place_id || "Unavailable";
-
-        const hero = document.getElementById("shop-hero-img");
-        hero.alt = `${shop.name} interior`;
-      }
-
-      function clearMarkers(markers) {
-        markers.forEach((marker) => marker.setMap(null));
-        markers.length = 0;
-      }
-
-      function openShopInfo(marker, shop) {
-        markerState.selectedShop = shop;
-        updateDetailPanel(shop);
-
-        const shopName = escapeHtml(shop.name);
-        const cityCountry = escapeHtml(`${shop.city ? `${shop.city}, ` : ""}${shop.country || ""}`);
-        const category = escapeHtml(shop.category || "");
-        markerState.infoWindow.setContent(
-          `<div style="min-width:190px;color:#101217;font-family:system-ui,sans-serif">` +
-            `<strong>#${shop.rank} ${shopName}</strong><br/>` +
-            `<span>${cityCountry}</span><br/>` +
-            `<span>${category}</span><br/>` +
-            `<a href="${shop.google_maps_url}" target="_blank" rel="noopener">Open in Google Maps</a>` +
-          `</div>`
-        );
-        markerState.infoWindow.open({ map: markerState.map, anchor: marker });
-      }
-
-      function renderCountryMarkers() {
-        clearMarkers(markerState.countryMarkers);
-
-        const visibleShops = getVisibleShops();
-        if (!visibleShops.length) {
-          return;
-        }
-
-        const counts = new Map();
-        visibleShops.forEach((shop) => {
-          const key = toCountryDisplay(shop);
-          const value = counts.get(key) || { count: 0, sample: shop };
-          value.count += 1;
-          if (shop.rank < value.sample.rank) {
-            value.sample = shop;
-          }
-          counts.set(key, value);
+      document.querySelectorAll(".js-category-toggle").forEach((button) => {
+        button.addEventListener("click", () => {
+          toggleCategory(button.dataset.category);
         });
+      });
 
-        const maxCount = Math.max(...Array.from(counts.values()).map((row) => row.count));
-
-        mapCountries.forEach((countryRow) => {
-          const match = counts.get(countryRow.country);
-          if (!match) {
-            return;
-          }
-
-          const ratio = match.count / Math.max(1, maxCount);
-          const scale = 16 + ratio * 24;
-
-          const marker = new google.maps.Marker({
-            position: { lat: countryRow.lat, lng: countryRow.lng },
-            map: markerState.map,
-            icon: iconForCountry(countryRow.color, scale),
-            title: `${countryRow.country} - ${match.count} shops`,
-            label: {
-              text: String(match.count),
-              color: "#111318",
-              fontSize: "11px",
-              fontWeight: "700",
-            },
-            zIndex: 4,
-          });
-
-          marker.addListener("click", () => {
-            markerState.map.setZoom(5);
-            markerState.map.panTo(marker.getPosition());
-            openShopInfo(marker, match.sample);
-          });
-
-          markerState.countryMarkers.push(marker);
-        });
-      }
-
-      function renderShopMarkers(countriesByName) {
-        clearMarkers(markerState.shopMarkers);
-        const visibleShops = getVisibleShops();
-        if (!visibleShops.length) {
-          showMapMessage("No shops match the active filters.");
-          return;
-        }
-        hideMapMessage();
-
-        visibleShops.forEach((shop) => {
-          const active = markerState.selectedShop && shopKey(markerState.selectedShop) === shopKey(shop);
-          const marker = new google.maps.Marker({
-            position: shopPosition(shop, countriesByName),
-            map: markerState.map,
-            icon: iconForShop(shop, active),
-            title: `${shop.rank}. ${shop.name}`,
-            zIndex: active ? 50 : 8,
-          });
-
-          marker.addListener("click", () => {
-            markerState.selectedShop = shop;
-            refreshMapLayers();
-            openShopInfo(marker, shop);
-          });
-
-          markerState.shopMarkers.push(marker);
-        });
-      }
-
-      function refreshMapLayers() {
-        if (!markerState.map) {
-          return;
-        }
-        const countriesByName = new Map(mapCountries.map((country) => [country.country, country]));
-        const zoom = markerState.map.getZoom() || 2;
-
-        if (zoom < 4) {
-          clearMarkers(markerState.shopMarkers);
-          renderCountryMarkers();
-        } else {
-          clearMarkers(markerState.countryMarkers);
-          renderShopMarkers(countriesByName);
-        }
-      }
-
-      function wireCategoryChips() {
-        document.querySelectorAll(".category-chip").forEach((chip) => {
-          chip.addEventListener("click", () => {
-            const category = chip.dataset.category;
-            if (markerState.activeCategories.has(category) && markerState.activeCategories.size === 1) {
-              return;
-            }
-            if (markerState.activeCategories.has(category)) {
-              markerState.activeCategories.delete(category);
-              chip.classList.remove("active");
-            } else {
-              markerState.activeCategories.add(category);
-              chip.classList.add("active");
-            }
-            markerState.selectedShop = null;
-            refreshMapLayers();
-
-            const visible = getVisibleSidebarShops();
-            if (visible.length) {
-              updateDetailPanel(visible[0]);
-            }
-          });
-        });
-      }
-
-      function initOverviewMap() {
-        if (!window.google || !window.google.maps) {
-          showMapMessage("Google Maps failed to load. Check your key or network settings.");
-          return;
-        }
-
-        markerState.map = new google.maps.Map(document.getElementById("overview-map"), {
-          center: { lat: 10, lng: 0 },
-          zoom: 2,
-          disableDefaultUI: false,
-          mapTypeControl: false,
-          streetViewControl: false,
-          fullscreenControl: true,
-          styles: [
-            { elementType: "geometry", stylers: [{ color: "#202022" }] },
-            { elementType: "labels.text.stroke", stylers: [{ color: "#202022" }] },
-            { elementType: "labels.text.fill", stylers: [{ color: "#928f86" }] },
-            { featureType: "administrative", elementType: "geometry", stylers: [{ color: "#3a3632" }] },
-            { featureType: "poi", elementType: "labels.text.fill", stylers: [{ color: "#8a857c" }] },
-            { featureType: "road", stylers: [{ visibility: "off" }] },
-            { featureType: "water", elementType: "geometry", stylers: [{ color: "#1a1d24" }] },
-          ],
-        });
-
-        markerState.infoWindow = new google.maps.InfoWindow();
-        markerState.selectedShop = getVisibleSidebarShops()[0] || sidebarShops[0] || null;
-        if (markerState.selectedShop) {
-          updateDetailPanel(markerState.selectedShop);
-        }
-
-        markerState.map.addListener("zoom_changed", refreshMapLayers);
-        if (!sidebarShops.length) {
-          showMapMessage(
-            "No shop data is available. Run the scraper to refresh data/current_list.json and rebuild."
-          );
-          document.getElementById("shop-name").textContent = "No coffee shop data";
-          document.getElementById("shop-address").textContent =
-            "The map will render once at least one shop row exists in data/current_list.json.";
-          return;
-        }
-
-        hideMapMessage();
-        refreshMapLayers();
-
-        if (mapMissingCoordsCount > 0) {
-          document.querySelector(".map-help").textContent =
-            `${mapMissingCoordsCount} shops are using centroid fallback until lat/lng is available.`;
-        }
-      }
-
-      function loadGoogleMapsScript() {
-        if (!googleMapsKey) {
-          showMapMessage(
-            "Google Maps API key is not configured in environment. Add GOOGLE_MAPS_JS_API_KEY to .env and restart the app."
-          );
-          return;
-        }
-        window.initOverviewMap = initOverviewMap;
-
-        const script = document.createElement("script");
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(googleMapsKey)}&callback=initOverviewMap`;
-        script.async = true;
-        script.defer = true;
-        script.onerror = () => {
-          showMapMessage("Google Maps failed to load. Please verify API key restrictions.");
-        };
-        document.head.appendChild(script);
-      }
-
-      wireCategoryChips();
-      loadGoogleMapsScript();
+      initDetailDrawer();
+      renderFilterControls();
+      renderListRows();
+      updateDetailPanel(pickDefaultShop());
+      loadGoogleMaps();
     </script>
   </body>
 </html>
