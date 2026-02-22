@@ -329,8 +329,8 @@
         border-radius: 14px;
         overflow: hidden;
         border: 1px solid var(--line);
-        background: rgba(66, 79, 98, 0.45);
-        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06), 0 12px 28px rgba(6, 10, 18, 0.24);
+        background: rgba(84, 101, 124, 0.42);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07), 0 12px 28px rgba(6, 10, 18, 0.2);
       }
 
       .overview-map-panel::before {
@@ -340,8 +340,8 @@
         pointer-events: none;
         z-index: 2;
         background:
-          linear-gradient(to top, rgba(24, 34, 48, 0.12), transparent 20%),
-          linear-gradient(to bottom, rgba(18, 26, 38, 0.12), transparent 16%);
+          linear-gradient(to top, rgba(28, 40, 58, 0.08), transparent 24%),
+          linear-gradient(to bottom, rgba(22, 31, 45, 0.08), transparent 18%);
       }
 
       .overview-map-panel::after {
@@ -350,7 +350,7 @@
         inset: 0;
         pointer-events: none;
         z-index: 1;
-        opacity: 0.06;
+        opacity: 0.04;
         background-image: linear-gradient(
           45deg,
           rgba(255, 255, 255, 0.03) 25%,
@@ -383,6 +383,26 @@
       }
 
       .map-message.hidden {
+        display: none;
+      }
+
+      .map-click-dialog {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        max-width: 280px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 208, 48, 0.3);
+        background: rgba(18, 24, 36, 0.8);
+        color: #ffe8b7;
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 8px 10px;
+        z-index: 5;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+      }
+
+      .map-click-dialog.hidden {
         display: none;
       }
 
@@ -874,6 +894,7 @@
             <div id="overview-map-region" class="overview-map-panel">
               <div id="overview-map" aria-label="Global coffee map"></div>
               <div id="map-message" class="map-message hidden"></div>
+              <div id="map-click-dialog" class="map-click-dialog hidden"></div>
               <div class="map-legend glass-panel">
                 <div class="legend-row"><span class="legend-dot country"></span><span>Country bubble (zoomed out)</span></div>
                 <div class="legend-row"><span class="legend-dot shop"></span><span>Individual shop (zoomed in)</span></div>
@@ -989,6 +1010,7 @@
         shopMarkers: [],
         tooltip: null,
         pulseTimer: null,
+        dialogTimer: null,
       };
 
       const detailPanel = document.getElementById("detail-panel");
@@ -1210,7 +1232,7 @@
 
         state.selectedShopId = shop.id;
         state.selectedCountry = shop.country_normalized;
-        document.getElementById("detail-name").textContent = shop.name;
+        document.getElementById("detail-name").textContent = safeShopName(shop);
         const address = [shop.formatted_address, shop.city, shop.country_normalized].filter(Boolean).join(", ");
         document.getElementById("detail-address").textContent = address || shop.country_normalized;
         document.getElementById("detail-rank").textContent = `#${shop.rank} ${shop.category}`;
@@ -1235,6 +1257,17 @@
 
       function hideMapMessage() {
         document.getElementById("map-message").classList.add("hidden");
+      }
+
+      function showMapClickDialog(message) {
+        const node = document.getElementById("map-click-dialog");
+        if (!node) return;
+        state.tooltip?.close();
+        const text = String(message || "").trim();
+        node.textContent = text || "Marker selected";
+        node.classList.remove("hidden");
+        if (state.dialogTimer) window.clearTimeout(state.dialogTimer);
+        state.dialogTimer = window.setTimeout(() => node.classList.add("hidden"), 2300);
       }
 
       function setMapHint(text) {
@@ -1328,16 +1361,39 @@
         return r * 0.299 + g * 0.587 + b * 0.114 > 140 ? "#111318" : "#ffffff";
       }
 
+      function safeCountryName(country) {
+        const value = String(country || "").trim();
+        return value || "Unknown country";
+      }
+
+      function safeShopName(shop) {
+        const value = String(shop?.name || "").trim();
+        return value || `Rank #${shop?.rank || "?"} Coffee Shop`;
+      }
+
+      function countryTooltipText(row) {
+        const country = safeCountryName(row?.country);
+        const count = Number(row?.shop_count || 0);
+        return `${country} - ${count} shops`;
+      }
+
+      function shopTooltipText(shop) {
+        const name = safeShopName(shop);
+        const country = safeCountryName(shop?.country_normalized);
+        const rank = Number(shop?.rank || 0);
+        return `#${rank || "?"} ${name} (${country})`;
+      }
+
       function countryMarkerIcon(row, active, maxCount) {
         const ratio = row.shop_count / Math.max(1, maxCount);
-        const markerSize = Math.max(16, Math.min(56, Number(row.marker_size_px) || 16 + ratio * 40));
+        const markerSize = Math.max(16, Math.min(48, Number(row.marker_size_px) || 16 + ratio * 32));
         const baseColor = flagColorFor(row.country, row.marker_color || "#888899");
         return {
           path: PIN_PATH,
-          fillColor: active ? "#ffffff" : baseColor,
-          fillOpacity: 0.92,
-          strokeColor: active ? baseColor : "#ffffff",
-          strokeWeight: active ? 2.5 : 1.6,
+          fillColor: active ? "#ffe4a8" : baseColor,
+          fillOpacity: active ? 0.94 : 0.84,
+          strokeColor: active ? "#ff9a3a" : "#f5f6fb",
+          strokeWeight: active ? 2.1 : 1.4,
           scale: Math.max(1, markerSize / 12),
           anchor: new google.maps.Point(0, 0),
           labelOrigin: new google.maps.Point(0, -14),
@@ -1348,11 +1404,11 @@
         const baseColor = flagColorFor(shop.country_normalized, "#888899");
         return {
           path: PIN_PATH,
-          fillColor: active ? "#ffffff" : baseColor,
-          fillOpacity: faded ? 0.58 : 0.96,
-          strokeColor: active ? baseColor : "#ffffff",
-          strokeWeight: active ? 2.5 : 1.4,
-          scale: active ? 1.4 : 1,
+          fillColor: active ? "#ffe8b8" : baseColor,
+          fillOpacity: faded ? 0.52 : active ? 0.93 : 0.9,
+          strokeColor: active ? "#ff9a3a" : "#f5f6fb",
+          strokeWeight: active ? 2 : 1.3,
+          scale: active ? 1.2 : 1,
           anchor: new google.maps.Point(0, 0),
           labelOrigin: new google.maps.Point(0, -14),
         };
@@ -1371,13 +1427,17 @@
 
       function startPulse(marker, iconFactory) {
         if (state.pulseTimer) window.clearInterval(state.pulseTimer);
-        let step = 0;
+        let grow = false;
         state.pulseTimer = window.setInterval(() => {
-          step = (step + 1) % 2;
+          grow = !grow;
           const icon = iconFactory();
-          icon.scale += step ? 3 : 0;
+          const baseScale = Number(icon.scale) || 1;
+          icon.scale = grow ? baseScale * 1.08 : baseScale;
+          icon.fillOpacity = grow
+            ? Math.min(1, Number(icon.fillOpacity || 0.9) + 0.03)
+            : Number(icon.fillOpacity || 0.9);
           marker.setIcon(icon);
-        }, 900);
+        }, 780);
       }
 
       function hasValidCoordinates(shop) {
@@ -1398,14 +1458,15 @@
         countries.forEach((row) => {
           const active = state.selectedCountry === row.country;
           const baseColor = flagColorFor(row.country, row.marker_color || "#888899");
+          const tooltipText = countryTooltipText(row);
           const marker = new google.maps.Marker({
             map: state.map,
             position: { lat: row.lat, lng: row.lng },
-            title: `${row.country} - ${row.shop_count} shops`,
+            title: tooltipText,
             icon: countryMarkerIcon(row, active, maxCount),
             label: {
               text: String(row.shop_count),
-              color: labelColor(active ? "#ffffff" : baseColor),
+              color: labelColor(active ? "#ffe4a8" : baseColor),
               fontWeight: "700",
               fontSize: "11px",
             },
@@ -1422,6 +1483,7 @@
               state.selectedShopId = featuredShop.id;
               updateDetailPanel(featuredShop);
             }
+            showMapClickDialog(tooltipText);
             if ((state.map.getZoom() || 2) < SHOP_ZOOM_THRESHOLD) {
               state.map.setZoom(SHOP_ZOOM_THRESHOLD);
             }
@@ -1431,7 +1493,7 @@
 
           marker.addListener("mouseover", () => {
             if (!state.tooltip) return;
-            state.tooltip.setContent(`${row.country} - ${row.shop_count} shops`);
+            state.tooltip.setContent(tooltipText);
             state.tooltip.open({ map: state.map, anchor: marker, shouldFocus: false });
           });
 
@@ -1473,14 +1535,15 @@
           const active = Boolean(selectedShop && selectedShop.id === shop.id);
           const faded = Boolean(selectedShop && selectedShop.id !== shop.id);
           const baseColor = flagColorFor(shop.country_normalized, countriesByName.get(shop.country_normalized)?.marker_color || "#888899");
+          const tooltipText = shopTooltipText(shop);
           const marker = new google.maps.Marker({
             map: state.map,
             position: coordinatePosition(shop),
-            title: `${shop.rank}. ${shop.name} (${shop.country_normalized})`,
+            title: tooltipText,
             icon: shopMarkerIcon(shop, active, faded),
             label: {
               text: String(shop.rank),
-              color: labelColor(active ? "#ffffff" : baseColor),
+              color: labelColor(active ? "#ffe8b8" : baseColor),
               fontWeight: "700",
               fontSize: "9px",
             },
@@ -1491,12 +1554,13 @@
             state.selectedCountry = shop.country_normalized;
             state.selectedShopId = shop.id;
             updateDetailPanel(shop);
+            showMapClickDialog(tooltipText);
             renderMapMarkers();
           });
 
           marker.addListener("mouseover", () => {
             if (!state.tooltip) return;
-            state.tooltip.setContent(shop.name);
+            state.tooltip.setContent(tooltipText);
             state.tooltip.open({ map: state.map, anchor: marker, shouldFocus: false });
           });
 
@@ -1571,18 +1635,18 @@
           gestureHandling: "greedy",
           clickableIcons: false,
           styles: [
-            { elementType: "geometry", stylers: [{ color: "#4f627a" }] },
-            { elementType: "labels.text.stroke", stylers: [{ color: "#304159" }, { weight: 1.2 }] },
-            { elementType: "labels.text.fill", stylers: [{ color: "#f6f0da" }] },
-            { featureType: "administrative.country", elementType: "geometry.fill", stylers: [{ color: "#627e9d" }] },
-            { featureType: "administrative.country", elementType: "geometry.stroke", stylers: [{ color: "#f6d57c" }, { weight: 1.45 }] },
-            { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [{ color: "#fff2be" }] },
-            { featureType: "administrative.province", elementType: "labels.text.fill", stylers: [{ color: "#ead8ad" }] },
+            { elementType: "geometry", stylers: [{ color: "#5f7692" }] },
+            { elementType: "labels.text.stroke", stylers: [{ color: "#3a4f67" }, { weight: 1.1 }] },
+            { elementType: "labels.text.fill", stylers: [{ color: "#fff4cf" }] },
+            { featureType: "administrative.country", elementType: "geometry.fill", stylers: [{ color: "#7690ad" }] },
+            { featureType: "administrative.country", elementType: "geometry.stroke", stylers: [{ color: "#ffd47a" }, { weight: 1.35 }] },
+            { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [{ color: "#fff0bd" }] },
+            { featureType: "administrative.province", elementType: "labels.text.fill", stylers: [{ color: "#f0ddb4" }] },
             { featureType: "road", stylers: [{ visibility: "off" }] },
             { featureType: "poi", stylers: [{ visibility: "off" }] },
             { featureType: "transit", stylers: [{ visibility: "off" }] },
-            { featureType: "water", elementType: "geometry", stylers: [{ color: "#86accd" }] },
-            { featureType: "landscape.natural", elementType: "geometry", stylers: [{ color: "#6d86a2" }] },
+            { featureType: "water", elementType: "geometry", stylers: [{ color: "#97b7d3" }] },
+            { featureType: "landscape.natural", elementType: "geometry", stylers: [{ color: "#8199b5" }] },
           ],
         });
         state.tooltip = new google.maps.InfoWindow();

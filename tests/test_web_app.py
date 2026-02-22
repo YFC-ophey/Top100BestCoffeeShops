@@ -70,7 +70,9 @@ def test_home_page_renders_roast_overview_with_south_america_label(tmp_path: Pat
     assert 'const PIN_PATH = "M 0,-24 C -6.6,-24 -12,-18.6 -12,-12 C -12,-4.8 0,0 0,0 C 0,0 12,-4.8 12,-12 C 12,-18.6 6.6,-24 0,-24 Z";' in response.text
     assert 'gestureHandling: "greedy"' in response.text
     assert "zoomControl: true" in response.text
-    assert "#f6d57c" in response.text
+    assert "#ffd47a" in response.text
+    assert "function shopTooltipText(shop)" in response.text
+    assert 'id="map-click-dialog"' in response.text
     assert "focusCountry: null" in response.text
     assert "World's Best Coffee Shops Complete Map" in response.text
     assert "https://buymeacoffee.com/opheliachen" in response.text
