@@ -3,7 +3,7 @@ from collections import defaultdict
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
-from src.category_utils import normalize_category
+from src.category_utils import SOUTH_AMERICA_CATEGORY, TOP_100_CATEGORY, normalize_category
 from src.models import CoffeeShop
 
 KML_NS = "http://www.opengis.net/kml/2.2"
@@ -15,7 +15,6 @@ CSV_HEADERS = [
     "name",
     "city",
     "country",
-    "address",
     "category",
     "lat",
     "lng",
@@ -47,7 +46,9 @@ def generate_kml(shops: list[CoffeeShop], output_path: Path) -> None:
     default_icon_style = ET.SubElement(default_style, f"{{{KML_NS}}}IconStyle")
     ET.SubElement(default_icon_style, f"{{{KML_NS}}}scale").text = "1.0"
 
-    for category, category_shops in grouped.items():
+    ordered_categories = [TOP_100_CATEGORY, SOUTH_AMERICA_CATEGORY]
+    for category in sorted(grouped.keys(), key=lambda item: (item not in ordered_categories, item)):
+        category_shops = grouped[category]
         folder = ET.SubElement(doc, f"{{{KML_NS}}}Folder")
         ET.SubElement(folder, f"{{{KML_NS}}}name").text = category
 
@@ -70,7 +71,7 @@ def generate_csv(shops: list[CoffeeShop], output_path: Path) -> None:
     with output_path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=CSV_HEADERS)
         writer.writeheader()
-        for shop in sorted(shops, key=lambda value: (value.rank, value.category, value.name)):
+        for shop in sorted(shops, key=lambda value: (value.rank, normalize_category(value.category), value.name)):
             row = {header: shop.to_dict().get(header) for header in CSV_HEADERS}
             row["category"] = normalize_category(shop.category)
             writer.writerow(row)

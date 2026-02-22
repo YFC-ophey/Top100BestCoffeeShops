@@ -101,15 +101,9 @@ def _parse_legacy_list_items(html: str, category: str) -> list[CoffeeShop]:
 def _parse_elementor_loop_cards(html: str, category: str) -> list[CoffeeShop]:
     primary = _parse_elementor_loop_cards_primary(html, category)
     fallback = _parse_elementor_loop_cards_by_href(html, category)
-    merged: dict[int, CoffeeShop] = {}
-    for shop in fallback + primary:
-        existing = merged.get(shop.rank)
-        if existing is None:
-            merged[shop.rank] = shop
-            continue
-        if not existing.country and shop.country:
-            merged[shop.rank] = shop
-    return [merged[rank] for rank in sorted(merged)]
+    if len(fallback) > len(primary):
+        return fallback
+    return primary
 
 
 def _parse_elementor_loop_cards_primary(html: str, category: str) -> list[CoffeeShop]:
@@ -155,7 +149,7 @@ def _parse_elementor_loop_cards_by_href(html_content: str, category: str) -> lis
     for href, texts in grouped:
         rank: int | None = None
         name: str | None = None
-        country = ""
+        country: str | None = None
         non_numeric: list[str] = []
         for text in texts:
             if rank is None and text.isdigit():
@@ -166,7 +160,7 @@ def _parse_elementor_loop_cards_by_href(html_content: str, category: str) -> lis
             name = non_numeric[0]
         if len(non_numeric) > 1:
             country = non_numeric[1]
-        if rank is None or name is None:
+        if rank is None or name is None or country is None:
             continue
         shops.append(
             CoffeeShop(

@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+from src.category_utils import normalize_category
 from src.models import CoffeeShop
 
 
@@ -19,7 +20,7 @@ def has_shop_changes(previous: list[CoffeeShop], current: list[CoffeeShop]) -> b
 def _canonical(shops: list[CoffeeShop]) -> list[tuple[str, int, str, str, str]]:
     normalized = [
         (
-            shop.category.strip(),
+            normalize_category(shop.category),
             shop.rank,
             shop.name.strip().casefold(),
             shop.city.strip().casefold(),
