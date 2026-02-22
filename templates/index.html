@@ -214,8 +214,8 @@
       }
 
       .chip-wrap {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
         gap: 8px;
       }
 
@@ -229,6 +229,7 @@
         color: #d7d9e5;
         background: rgba(255, 255, 255, 0.04);
         cursor: pointer;
+        width: 100%;
       }
 
       .chip-wrap button.active,
@@ -431,6 +432,21 @@
         color: #dce0f0;
         display: grid;
         gap: 5px;
+      }
+
+      .map-source {
+        margin: 8px 2px 0;
+        color: #b9bfd2;
+        font-size: 0.7rem;
+      }
+
+      .map-source a {
+        color: #ffd37a;
+        text-decoration: none;
+      }
+
+      .map-source a:hover {
+        text-decoration: underline;
       }
 
       .legend-row {
@@ -901,6 +917,9 @@
               </div>
               <div class="map-hint glass-panel">Pins use national flag colors. Zoom out for country density, zoom in for individual shops.</div>
             </div>
+            <p class="map-source">
+              Source: <a href="https://theworlds100bestcoffeeshops.com/" target="_blank" rel="noopener">https://theworlds100bestcoffeeshops.com/</a>
+            </p>
 
             <div id="overview-list-region" class="overview-list">
               <table>
@@ -1062,7 +1081,7 @@
         chipWrap.innerHTML = "";
         overviewFilters.categories.forEach((category) => {
           const button = document.createElement("button");
-          button.textContent = `${category.label} (${category.count})`;
+          button.textContent = category.label;
           button.dataset.category = category.key;
           button.classList.toggle("active", state.activeCategories.has(category.key));
           button.addEventListener("click", () => toggleCategory(category.key));
@@ -1075,7 +1094,10 @@
         allOption.value = "All";
         allOption.textContent = "All Countries";
         countrySelect.appendChild(allOption);
-        overviewFilters.countries.forEach((country) => {
+        const countriesSorted = [...overviewFilters.countries].sort((a, b) =>
+          String(a.label).localeCompare(String(b.label), "en", { sensitivity: "base" })
+        );
+        countriesSorted.forEach((country) => {
           const option = document.createElement("option");
           option.value = country.key;
           option.textContent = `${country.label} (${country.count})`;

@@ -59,6 +59,14 @@ def test_home_page_renders_roast_overview_with_south_america_label(tmp_path: Pat
     assert 'class="banner-subtitle"' in response.text
     assert 'id="overview-map"' in response.text
     assert "South America" in response.text
+    assert "Top 100 World" in response.text
+    assert "South America 100" in response.text
+    assert "Top 100 World (" not in response.text
+    assert "South America 100 (" not in response.text
+    assert "Top 20" in response.text
+    assert "Top 50" in response.text
+    assert "The Rest" in response.text
+    assert "Source: <a href=\"https://theworlds100bestcoffeeshops.com/\"" in response.text
     assert "Data Quality" not in response.text
     assert "Total shops" not in response.text
     assert ">CSV<" not in response.text
@@ -74,6 +82,8 @@ def test_home_page_renders_roast_overview_with_south_america_label(tmp_path: Pat
     assert "function shopTooltipText(shop)" in response.text
     assert 'id="map-click-dialog"' in response.text
     assert "new google.maps.InfoWindow()" not in response.text
+    assert "grid-template-columns: 1fr 1fr;" in response.text
+    assert "countriesSorted = [...overviewFilters.countries].sort" in response.text
     assert "focusCountry: null" in response.text
     assert "World's Best Coffee Shops Complete Map" in response.text
     assert "https://buymeacoffee.com/opheliachen" in response.text

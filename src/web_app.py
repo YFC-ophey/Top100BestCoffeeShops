@@ -32,10 +32,9 @@ DEFAULT_KML_FILE = BASE_DIR / "output" / "coffee_shops.kml"
 TEMPLATES = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 RANK_BANDS = [
-    {"key": "1-10", "label": "1-10", "min": 1, "max": 10},
-    {"key": "11-25", "label": "11-25", "min": 11, "max": 25},
-    {"key": "26-50", "label": "26-50", "min": 26, "max": 50},
-    {"key": "51-100", "label": "51-100", "min": 51, "max": 100},
+    {"key": "Top 20", "label": "Top 20", "min": 1, "max": 20},
+    {"key": "Top 50", "label": "Top 50", "min": 21, "max": 50},
+    {"key": "The Rest", "label": "The Rest", "min": 51, "max": 100},
 ]
 
 _STREET_WORDS = {
@@ -574,7 +573,7 @@ def _build_overview_filters(
         },
         {
             "key": SOUTH_AMERICA_CATEGORY,
-            "label": SOUTH_AMERICA_CATEGORY,
+            "label": "South America 100",
             "count": int(category_counts.get(SOUTH_AMERICA_CATEGORY, 0)),
             "active": True,
         },
