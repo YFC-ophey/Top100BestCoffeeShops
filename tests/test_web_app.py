@@ -74,13 +74,21 @@ def test_home_page_renders_roast_overview_with_south_america_label(tmp_path: Pat
     assert "<th>City</th>" in response.text
     assert ">Map</a>" in response.text
     assert "color: var(--brand-gold);" in response.text
-    assert "Pins use national flag colors. Zoom out for country density, zoom in for individual shops." in response.text
-    assert 'const PIN_PATH = "M 0,-24 C -6.6,-24 -12,-18.6 -12,-12 C -12,-4.8 0,0 0,0 C 0,0 12,-4.8 12,-12 C 12,-18.6 6.6,-24 0,-24 Z";' in response.text
+    assert "Warm espresso map mode: zoom out for country bubbles, zoom in for individual shops." in response.text
+    assert "Single-shop countries are hidden at global zoom." in response.text
+    assert 'const GLOBAL_COUNTRY_MIN_SHOPS = 2;' in response.text
+    assert "path: google.maps.SymbolPath.CIRCLE" in response.text
+    assert 'const SHOP_PIN_PATH = "M 0,-19 C -5.8,-19 -10.8,-14.5 -10.8,-8.8 C -10.8,-1.9 0,5.8 0,5.8 C 0,5.8 10.8,-1.9 10.8,-8.8 C 10.8,-14.5 5.8,-19 0,-19 Z M 0,-12.5 C -2.3,-12.5 -4.2,-10.6 -4.2,-8.3 C -4.2,-6 -2.3,-4.1 0,-4.1 C 2.3,-4.1 4.2,-6 4.2,-8.3 C 4.2,-10.6 2.3,-12.5 0,-12.5 Z";' in response.text
     assert 'gestureHandling: "greedy"' in response.text
     assert "zoomControl: true" in response.text
-    assert "#ffd47a" in response.text
+    assert "#df6e2e" in response.text
     assert "function shopTooltipText(shop)" in response.text
     assert 'id="map-click-dialog"' in response.text
+    assert 'url("/map-style-inspo.png") center / cover no-repeat' in response.text
+    assert "shop.lat !== null" in response.text
+    assert "shop.lng !== null" in response.text
+    assert "Only source-backed fields from the scraped dataset are shown in this panel." not in response.text
+    assert "Coffee Shop Preview" in response.text
     assert "new google.maps.InfoWindow()" not in response.text
     assert "grid-template-columns: 1fr 1fr;" in response.text
     assert "countriesSorted = [...overviewFilters.countries].sort" in response.text
@@ -117,6 +125,20 @@ def test_artifact_endpoint_serves_csv(tmp_path: Path) -> None:
 
     assert response.status_code == 200
     assert "Coffee Collective" in response.text
+
+
+def test_map_style_inspo_endpoint_serves_png(tmp_path: Path) -> None:
+    app = create_app(
+        data_file=tmp_path / "data" / "current_list.json",
+        csv_file=tmp_path / "output" / "coffee_shops.csv",
+        kml_file=tmp_path / "output" / "coffee_shops.kml",
+    )
+    client = TestClient(app)
+
+    response = client.get("/map-style-inspo.png")
+
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("image/png")
 
 
 def test_home_page_renders_map_links_and_legacy_south_normalization(tmp_path: Path) -> None:
