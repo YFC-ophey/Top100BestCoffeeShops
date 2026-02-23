@@ -84,8 +84,10 @@ def test_home_page_renders_roast_overview_with_south_america_label(tmp_path: Pat
     assert 'gestureHandling: "greedy"' in response.text
     assert "zoomControl: true" in response.text
     assert "#a5755b" in response.text
-    assert "right: 12px;" in response.text
-    assert "top: 12px;" in response.text
+    assert "position: static;" in response.text
+    assert "justify-content: space-between;" in response.text
+    assert '<div class="map-meta-row">' in response.text
+    assert "text-align: right;" in response.text
     assert "font-size: 0.58rem;" in response.text
     assert "function shopTooltipText(shop)" in response.text
     assert 'id="map-click-dialog"' in response.text

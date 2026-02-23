@@ -421,29 +421,37 @@
         display: none;
       }
 
+      .map-meta-row {
+        margin: 8px 2px 0;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
       .map-legend {
-        position: absolute;
-        right: 12px;
-        top: 12px;
-        z-index: 3;
+        position: static;
         border-radius: 8px;
         padding: 5px 7px;
         border: 1px solid rgba(247, 198, 154, 0.16);
         font-size: 0.58rem;
         line-height: 1.2;
         color: #f2d8c2;
+        flex: 0 0 auto;
         display: grid;
         gap: 4px;
         background: rgba(28, 16, 12, 0.54);
         backdrop-filter: blur(4px);
         -webkit-backdrop-filter: blur(4px);
-        pointer-events: none;
       }
 
       .map-source {
-        margin: 8px 2px 0;
+        margin: 0;
         color: #cab5a5;
-        font-size: 0.7rem;
+        font-size: 0.66rem;
+        text-align: right;
+        flex: 1 1 auto;
+        overflow-wrap: anywhere;
       }
 
       .map-source a {
@@ -845,6 +853,14 @@
         .tabs-head {
           flex-wrap: wrap;
         }
+
+        .map-meta-row {
+          gap: 8px;
+        }
+
+        .map-source {
+          font-size: 0.62rem;
+        }
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -923,15 +939,17 @@
               <div id="overview-map" aria-label="Global coffee map"></div>
               <div id="map-message" class="map-message hidden"></div>
               <div id="map-click-dialog" class="map-click-dialog hidden"></div>
+              <div class="map-hint glass-panel hidden"></div>
+            </div>
+            <div class="map-meta-row">
               <div class="map-legend glass-panel">
                 <div class="legend-row"><span class="legend-dot country"></span><span>Country bubble (zoomed out)</span></div>
                 <div class="legend-row"><span class="legend-dot shop"></span><span>Individual shop (zoomed in)</span></div>
               </div>
-              <div class="map-hint glass-panel hidden"></div>
+              <p class="map-source">
+                Source: <a href="https://theworlds100bestcoffeeshops.com/" target="_blank" rel="noopener">https://theworlds100bestcoffeeshops.com/</a>
+              </p>
             </div>
-            <p class="map-source">
-              Source: <a href="https://theworlds100bestcoffeeshops.com/" target="_blank" rel="noopener">https://theworlds100bestcoffeeshops.com/</a>
-            </p>
 
             <div id="overview-list-region" class="overview-list">
               <table>

@@ -73,6 +73,15 @@ body {
   font-weight: 800;
   letter-spacing: 0.02em;
 }
+.collection-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 4px;
+}
 .category-chip {
   border: 0;
   border-radius: 999px;
@@ -457,8 +466,13 @@ th {
   display: none !important;
 }
 @media (max-width: 1080px) {
-  .banner-title {
+  .collection-toggle {
     order: 3;
+    flex-basis: 100%;
+    justify-content: center;
+  }
+  .banner-title {
+    order: 4;
     flex-basis: 100%;
     text-align: left;
   }
