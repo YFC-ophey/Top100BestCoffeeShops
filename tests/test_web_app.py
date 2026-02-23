@@ -83,7 +83,10 @@ def test_home_page_renders_roast_overview_with_south_america_label(tmp_path: Pat
     assert 'const SHOP_PIN_PATH = "M 0,-19 C -5.8,-19 -10.8,-14.5 -10.8,-8.8 C -10.8,-1.9 0,5.8 0,5.8 C 0,5.8 10.8,-1.9 10.8,-8.8 C 10.8,-14.5 5.8,-19 0,-19 Z M 0,-12.5 C -2.3,-12.5 -4.2,-10.6 -4.2,-8.3 C -4.2,-6 -2.3,-4.1 0,-4.1 C 2.3,-4.1 4.2,-6 4.2,-8.3 C 4.2,-10.6 2.3,-12.5 0,-12.5 Z";' in response.text
     assert 'gestureHandling: "greedy"' in response.text
     assert "zoomControl: true" in response.text
-    assert "#df6e2e" in response.text
+    assert "#a5755b" in response.text
+    assert "right: 12px;" in response.text
+    assert "top: 12px;" in response.text
+    assert "font-size: 0.58rem;" in response.text
     assert "function shopTooltipText(shop)" in response.text
     assert 'id="map-click-dialog"' in response.text
     assert 'url("/map-style-inspo.png") center / cover no-repeat' not in response.text
