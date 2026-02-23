@@ -76,7 +76,12 @@ def test_home_page_renders_roast_overview_with_south_america_label(tmp_path: Pat
     assert ">CSV<" not in response.text
     assert ">KML<" not in response.text
     assert "<th>City</th>" in response.text
-    assert ">Map</a>" in response.text
+    assert "<th>Address</th>" in response.text
+    assert ">Map</a>" not in response.text
+    assert ">Filter<" in response.text
+    assert ">Filters<" not in response.text
+    assert "max-width: 222px;" in response.text
+    assert "color: #f1d0b1;" in response.text
     assert "color: var(--brand-gold);" in response.text
     assert '<div class="map-hint glass-panel hidden"></div>' in response.text
     assert "Warm espresso map mode: zoom out for country bubbles, zoom in for individual shops." not in response.text
@@ -201,17 +206,18 @@ def test_home_page_renders_map_links_and_legacy_south_normalization(tmp_path: Pa
     assert "Top 100 Links" not in response.text
     assert "South America Links" not in response.text
     assert "Shop+A%2C+USA" not in response.text
-    assert "R.+dos+Sapateiros+111%2C+1100-619+Lisbon%2C+Portugal" in response.text
-    assert "query_place_id=pid1" in response.text
+    assert "R. dos Sapateiros 111, 1100-619 Lisbon, Portugal" in response.text
+    assert "maps/place/?q=place_id%3Apid1" in response.text
     assert "Shop+S%2C+Australia" in response.text
     assert response.text.index("Shop A") < response.text.index("Shop B")
     assert "South America" in response.text
-    assert ">Map</a>" in response.text
+    assert "<th>Address</th>" in response.text
+    assert ">Map</a>" not in response.text
     assert "shopPosition(" not in response.text
     assert "hashString(" not in response.text
 
 
-def test_overview_table_map_links_are_per_row_direct_google_maps_targets(tmp_path: Path) -> None:
+def test_overview_table_uses_address_column_per_row(tmp_path: Path) -> None:
     data_file = tmp_path / "data" / "current_list.json"
     payload = [
         {
@@ -249,22 +255,21 @@ def test_overview_table_map_links_are_per_row_direct_google_maps_targets(tmp_pat
     html = response.text
 
     match_a = re.search(
-        r"<tr>\s*<td>1</td>\s*<td>Shop A</td>.*?<a href=\"([^\"]+)\" target=\"_blank\" rel=\"noopener\">Map</a>",
+        r"<tr>\s*<td>1</td>\s*<td>Shop A</td>\s*<td>Lisbon</td>\s*<td>Portugal</td>\s*<td>Top 100</td>\s*<td>R\. dos Sapateiros 111, 1100-619 Lisbon, Portugal</td>\s*</tr>",
         html,
         flags=re.DOTALL,
     )
-    assert match_a, "Shop A row should include a map link in the map column."
-    assert "query_place_id=pid1" in match_a.group(1)
-    assert "R.+dos+Sapateiros+111%2C+1100-619+Lisbon%2C+Portugal" in match_a.group(1)
+    assert match_a, "Shop A row should include its address in the Address column."
 
     match_b = re.search(
-        r"<tr>\s*<td>2</td>\s*<td>Shop B</td>.*?<a href=\"([^\"]+)\" target=\"_blank\" rel=\"noopener\">Map</a>",
+        r"<tr>\s*<td>2</td>\s*<td>Shop B</td>\s*<td>Miraflores</td>\s*<td>Peru</td>\s*<td>South America</td>\s*<td>Entre Pardos Chicken y Wong, Mal\. de la Reserva 610, Miraflores 15074, Peru</td>\s*</tr>",
         html,
         flags=re.DOTALL,
     )
-    assert match_b, "Shop B row should include a map link in the map column."
-    assert "query_place_id=" not in match_b.group(1)
-    assert "Entre+Pardos+Chicken+y+Wong%2C+Mal.+de+la+Reserva+610%2C+Miraflores+15074%2C+Peru" in match_b.group(1)
+    assert match_b, "Shop B row should include its address in the Address column."
+
+    assert "<th>Address</th>" in html
+    assert ">Map</a>" not in html
 
 
 def test_overview_payload_uses_country_markers_without_shop_coordinates(tmp_path: Path) -> None:
@@ -371,11 +376,21 @@ def test_google_maps_link_uses_required_precedence_rules() -> None:
         category="Top 100",
         formatted_address=None,
     )
+    with_coordinates = CoffeeShop(
+        name="Apartment Coffee",
+        city="Singapore",
+        country="Singapore",
+        rank=11,
+        category="Top 100",
+        lat=1.2955,
+        lng=103.8520,
+        formatted_address=None,
+        place_id=None,
+    )
 
     place_link = _google_maps_link(with_place_id)
     place_query = parse_qs(urlparse(place_link).query)
-    assert place_query["query"] == ["R. dos Sapateiros 111, 1100-619 Lisbon, Portugal"]
-    assert place_query["query_place_id"] == ["abc123"]
+    assert place_query["q"] == ["place_id:abc123"]
 
     address_link = _google_maps_link(with_address_only)
     address_query = parse_qs(urlparse(address_link).query)
@@ -391,6 +406,10 @@ def test_google_maps_link_uses_required_precedence_rules() -> None:
     country_link = _google_maps_link(with_name_country)
     country_query = parse_qs(urlparse(country_link).query)
     assert country_query["query"] == ["Shop No City, Japan"]
+
+    coords_link = _google_maps_link(with_coordinates)
+    coords_query = parse_qs(urlparse(coords_link).query)
+    assert coords_query["query"] == ["1.2955,103.852"]
 
 
 def test_best_map_query_text_sanitizes_entities_and_duplicate_country_suffix() -> None:

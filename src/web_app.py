@@ -289,11 +289,21 @@ def _build_ordered_links(shops: list[CoffeeShop], category: str) -> list[dict[st
 
 
 def _google_maps_link(shop: CoffeeShop) -> str:
+    place_id = _normalize_shop_text(shop.place_id)
+    if place_id:
+        return f"https://www.google.com/maps/place/?{urlencode({'q': f'place_id:{place_id}'})}"
+
+    if shop.lat is not None and shop.lng is not None:
+        coords = f"{_format_coordinate(shop.lat)},{_format_coordinate(shop.lng)}"
+        return f"https://www.google.com/maps/search/?{urlencode({'api': '1', 'query': coords})}"
+
     query = _best_map_query_text(shop)
     params: dict[str, str] = {"api": "1", "query": query}
-    if shop.place_id:
-        params["query_place_id"] = shop.place_id
     return f"https://www.google.com/maps/search/?{urlencode(params)}"
+
+
+def _format_coordinate(value: float) -> str:
+    return f"{float(value):.6f}".rstrip("0").rstrip(".")
 
 
 def _best_map_query_text(shop: CoffeeShop) -> str:

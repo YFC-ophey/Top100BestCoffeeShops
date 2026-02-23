@@ -187,8 +187,24 @@
         display: flex;
         flex-direction: column;
         gap: 14px;
+        align-items: flex-start;
         flex: 0 0 auto;
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .filters-panel .filter-head,
+      .filters-panel section {
+        width: 100%;
+        max-width: 222px;
+      }
+
+      .filter-title {
+        margin: 0;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #f1d0b1;
+        font-weight: 700;
       }
 
       .panel-title {
@@ -819,6 +835,11 @@
           grid-template-columns: minmax(0, 1fr);
         }
 
+        .filters-panel .filter-head,
+        .filters-panel section {
+          max-width: none;
+        }
+
         .sidebar-right {
           grid-column: 1 / -1;
           max-height: none;
@@ -957,7 +978,7 @@
                     <th>City</th>
                     <th>Country</th>
                     <th>Category</th>
-                    <th>Map</th>
+                    <th>Address</th>
                   </tr>
                 </thead>
                 <tbody id="overview-list-body">
@@ -968,7 +989,7 @@
                     <td>{{ shop.city or 'Not provided' }}</td>
                     <td>{{ shop.country_normalized }}</td>
                     <td>{{ shop.category }}</td>
-                    <td><a href="{{ shop.google_maps_url }}" target="_blank" rel="noopener">Map</a></td>
+                    <td>{{ shop.formatted_address or shop.address or 'Not provided' }}</td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -986,7 +1007,7 @@
           </button>
           <div id="filters-panel" class="filters-panel">
             <div class="filter-head">
-              <p class="panel-title">Filters</p>
+              <p class="filter-title">Filter</p>
               <button class="reset-btn" id="reset-filters">Reset</button>
             </div>
 
@@ -1279,7 +1300,7 @@
               `<td>${escapeHtml(shop.city || "Not provided")}</td>` +
               `<td>${escapeHtml(shop.country_normalized)}</td>` +
               `<td>${escapeHtml(shop.category)}</td>` +
-              `<td><a href="${shop.google_maps_url}" target="_blank" rel="noopener">Map</a></td>` +
+              `<td>${escapeHtml(shop.formatted_address || shop.address || "Not provided")}</td>` +
               `</tr>`
           )
           .join("");
