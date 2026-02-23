@@ -463,6 +463,23 @@
         text-decoration: underline;
       }
 
+      .list-source {
+        margin: 10px 2px 0;
+        color: #cab5a5;
+        font-size: 0.66rem;
+        text-align: right;
+        overflow-wrap: anywhere;
+      }
+
+      .list-source a {
+        color: #f4b985;
+        text-decoration: none;
+      }
+
+      .list-source a:hover {
+        text-decoration: underline;
+      }
+
       .legend-row {
         display: flex;
         align-items: center;
@@ -861,6 +878,10 @@
         .map-source {
           font-size: 0.62rem;
         }
+
+        .list-source {
+          font-size: 0.62rem;
+        }
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -976,6 +997,9 @@
                   {% endfor %}
                 </tbody>
               </table>
+              <p id="overview-list-source" class="list-source">
+                Source: <a href="https://theworlds100bestcoffeeshops.com/" target="_blank" rel="noopener">https://theworlds100bestcoffeeshops.com/</a>
+              </p>
             </div>
           </section>
         </section>

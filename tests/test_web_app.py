@@ -88,6 +88,7 @@ def test_home_page_renders_roast_overview_with_south_america_label(tmp_path: Pat
     assert "justify-content: space-between;" in response.text
     assert '<div class="map-meta-row">' in response.text
     assert "text-align: right;" in response.text
+    assert 'id="overview-list-source"' in response.text
     assert "font-size: 0.58rem;" in response.text
     assert "function shopTooltipText(shop)" in response.text
     assert 'id="map-click-dialog"' in response.text
