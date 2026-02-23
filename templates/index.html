@@ -353,12 +353,12 @@
         inset: 0;
         pointer-events: none;
         z-index: 1;
-        opacity: 0.14;
+        opacity: 0.16;
         background:
-          radial-gradient(circle, rgba(244, 120, 48, 0.5) 1px, transparent 1.7px) 0 0 / 8px 8px,
-          radial-gradient(circle, rgba(248, 213, 183, 0.22) 1px, transparent 2px) 4px 4px / 16px 16px,
-          url("/map-style-inspo.png") center / cover no-repeat;
-        mix-blend-mode: screen;
+          radial-gradient(circle, rgba(244, 120, 48, 0.46) 1px, transparent 1.8px) 0 0 / 8px 8px,
+          radial-gradient(circle, rgba(248, 213, 183, 0.2) 1px, transparent 2.1px) 4px 4px / 16px 16px,
+          linear-gradient(145deg, rgba(28, 14, 10, 0.14), rgba(69, 34, 22, 0.06));
+        mix-blend-mode: lighten;
       }
 
       #overview-map {
@@ -415,6 +415,10 @@
         z-index: 4;
         border: 1px solid rgba(247, 198, 154, 0.22);
         background: rgba(28, 16, 12, 0.65);
+      }
+
+      .map-hint.hidden {
+        display: none;
       }
 
       .map-legend {
@@ -928,7 +932,7 @@
                 <div class="legend-row"><span class="legend-dot country"></span><span>Country bubble (zoomed out)</span></div>
                 <div class="legend-row"><span class="legend-dot shop"></span><span>Individual shop (zoomed in)</span></div>
               </div>
-              <div class="map-hint glass-panel">Warm espresso map mode: zoom out for country bubbles, zoom in for individual shops.</div>
+              <div class="map-hint glass-panel hidden"></div>
             </div>
             <p class="map-source">
               Source: <a href="https://theworlds100bestcoffeeshops.com/" target="_blank" rel="noopener">https://theworlds100bestcoffeeshops.com/</a>
@@ -1320,7 +1324,10 @@
 
       function setMapHint(text) {
         const hint = document.querySelector(".map-hint");
-        if (hint) hint.textContent = text;
+        if (!hint) return;
+        const value = String(text || "").trim();
+        hint.textContent = value;
+        hint.classList.toggle("hidden", !value);
       }
 
       function colorWithIntensity(baseColor, ratio) {
@@ -1434,19 +1441,19 @@
 
       function countryMarkerIcon(row, active, maxCount) {
         const ratio = row.shop_count / Math.max(1, maxCount);
-        const markerSize = Math.max(15, Math.min(44, Number(row.marker_size_px) || 15 + ratio * 29));
+        const markerSize = Math.max(17, Math.min(46, Number(row.marker_size_px) || 17 + ratio * 28));
         const baseColor = flagColorFor(row.country, row.marker_color || "#888899");
-        const bubbleRadius = Math.max(8.8, markerSize / 2.2);
-        const bubbleFill = colorWithIntensity(baseColor, 0.64 + ratio * 0.32);
+        const bubbleRadius = Math.max(9.6, markerSize / 2.05);
+        const bubbleFill = colorWithIntensity(baseColor, 0.5 + ratio * 0.33);
         return {
           path: google.maps.SymbolPath.CIRCLE,
-          fillColor: active ? "#ffe9d7" : bubbleFill,
-          fillOpacity: active ? 0.98 : 0.9,
-          strokeColor: active ? "#fff8ed" : "#f6d7bd",
-          strokeWeight: active ? 2.4 : 1.9,
-          scale: bubbleRadius,
+          fillColor: active ? "#fff0e2" : bubbleFill,
+          fillOpacity: active ? 0.99 : 0.94,
+          strokeColor: active ? "#ffd9ba" : "#ffebd8",
+          strokeWeight: active ? 2.7 : 2.2,
+          scale: active ? bubbleRadius * 1.05 : bubbleRadius,
           anchor: new google.maps.Point(0, 0),
-          labelOrigin: new google.maps.Point(0, 1),
+          labelOrigin: new google.maps.Point(0, 0),
         };
       }
 
@@ -1516,7 +1523,7 @@
         countries,
         shops,
         maxCount,
-        hintText = "Warm espresso map mode: zoom out for country bubbles, zoom in for individual shops."
+        hintText = ""
       ) {
         setMapHint(hintText);
         countries.forEach((row) => {
@@ -1530,9 +1537,9 @@
             icon: countryMarkerIcon(row, active, maxCount),
             label: {
               text: String(row.shop_count),
-              color: labelColor(active ? "#ffe4a8" : baseColor),
-              fontWeight: "700",
-              fontSize: "11px",
+              color: active ? "#2b150f" : labelColor(baseColor),
+              fontWeight: "800",
+              fontSize: row.shop_count >= 100 ? "10px" : "11px",
             },
             zIndex: active ? 70 : 20,
           });
@@ -1644,12 +1651,7 @@
         const zoom = state.map.getZoom() || 2;
         if (zoom < SHOP_ZOOM_THRESHOLD) {
           if (state.country === "All" && !state.focusCountry) {
-            renderCountryMarkers(
-              countries,
-              shops,
-              maxCount,
-              "Warm espresso map mode: zoom out for country bubbles, zoom in for individual shops. Single-shop countries are hidden at global zoom."
-            );
+            renderCountryMarkers(countries, shops, maxCount, "");
           } else {
             renderCountryMarkers(countries, shops, maxCount);
           }
@@ -1692,12 +1694,12 @@
       ];
 
       const MAP_STYLE_DETAILED = [
-        ...MAP_STYLE_BASE.filter((rule) => !["road", "poi", "transit"].includes(rule.featureType || "")),
+        ...MAP_STYLE_BASE.filter((rule) => !["road", "transit"].includes(rule.featureType || "")),
         { featureType: "road", elementType: "geometry", stylers: [{ color: "#5d3d2d" }, { visibility: "on" }] },
         { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#e8c8ac" }] },
         { featureType: "road.local", elementType: "geometry", stylers: [{ color: "#4a3024" }] },
         { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [{ color: "#f0d4bd" }] },
-        { featureType: "poi", elementType: "labels.text.fill", stylers: [{ color: "#deb89a" }, { visibility: "on" }] },
+        { featureType: "poi", stylers: [{ visibility: "off" }] },
         { featureType: "transit", stylers: [{ visibility: "off" }] },
       ];
 
