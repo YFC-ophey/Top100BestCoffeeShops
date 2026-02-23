@@ -823,28 +823,19 @@
 
         .sidebar-right {
           order: 3;
-          position: fixed;
-          left: 12px;
-          right: 12px;
-          bottom: 10px;
-          z-index: 20;
-          max-height: min(78vh, 560px);
-          border-radius: 16px;
-          box-shadow: 0 16px 34px rgba(0, 0, 0, 0.45);
-          transition: transform 0.28s ease;
-        }
-
-        .drawer-toggle {
-          display: inline-flex;
-        }
-
-        .sidebar-right.is-collapsed .hero,
-        .sidebar-right.is-collapsed .detail-body {
-          display: none;
+          position: relative;
+          left: auto;
+          right: auto;
+          bottom: auto;
+          z-index: auto;
+          max-height: none;
+          border-radius: 18px;
+          box-shadow: none;
+          top: auto;
         }
 
         .app-shell {
-          padding-bottom: 110px;
+          padding-bottom: 20px;
         }
 
         .canvas {
@@ -1080,11 +1071,9 @@
         const mobileQuery = window.matchMedia("(max-width: 860px)");
 
         const syncDrawerForViewport = () => {
-          if (mobileQuery.matches) {
-            setDetailDrawerState(true);
-          } else {
-            setDetailDrawerState(false);
-          }
+          // Keep details visible on all devices; use natural page flow on mobile.
+          setDetailDrawerState(false);
+          detailDrawerToggle.style.display = mobileQuery.matches ? "none" : "";
         };
 
         detailDrawerToggle.addEventListener("click", () => {
