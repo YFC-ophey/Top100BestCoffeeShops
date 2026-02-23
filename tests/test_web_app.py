@@ -86,8 +86,10 @@ def test_home_page_renders_roast_overview_with_south_america_label(tmp_path: Pat
     assert "#a5755b" in response.text
     assert "position: static;" in response.text
     assert "justify-content: space-between;" in response.text
-    assert '<div class="map-meta-row">' in response.text
+    assert '<div id="overview-map-meta-row" class="map-meta-row">' in response.text
     assert "text-align: right;" in response.text
+    assert 'id="overview-map-meta-row"' in response.text
+    assert 'document.getElementById("overview-map-meta-row").classList.toggle("is-hidden", mode !== "map");' in response.text
     assert 'id="overview-list-source"' in response.text
     assert "font-size: 0.58rem;" in response.text
     assert "function shopTooltipText(shop)" in response.text

@@ -962,7 +962,7 @@
               <div id="map-click-dialog" class="map-click-dialog hidden"></div>
               <div class="map-hint glass-panel hidden"></div>
             </div>
-            <div class="map-meta-row">
+            <div id="overview-map-meta-row" class="map-meta-row">
               <div class="map-legend glass-panel">
                 <div class="legend-row"><span class="legend-dot country"></span><span>Country bubble (zoomed out)</span></div>
                 <div class="legend-row"><span class="legend-dot shop"></span><span>Individual shop (zoomed in)</span></div>
@@ -1096,6 +1096,7 @@
           const mode = button.dataset.mode;
           document.querySelectorAll(".js-overview-mode").forEach((item) => item.classList.toggle("active", item === button));
           document.getElementById("overview-map-region").classList.toggle("is-hidden", mode !== "map");
+          document.getElementById("overview-map-meta-row").classList.toggle("is-hidden", mode !== "map");
           document.getElementById("overview-list-region").classList.toggle("active", mode === "list");
           document.getElementById("overview-list-region").classList.toggle("is-hidden", mode !== "list");
         });
