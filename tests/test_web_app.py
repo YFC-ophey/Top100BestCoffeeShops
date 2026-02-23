@@ -56,6 +56,10 @@ def test_home_page_renders_roast_overview_with_south_america_label(tmp_path: Pat
     assert "ROAST." in response.text
     assert "World's 100 Best Coffee Shops" in response.text
     assert "Interactive map with country-level shop density and source-backed shop details." in response.text
+    assert "grid-template-columns: minmax(0, 1fr) 395px;" in response.text
+    assert 'id="filters-panel" class="filters-panel"' in response.text
+    assert 'class="sidebar-left glass-panel"' not in response.text
+    assert response.text.index('id="filters-panel"') < response.text.index("<p>Coffee Shop Preview</p>")
     assert 'class="banner-subtitle"' in response.text
     assert 'id="overview-map"' in response.text
     assert "South America" in response.text

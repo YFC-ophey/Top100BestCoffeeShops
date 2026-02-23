@@ -172,22 +172,23 @@
       .workspace {
         min-height: 0;
         display: grid;
-        grid-template-columns: 250px minmax(0, 1fr) 395px;
+        grid-template-columns: minmax(0, 1fr) 395px;
         gap: 12px;
       }
 
-      .sidebar-left,
       .sidebar-right,
       .canvas {
         border-radius: 18px;
         min-height: 0;
       }
 
-      .sidebar-left {
+      .filters-panel {
         padding: 14px;
         display: flex;
         flex-direction: column;
         gap: 14px;
+        flex: 0 0 auto;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       }
 
       .panel-title {
@@ -550,6 +551,7 @@
 
       .preview-head {
         padding: 12px 14px 10px;
+        flex: 0 0 auto;
         border-bottom: 1px solid rgba(247, 198, 154, 0.18);
         background: linear-gradient(180deg, rgba(247, 198, 154, 0.08), rgba(247, 198, 154, 0.01));
       }
@@ -591,6 +593,7 @@
       .hero {
         position: relative;
         height: 220px;
+        flex: 0 0 auto;
       }
 
       .hero img {
@@ -668,6 +671,8 @@
         padding: 14px;
         display: grid;
         gap: 12px;
+        flex: 1 1 auto;
+        min-height: 0;
         overflow-y: auto;
       }
 
@@ -811,12 +816,12 @@
 
       @media (max-width: 1080px) {
         .workspace {
-          grid-template-columns: 240px minmax(0, 1fr);
+          grid-template-columns: minmax(0, 1fr);
         }
 
         .sidebar-right {
           grid-column: 1 / -1;
-          max-height: 340px;
+          max-height: none;
           position: relative;
           top: auto;
         }
@@ -842,12 +847,8 @@
           grid-template-columns: 1fr;
         }
 
-        .sidebar-left {
-          order: 2;
-        }
-
         .sidebar-right {
-          order: 3;
+          order: 2;
           position: relative;
           left: auto;
           right: auto;
@@ -913,31 +914,6 @@
       </header>
 
       <main class="workspace">
-        <aside class="sidebar-left glass-panel">
-          <div class="filter-head">
-            <p class="panel-title">Filters</p>
-            <button class="reset-btn" id="reset-filters">Reset</button>
-          </div>
-
-          <section>
-            <p class="panel-title">Collection</p>
-            <div class="chip-wrap" id="collection-chip-wrap"></div>
-          </section>
-
-          <section>
-            <p class="panel-title">Country</p>
-            <div class="select-wrap">
-              <select id="country-filter"></select>
-            </div>
-          </section>
-
-          <section>
-            <p class="panel-title">Rank Band</p>
-            <div class="rank-wrap" id="rank-band-wrap"></div>
-          </section>
-
-        </aside>
-
         <section class="canvas glass-panel">
           <div class="tabs-head">
             <div class="tabs" role="tablist" aria-label="Coffee views">
@@ -1008,6 +984,29 @@
           <button class="drawer-toggle" id="detail-drawer-toggle" type="button" aria-expanded="true">
             Shop Details
           </button>
+          <div id="filters-panel" class="filters-panel">
+            <div class="filter-head">
+              <p class="panel-title">Filters</p>
+              <button class="reset-btn" id="reset-filters">Reset</button>
+            </div>
+
+            <section>
+              <p class="panel-title">Collection</p>
+              <div class="chip-wrap" id="collection-chip-wrap"></div>
+            </section>
+
+            <section>
+              <p class="panel-title">Country</p>
+              <div class="select-wrap">
+                <select id="country-filter"></select>
+              </div>
+            </section>
+
+            <section>
+              <p class="panel-title">Rank Band</p>
+              <div class="rank-wrap" id="rank-band-wrap"></div>
+            </section>
+          </div>
           <div class="preview-head">
             <p>Coffee Shop Preview</p>
           </div>
