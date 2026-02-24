@@ -79,6 +79,17 @@ jobs:
           script: |
             const missing = ${{ steps.geocode_gap.outputs.missing }};
             const title = `Owner geocode refresh needed (${missing} shops missing place_id)`;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const openIssues = await github.paginate(github.rest.issues.listForRepo, {
+              owner,
+              repo,
+              state: "open",
+              per_page: 100,
+            });
+            if (openIssues.some((issue) => issue.title === title)) {
+              return;
+            }
             const body = [
               "Automated reminder from `update_map.yml`.",
               "",
@@ -88,10 +99,10 @@ jobs:
               "```bash",
               "python src/main.py owner-geocode --api-key \"$GOOGLE_MAPS_API_KEY\"",
               "```",
-            ].join("\\n");
+            ].join("\n");
             await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+              owner,
+              repo,
               title,
               body
             });
