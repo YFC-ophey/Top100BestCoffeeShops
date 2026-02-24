@@ -23,29 +23,24 @@ def test_build_static_site_generates_index_and_styles(tmp_path: Path) -> None:
 
     index = (site_dir / "index.html").read_text(encoding="utf-8")
     style = (site_dir / "assets" / "style.css").read_text(encoding="utf-8")
+    assert "<title>ROAST. | Global Coffee Explorer</title>" in index
+    assert "World's 100 Best Coffee Shops" in index
+    assert "Interactive map with country-level shop density and source-backed shop details." in index
     assert 'id="overview-map"' in index
-    assert '<p class="banner-title">Top 100 Best Coffee Shops 2026</p>' in index
-    assert index.index('class="banner-title"') < index.index('class="workspace-head"')
-    assert 'data-category="Top 100"' in index
-    assert 'data-category="South America"' in index
-    assert 'data-category="South"' not in index
-    assert 'class="profile-badge"' not in index
-    assert "Main Top 100" in index
-    assert "South America" in index
-    assert "Chat conversation history" not in index
-    assert "Project canvas and components" not in index
-    assert "Live preview" not in index
-    assert "Menu Highlights" not in index
-    assert "Open Today" not in index
-    assert "WiFi Speed" not in index
-    assert "Recent Review" not in index
-    assert "Book a Table" not in index
-    assert "Open in Google Maps" in index
-    assert "Download CSV" in index
+    assert ">Filter<" in index
+    assert "Coffee Shop Preview" in index
+    assert "<th>Address</th>" in index
+    assert "Top 100 World" in index
+    assert "South America 100" in index
+    assert "Main Top 100" not in index
+    assert "Download CSV" not in index
+    assert "Open in Google Maps" not in index
+    assert "World's Best Coffee Shops Complete Map" in index
     assert 'const googleMapsKey = "";' in index
-    assert index.index("markerState.map = new google.maps.Map") < index.index("if (!sidebarShops.length)")
-    assert "shops are using centroid fallback until lat/lng is available" in index
-    assert "top10" in style
+    assert "const overviewShops = " in index
+    assert "const overviewCountries = " in index
+    assert "const overviewFilters = " in index
+    assert "styles are inlined in templates/index.html" in style
 
 
 def test_build_static_site_does_not_embed_env_api_key(tmp_path: Path, monkeypatch) -> None:
@@ -67,3 +62,24 @@ def test_build_static_site_does_not_embed_env_api_key(tmp_path: Path, monkeypatc
     index = (site_dir / "index.html").read_text(encoding="utf-8")
     assert "TEST_MAPS_KEY_PLACEHOLDER_DO_NOT_USE" not in index
     assert 'const googleMapsKey = "";' in index
+
+
+def test_build_static_site_embeds_api_key_when_opt_in_enabled(tmp_path: Path, monkeypatch) -> None:
+    data_file = tmp_path / "data" / "current_list.json"
+    output_csv = tmp_path / "output" / "coffee_shops.csv"
+    output_kml = tmp_path / "output" / "coffee_shops.kml"
+    site_dir = tmp_path / "site"
+    payload = [{"name": "A", "city": "Copenhagen", "country": "Denmark", "rank": 1, "category": "Top 100"}]
+    data_file.parent.mkdir(parents=True, exist_ok=True)
+    data_file.write_text(json.dumps(payload), encoding="utf-8")
+    output_csv.parent.mkdir(parents=True, exist_ok=True)
+    output_csv.write_text("rank,name\n1,A\n", encoding="utf-8")
+    output_kml.write_text("<kml></kml>", encoding="utf-8")
+
+    monkeypatch.setenv("EMBED_GOOGLE_MAPS_JS_KEY", "1")
+    monkeypatch.setenv("GOOGLE_MAPS_JS_API_KEY", "TEST_MAPS_KEY_PLACEHOLDER_DO_NOT_USE")
+
+    build_static_site(data_file=data_file, site_dir=site_dir, csv_file=output_csv, kml_file=output_kml)
+
+    index = (site_dir / "index.html").read_text(encoding="utf-8")
+    assert 'const googleMapsKey = "TEST_MAPS_KEY_PLACEHOLDER_DO_NOT_USE";' in index
