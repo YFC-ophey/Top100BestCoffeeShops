@@ -1,6 +1,7 @@
 import html
 import json
 from collections import defaultdict
+import os
 from pathlib import Path
 from urllib.parse import urlencode
 
@@ -53,8 +54,9 @@ def build_static_site(
         total_count=len(all_shops),
         csv_url=csv_url,
         kml_url=kml_url,
-        # Never embed API keys into committed static artifacts.
-        google_maps_key="",
+        # For GitHub Pages deploy artifacts, this can be injected from workflow secrets.
+        # Keep workflow commit steps keyless to avoid storing keys in repository history.
+        google_maps_key=_google_maps_js_key(),
     )
 
     (assets_dir / "style.css").write_text(_style_css(), encoding="utf-8")
@@ -150,6 +152,17 @@ def _build_sidebar_shops(shops: list[CoffeeShop]) -> list[dict[str, object]]:
 
 def _json_script_literal(value: object) -> str:
     return json.dumps(value).replace("</", "<\\/")
+
+
+def _google_maps_js_key() -> str:
+    embed_enabled = os.getenv("EMBED_GOOGLE_MAPS_JS_KEY", "").strip().lower()
+    if embed_enabled not in {"1", "true", "yes", "on"}:
+        return ""
+    for env_key in ("GOOGLE_MAPS_JS_API_KEY", "GOOGLE_MAPS_API_KEY"):
+        env_value = os.getenv(env_key, "").strip()
+        if env_value:
+            return env_value
+    return ""
 
 
 def _shop_id(shop: CoffeeShop) -> str:
