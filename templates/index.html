@@ -48,6 +48,22 @@
         position: relative;
       }
 
+      @media (min-width: 981px) {
+        html,
+        body {
+          height: 100%;
+        }
+
+        body {
+          overflow: hidden;
+        }
+
+        .app-shell {
+          height: 100dvh;
+          overflow: hidden;
+        }
+      }
+
       .app-shell::before {
         content: "";
         position: fixed;
@@ -938,7 +954,7 @@
         }
 
         .overview-map-panel {
-          height: clamp(430px, calc(100dvh - 210px), 680px);
+          height: clamp(390px, calc(100dvh - 250px), 620px);
         }
 
         .map-meta-row {
@@ -1055,7 +1071,7 @@
         }
 
         .overview-map-panel {
-          height: clamp(390px, calc(100dvh - 205px), 620px);
+          height: clamp(350px, calc(100dvh - 240px), 540px);
         }
 
         .filters-panel {
