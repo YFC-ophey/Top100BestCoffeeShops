@@ -48,19 +48,17 @@ jobs:
           git diff --staged --quiet || git commit -m "chore: update coffee shops map data"
           git push
 
-      - name: Rebuild Pages site with browser key
-        if: ${{ secrets.GOOGLE_MAPS_JS_API_KEY != '' || secrets.GOOGLE_MAPS_API_KEY != '' }}
+      - name: Rebuild Pages site with browser key when available
         env:
-          EMBED_GOOGLE_MAPS_JS_KEY: "1"
           GOOGLE_MAPS_JS_API_KEY: ${{ secrets.GOOGLE_MAPS_JS_API_KEY }}
           GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
         run: |
-          python src/main.py build-site
-
-      - name: Notify missing browser key
-        if: ${{ secrets.GOOGLE_MAPS_JS_API_KEY == '' && secrets.GOOGLE_MAPS_API_KEY == '' }}
-        run: |
-          echo "No Google Maps browser key secret configured; deploying static site without live map."
+          if [ -n "${GOOGLE_MAPS_JS_API_KEY}${GOOGLE_MAPS_API_KEY}" ]; then
+            echo "Google Maps browser key detected. Rebuilding Pages artifact with embedded key."
+            EMBED_GOOGLE_MAPS_JS_KEY=1 python src/main.py build-site
+          else
+            echo "No Google Maps browser key secret configured; deploying static site without live map."
+          fi
 
       - name: Count shops missing place IDs
         id: geocode_gap
