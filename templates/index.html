@@ -719,7 +719,7 @@
 
       .hero {
         position: relative;
-        height: clamp(186px, 29vh, 272px);
+        height: clamp(204px, 31vh, 296px);
         flex: 0 0 auto;
       }
 
@@ -856,19 +856,19 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 8px;
-        grid-auto-rows: minmax(68px, auto);
+        grid-auto-rows: minmax(56px, auto);
         align-content: start;
       }
 
       .details-card {
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
+        justify-content: center;
         border: 1px solid var(--line);
         border-radius: 10px;
         background: rgba(255, 255, 255, 0.04);
-        min-height: 62px;
-        padding: 10px 9px;
+        min-height: 56px;
+        padding: 8px 9px;
       }
 
       .details-label {
@@ -1046,7 +1046,7 @@
         }
 
         .hero {
-          height: clamp(152px, 23.5vh, 204px);
+          height: clamp(164px, 24.5vh, 218px);
         }
 
         .detail-body {
@@ -1436,6 +1436,12 @@
         pulseTimer: null,
         dialogTimer: null,
       };
+
+      const allCountriesByName = new Map(
+        overviewCountries
+          .filter((country) => Number.isFinite(Number(country.lat)) && Number.isFinite(Number(country.lng)))
+          .map((country) => [country.country, country])
+      );
 
       const detailPanel = document.getElementById("detail-panel");
       const detailDrawerToggle = document.getElementById("detail-drawer-toggle");
@@ -1924,11 +1930,13 @@
         return base * spread;
       }
 
-      function coordinatePosition(shop, countriesByName) {
+      function coordinatePosition(shop, countriesByName, fallbackCountriesByName = allCountriesByName) {
         if (hasValidCoordinates(shop)) {
           return { lat: Number(shop.lat), lng: Number(shop.lng), approximate: false };
         }
-        const country = countriesByName.get(shop.country_normalized);
+        const country =
+          countriesByName.get(shop.country_normalized) ||
+          fallbackCountriesByName.get(shop.country_normalized);
         const countryLat = country ? Number(country.lat) : NaN;
         const countryLng = country ? Number(country.lng) : NaN;
         if (!Number.isFinite(countryLat) || !Number.isFinite(countryLng)) return null;
@@ -1994,11 +2002,11 @@
         });
       }
 
-      function renderShopMarkers(shops, countriesByName) {
+      function renderShopMarkers(shops, countriesByName, fallbackCountriesByName = allCountriesByName) {
         const positionedShops = shops
           .map((shop) => ({
             shop,
-            position: coordinatePosition(shop, countriesByName),
+            position: coordinatePosition(shop, countriesByName, fallbackCountriesByName),
             exact: hasValidCoordinates(shop),
           }))
           .filter((entry) => Boolean(entry.position));
@@ -2090,7 +2098,7 @@
           }
           return;
         }
-        renderShopMarkers(mapShops, countriesByName);
+        renderShopMarkers(mapShops, countriesByName, allCountriesByName);
       }
 
       const MAP_STYLE_BASE = [
