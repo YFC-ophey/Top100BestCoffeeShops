@@ -47,14 +47,14 @@ def test_geocode_shop_returns_first_candidate() -> None:
 
 def test_geocode_shop_returns_none_when_no_candidates() -> None:
     payload = {"status": "ZERO_RESULTS", "candidates": []}
+    geocode_payload = {"status": "ZERO_RESULTS", "results": []}
 
-    with patch(
-        "urllib.request.urlopen",
-        side_effect=[
-            _FakeResponse(json.dumps(payload).encode()),
-            _FakeResponse(json.dumps({"status": "ZERO_RESULTS", "results": []}).encode()),
-        ],
-    ):
+    def _urlopen_side_effect(url: str, timeout: float = 30.0):
+        if "findplacefromtext" in url:
+            return _FakeResponse(json.dumps(payload).encode())
+        return _FakeResponse(json.dumps(geocode_payload).encode())
+
+    with patch("urllib.request.urlopen", side_effect=_urlopen_side_effect):
         geocoder = GooglePlacesGeocoder(api_key="test-key")
         shop = CoffeeShop(
             name="Unknown",
@@ -68,6 +68,32 @@ def test_geocode_shop_returns_none_when_no_candidates() -> None:
 
     assert result is None
     assert geocoder.last_status == "ZERO_RESULTS"
+
+
+def test_geocode_shop_prefers_address_queries_before_name_city_country() -> None:
+    captured_queries: list[str] = []
+
+    def _geocode_text_side_effect(query: str):
+        captured_queries.append(query)
+        if "101 E Walnut Ave Rogers, AR 72756, USA" in query:
+            return object()
+        return None
+
+    geocoder = GooglePlacesGeocoder(api_key="test-key")
+    shop = CoffeeShop(
+        name="Onyx Coffee LAB",
+        city="Rogers",
+        country="USA",
+        rank=1,
+        category="Top 100",
+        address="101 E Walnut Ave Rogers, AR 72756, USA",
+    )
+
+    with patch.object(geocoder, "geocode_text", side_effect=_geocode_text_side_effect):
+        result = geocoder.geocode_shop(shop)
+
+    assert result is not None
+    assert captured_queries[0] == "Onyx Coffee LAB, 101 E Walnut Ave Rogers, AR 72756, USA"
 
 
 def test_geocode_shop_falls_back_to_geocoding_api_when_places_has_zero_results() -> None:

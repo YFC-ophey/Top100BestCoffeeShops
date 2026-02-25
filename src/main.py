@@ -30,6 +30,7 @@ def scrape_only(sleep_seconds: float = 1.0) -> tuple[list[CoffeeShop], bool]:
         all_shops.extend(parse_coffee_shops(html, category=category))
 
     all_shops = enrich_shops_with_details(all_shops, sleep_seconds=sleep_seconds)
+    all_shops = _carry_forward_geocode(previous, all_shops)
     changed = has_shop_changes(previous, all_shops)
     _save_state(all_shops)
     generate_csv(all_shops, CSV_FILE)
@@ -59,6 +60,37 @@ def build_site() -> None:
 def _save_state(shops: list[CoffeeShop]) -> None:
     DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
     DATA_FILE.write_text(json.dumps([shop.to_dict() for shop in shops], indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+def _carry_forward_geocode(previous: list[CoffeeShop], current: list[CoffeeShop]) -> list[CoffeeShop]:
+    previous_by_source: dict[str, CoffeeShop] = {}
+    previous_by_identity: dict[tuple[str, int, str, str], CoffeeShop] = {}
+
+    for shop in previous:
+        if shop.source_url:
+            previous_by_source[shop.source_url.strip().casefold()] = shop
+        previous_by_identity[(shop.category.strip().casefold(), shop.rank, shop.name.strip().casefold(), shop.country.strip().casefold())] = shop
+
+    for shop in current:
+        match: CoffeeShop | None = None
+        if shop.source_url:
+            match = previous_by_source.get(shop.source_url.strip().casefold())
+        if match is None:
+            identity = (shop.category.strip().casefold(), shop.rank, shop.name.strip().casefold(), shop.country.strip().casefold())
+            match = previous_by_identity.get(identity)
+        if match is None:
+            continue
+
+        if shop.place_id is None and match.place_id:
+            shop.place_id = match.place_id
+        if shop.lat is None and match.lat is not None:
+            shop.lat = match.lat
+        if shop.lng is None and match.lng is not None:
+            shop.lng = match.lng
+        if shop.formatted_address is None and match.formatted_address:
+            shop.formatted_address = match.formatted_address
+
+    return current
 
 
 def main() -> int:

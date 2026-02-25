@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import html
 import json
 import time
 from typing import Callable
@@ -127,5 +128,47 @@ class GooglePlacesGeocoder:
         )
 
     def geocode_shop(self, shop: CoffeeShop) -> GeocodeResult | None:
-        query = f"{shop.name}, {shop.city}, {shop.country}"
-        return self.geocode_text(query)
+        for query in self._shop_queries(shop):
+            result = self.geocode_text(query)
+            if result:
+                return result
+        return None
+
+    def _shop_queries(self, shop: CoffeeShop) -> list[str]:
+        name = self._clean_text(shop.name)
+        city = self._clean_text(shop.city)
+        country = self._clean_text(shop.country)
+        address = self._clean_text(shop.address)
+        formatted_address = self._clean_text(shop.formatted_address)
+
+        queries: list[str] = []
+        if address:
+            if name:
+                queries.append(f"{name}, {address}")
+            queries.append(address)
+        if formatted_address:
+            if name:
+                queries.append(f"{name}, {formatted_address}")
+            queries.append(formatted_address)
+        if name and city and country:
+            queries.append(f"{name}, {city}, {country}")
+        elif name and country:
+            queries.append(f"{name}, {country}")
+        elif name:
+            queries.append(name)
+
+        unique_queries: list[str] = []
+        seen: set[str] = set()
+        for query in queries:
+            normalized = query.casefold()
+            if not query or normalized in seen:
+                continue
+            seen.add(normalized)
+            unique_queries.append(query)
+        return unique_queries
+
+    @staticmethod
+    def _clean_text(value: str | None) -> str:
+        if not value:
+            return ""
+        return " ".join(html.unescape(str(value)).split()).strip()
