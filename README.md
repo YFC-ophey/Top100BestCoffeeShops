@@ -1,136 +1,126 @@
-# Top100BestCoffeeShops
+# ROAST. ☕
+### World's 100 Best Coffee Shops — Interactive Explorer
 
-**Goal:** Maintain a zero-cost, open-source pipeline that scrapes the 2026 coffee-shop rankings, generates map artifacts, and publishes a static site with public Google Maps links.
-
-**Architecture:** The project uses a Python scrape/enrich/generate pipeline. It ingests list pages and detail pages, stores normalized output in `data/current_list.json`, produces `CSV/KML`, and builds a static site in `site/`. CI executes tests, runs scrape/build commands, commits generated artifacts, deploys via GitHub Pages, and opens a reminder issue when owner-only geocoding refresh is needed.
-
-**Tech Stack:** Python 3.11+, FastAPI/Jinja (preview UI), static site builder, pytest, GitHub Actions, GitHub Pages.
+[![Live Site](https://img.shields.io/badge/Live%20Site-GitHub%20Pages-black?style=flat-square)](https://yfc-ophey.github.io/Top-100-Best-CoffeeShops/)
 
 ---
 
-## Current Project Summary
+## The Story
 
-### What Is Implemented
-- End-to-end scraper for Top 100 + South source pages, including fallback parsing for live Elementor layouts.
-- Detail-page enrichment for `city` and `address` with graceful fallback behavior.
-- Artifact generation: `data/current_list.json`, `output/coffee_shops.csv`, `output/coffee_shops.kml`.
-- FastAPI+Jinja preview app with tabs and public Google Maps links.
-- Static site builder producing `site/index.html` and `site/assets/style.css`.
-- CI/CD workflow (`.github/workflows/update_map.yml`) that tests, scrapes, builds, commits artifacts, deploys to GitHub Pages, and creates owner geocode reminder issues when needed.
+Earlier this year I visited **[Bouche](https://theworlds100bestcoffeeshops.com/)** in Brussels, Belgium — and it completely changed what I thought a coffee shop could be. The beans were a house blend, but the quality was on another level. The interior, the merch, the whole vibe — I was hooked.
 
-### Zero-Cost Boundary
-- User-facing flow does not require Google Places API credentials.
-- Optional owner-only geocoding is available via CLI for annual enrichment.
+That trip sent me down a rabbit hole. I discovered **The World's 100 Best Coffee Shops**, an annual ranking published every February at a global coffee festival. They release two lists — a **Top 100 Global** and a **Top 100 South America** edition. Bouche made it at #75.
 
-### Verification Status
-- Test suite currently passing (`21 passed`).
-- Static site build command verified.
-- Branch delivered and pushed: `codex/oph-20-24-delivery`.
+I built ROAST. to make that data actually explorable.
 
-## Remaining Risks / Gaps
-- Source-site HTML can still change; selectors should be periodically validated.
-- Live scraping can be slow due to respectful detail-page throttling.
-- Place ID completeness depends on owner-only geocode refresh cadence.
+---
 
-## Task Breakdown for Ongoing Maintenance
+## Live Preview
 
-### Task 1: Weekly source integrity check
+> **[→ Visit ROAST. Live](https://yfc-ophey.github.io/Top-100-Best-CoffeeShops/)**
 
-**Files:**
-- Modify: `/Users/opheliachen/.codex/projects/Top100BestCoffeeShops_build/.worktrees/oph-20-24-delivery/src/scraper.py`
-- Test: `/Users/opheliachen/.codex/projects/Top100BestCoffeeShops_build/.worktrees/oph-20-24-delivery/tests/test_scraper.py`
+The site features:
+- Interactive world map with country-level shop density bubbles
+- Drill-down to individual shop details (address, city, country, rank)
+- Filterable list view by collection, country, and rank band
+- Public Google Maps links — no API key required for visitors
 
-**Step 1: Write a failing test for unexpected rank gaps**
+---
 
-```python
-def test_detect_rank_gap_in_top100():
-    assert missing_ranks([1, 2, 4], 4) == [3]
+## What This Project Does
+
+A zero-cost, open-source pipeline that:
+
+1. **Scrapes** the annual Top 100 + South America rankings from [theworlds100bestcoffeeshops.com](https://theworlds100bestcoffeeshops.com/)
+2. **Enriches** each shop entry with city, address, and geocoordinates
+3. **Generates** `JSON`, `CSV`, and `KML` artifacts
+4. **Builds** a static site and auto-deploys via GitHub Pages
+5. **Runs automatically** on a CI/CD schedule via GitHub Actions
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Language | Python 3.11+ |
+| Preview UI | FastAPI + Jinja2 |
+| Site Builder | Static HTML/CSS generator |
+| Maps | Public Google Maps links (zero API cost) |
+| Testing | pytest (21 tests passing) |
+| CI/CD | GitHub Actions → GitHub Pages |
+
+---
+
+## Project Structure
+
+```
+Top-100-Best-CoffeeShops/
+├── src/                  # Scraper, enricher, site builder
+├── data/                 # current_list.json (source of truth)
+├── output/               # coffee_shops.csv, coffee_shops.kml
+├── site/                 # Generated static site (index.html + assets)
+├── templates/            # Jinja2 HTML templates
+├── tests/                # pytest test suite
+├── claude_prompts/       # AI prompts used during development
+├── docs/                 # Release timeline and notes
+└── .github/workflows/    # CI/CD automation
 ```
 
-**Step 2: Run test to verify it fails**
+---
 
-Run: `pytest tests/test_scraper.py::test_detect_rank_gap_in_top100 -v`
-Expected: FAIL due to missing helper
+## Zero-Cost Boundary
 
-**Step 3: Write minimal implementation**
+This project runs entirely for free:
 
-```python
-def missing_ranks(ranks: list[int], expected_max: int) -> list[int]:
-    return [n for n in range(1, expected_max + 1) if n not in set(ranks)]
-```
+- **Visitors** never need a Google API key — all map links are plain Google Maps URLs
+- **CI** handles scraping, building, and deploying automatically
+- **Optional**: Owner-only geocoding refresh via CLI (uses Google Places API once annually)
 
-**Step 4: Run test to verify it passes**
+---
 
-Run: `pytest tests/test_scraper.py::test_detect_rank_gap_in_top100 -v`
-Expected: PASS
-
-**Step 5: Commit**
+## Running Locally
 
 ```bash
-git add src/scraper.py tests/test_scraper.py
-git commit -m "test: add rank-gap detection utility"
+# Install dependencies
+pip install -e .
+
+# Run full pipeline (scrape → enrich → build)
+python main.py
+
+# Preview UI
+uvicorn src.app:app --reload
+
+# Run tests
+pytest
 ```
 
-### Task 2: Improve owner geocode observability
+---
 
-**Files:**
-- Modify: `/Users/opheliachen/.codex/projects/Top100BestCoffeeShops_build/.worktrees/oph-20-24-delivery/src/main.py`
-- Test: `/Users/opheliachen/.codex/projects/Top100BestCoffeeShops_build/.worktrees/oph-20-24-delivery/tests/test_main_orchestration.py`
+## CI/CD Workflow
 
-**Step 1: Write failing test for geocode summary output**
+On every push to `main`, GitHub Actions will:
 
-```python
-def test_owner_geocode_reports_enriched_count(capsys):
-    owner_geocode("fake")
-    assert "enriched" in capsys.readouterr().out
-```
+1. Run the test suite
+2. Execute the scrape + build pipeline
+3. Commit generated artifacts back to the repo
+4. Deploy to GitHub Pages
+5. Open a reminder issue if an owner geocode refresh is needed
 
-**Step 2: Run test to verify it fails**
+---
 
-Run: `pytest tests/test_main_orchestration.py::test_owner_geocode_reports_enriched_count -v`
-Expected: FAIL (message absent)
+## Known Limitations
 
-**Step 3: Write minimal implementation**
+- Source site uses Elementor — selectors may shift when the site redesigns
+- Detail-page scraping is intentionally throttled (respectful crawl speed)
+- Place ID completeness depends on annual owner geocode refresh
 
-```python
-print(f"Owner geocode refresh complete: enriched={enriched_count}")
-```
+---
 
-**Step 4: Run test to verify it passes**
+## Data Source
 
-Run: `pytest tests/test_main_orchestration.py::test_owner_geocode_reports_enriched_count -v`
-Expected: PASS
+All coffee shop data sourced from **[theworlds100bestcoffeeshops.com](https://theworlds100bestcoffeeshops.com/)** — an independent annual ranking published each February.
 
-**Step 5: Commit**
+---
 
-```bash
-git add src/main.py tests/test_main_orchestration.py
-git commit -m "feat: report owner geocode enrichment counts"
-```
-
-### Task 3: Add release checklist to docs
-
-**Files:**
-- Modify: `/Users/opheliachen/.codex/projects/Top100BestCoffeeShops_build/.worktrees/oph-20-24-delivery/README.md`
-- Modify: `/Users/opheliachen/.codex/projects/Top100BestCoffeeShops_build/.worktrees/oph-20-24-delivery/docs/release-timeline-2026.md`
-
-**Step 1: Add checklist items for pre-release gates**
-
-```markdown
-- [ ] Tests passing
-- [ ] Scrape-only run completed
-- [ ] Site built and visually checked
-- [ ] Pages deploy successful
-```
-
-**Step 2: Verify docs render correctly**
-
-Run: `rg "\[ \]" README.md docs/release-timeline-2026.md`
-Expected: checklist lines present
-
-**Step 3: Commit**
-
-```bash
-git add README.md docs/release-timeline-2026.md
-git commit -m "docs: add release readiness checklist"
-```
+*Built by [@YFC-ophey](https://github.com/YFC-ophey) · [Buy Me a Coffee](https://buymeacoffee.com/opheliachen)*
