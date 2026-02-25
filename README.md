@@ -1,7 +1,11 @@
 # ROAST. ☕
 ### World's 100 Best Coffee Shops — Interactive Map Explorer
 
-[![Live Site](https://img.shields.io/badge/Live%20Site-GitHub%20Pages-black?style=flat-square)](https://yfc-ophey.github.io/Top-100-Best-CoffeeShops/)
+## Live Preview
+
+[![ROAST. Live Preview](https://raw.githubusercontent.com/YFC-ophey/Top-100-Best-CoffeeShops/main/docs/live-preview-image.png)](https://yfc-ophey.github.io/Top-100-Best-CoffeeShops/)
+
+> Click the image to explore the live site.
 
 
 
