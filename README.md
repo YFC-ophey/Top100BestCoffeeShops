@@ -1,5 +1,5 @@
 # ROAST. ☕
-### World's 100 Best Coffee Shops — Interactive Map Explorer
+### World's 100 Best Coffee Shops ☕️ Interactive Map Explorer 🗺️
 
 ## Live Preview
 
