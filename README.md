@@ -1,16 +1,6 @@
 # ROAST. ☕
 ### World's 100 Best Coffee Shops ☕️ Interactive Map Explorer 🗺️
 
-## Live Preview
-
-[![ROAST. Live Preview](https://raw.githubusercontent.com/YFC-ophey/Top-100-Best-CoffeeShops/main/docs/live-preview-image.png)](https://yfc-ophey.github.io/Top-100-Best-CoffeeShops/)
-
-> Click the image to explore the live site.
-
-
-
----
-
 ## The Story
 
 Earlier this year I visited **[Bouche](https://theworlds100bestcoffeeshops.com/)** in Brussels, Belgium and it completely changed what I thought a coffee shop could be. The beans were a house blend, but the quality was on another level. The interior, the merch, the whole vibe: "I was hooked".
@@ -24,6 +14,8 @@ Whenever the coffee vibes hit, you can open ROAST. and instantly see if one of t
 ---
 
 ## Live Preview
+
+[![ROAST. Live Preview](https://raw.githubusercontent.com/YFC-ophey/Top-100-Best-CoffeeShops/main/docs/live-preview-image.png)]
 
 > **[→ Visit ROAST. Live](https://yfc-ophey.github.io/Top-100-Best-CoffeeShops/)**
 
