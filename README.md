@@ -1,15 +1,17 @@
 # ROAST. ☕
-### World's 100 Best Coffee Shops — Interactive Explorer
+### World's 100 Best Coffee Shops — Interactive Map Explorer
 
 [![Live Site](https://img.shields.io/badge/Live%20Site-GitHub%20Pages-black?style=flat-square)](https://yfc-ophey.github.io/Top-100-Best-CoffeeShops/)
+
+
 
 ---
 
 ## The Story
 
-Earlier this year I visited **[Bouche](https://theworlds100bestcoffeeshops.com/)** in Brussels, Belgium — and it completely changed what I thought a coffee shop could be. The beans were a house blend, but the quality was on another level. The interior, the merch, the whole vibe — I was hooked.
+Earlier this year I visited **[Bouche](https://theworlds100bestcoffeeshops.com/)** in Brussels, Belgium and it completely changed what I thought a coffee shop could be. The beans were a house blend, but the quality was on another level. The interior, the merch, the whole vibe — I was hooked.
 
-That trip sent me down a rabbit hole. I discovered **The World's 100 Best Coffee Shops**, an annual ranking published every February at a global coffee festival. They release two lists — a **Top 100 Global** and a **Top 100 South America** edition. Bouche made it at #75.
+That trip sent me down a rabbit hole. I discovered **The World's 100 Best Coffee Shops**, an annual ranking published every February at a global coffee festival. They release two lists: a **Top 100 Global** and a **Top 100 South America** edition. Bouche made it at #75.
 
 I built ROAST. to make that data actually explorable.
 
