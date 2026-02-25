@@ -17,7 +17,9 @@ Earlier this year I visited **[Bouche](https://theworlds100bestcoffeeshops.com/)
 
 That trip sent me down a rabbit hole. I discovered **The World's 100 Best Coffee Shops**, an annual ranking published every February at a global coffee festival. They release two lists: a **Top 100 Global** and a **Top 100 South America** edition. Bouche made it at #75.
 
-I built ROAST. to make that data actually explorable.
+I built ROAST. to make that data actually explorable. 
+Whether you're on a work trip, traveling, on vacation, or just visiting someone;  
+Whenever the coffee vibes hit, you can open ROAST. and instantly see if one of the world's best coffee shops is near you! Why not?!
 
 ---
 
