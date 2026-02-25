@@ -190,17 +190,31 @@
       .workspace {
         min-height: 0;
         height: 100%;
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) clamp(310px, 27vw, 370px);
+        display: flex;
         gap: 12px;
         align-items: stretch;
+      }
+
+      .workspace > * {
+        min-width: 0;
       }
 
       .sidebar-right,
       .canvas {
         border-radius: 18px;
         min-height: 0;
+        min-width: 0;
         height: 100%;
+      }
+
+      .canvas {
+        flex: 1 1 auto;
+        width: 0;
+      }
+
+      .sidebar-right {
+        flex: 0 0 clamp(310px, 27vw, 370px);
+        width: clamp(310px, 27vw, 370px);
       }
 
       .filters-panel {
@@ -299,6 +313,7 @@
         grid-template-rows: auto minmax(0, 1fr);
         gap: 10px;
         min-height: 0;
+        overflow: hidden;
       }
 
       .canvas-head {
@@ -555,6 +570,7 @@
 
       table {
         width: 100%;
+        table-layout: fixed;
         border-collapse: collapse;
         border-radius: 12px;
         overflow: hidden;
@@ -567,6 +583,8 @@
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         text-align: left;
         font-size: 0.73rem;
+        overflow-wrap: anywhere;
+        word-break: break-word;
       }
 
       th {
@@ -589,8 +607,12 @@
 
       @media (max-width: 1440px) and (min-width: 981px) {
         .workspace {
-          grid-template-columns: minmax(0, 1fr) clamp(286px, 24vw, 336px);
           gap: 10px;
+        }
+
+        .sidebar-right {
+          flex-basis: clamp(286px, 24vw, 336px);
+          width: clamp(286px, 24vw, 336px);
         }
       }
 
@@ -605,8 +627,12 @@
         }
 
         .workspace {
-          grid-template-columns: minmax(0, 1fr) clamp(264px, 24.5vw, 300px);
           gap: 9px;
+        }
+
+        .sidebar-right {
+          flex-basis: clamp(264px, 24.5vw, 300px);
+          width: clamp(264px, 24.5vw, 300px);
         }
 
         .canvas {
@@ -693,7 +719,7 @@
 
       .hero {
         position: relative;
-        height: clamp(150px, 23vh, 210px);
+        height: clamp(204px, 31vh, 296px);
         flex: 0 0 auto;
       }
 
@@ -769,12 +795,14 @@
       }
 
       .detail-body {
-        padding: 14px;
-        display: grid;
-        gap: 12px;
+        padding: 12px 14px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
         flex: 1 1 auto;
-        min-height: 140px;
+        min-height: 0;
         overflow-y: auto;
+        align-items: stretch;
       }
 
       .shop-title {
@@ -794,16 +822,22 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 8px;
+        align-items: stretch;
       }
 
       .actions a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         text-decoration: none;
         border-radius: 10px;
         border: 1px solid var(--line);
         color: #eff1fb;
         font-size: 0.75rem;
         font-weight: 700;
-        padding: 9px;
+        line-height: 1.1;
+        min-height: 44px;
+        padding: 10px 9px;
         text-align: center;
       }
 
@@ -822,13 +856,19 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 8px;
+        grid-auto-rows: minmax(56px, auto);
+        align-content: start;
       }
 
       .details-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         border: 1px solid var(--line);
         border-radius: 10px;
         background: rgba(255, 255, 255, 0.04);
-        padding: 9px;
+        min-height: 56px;
+        padding: 8px 9px;
       }
 
       .details-label {
@@ -1006,7 +1046,7 @@
         }
 
         .hero {
-          height: clamp(122px, 19vh, 165px);
+          height: clamp(164px, 24.5vh, 218px);
         }
 
         .detail-body {
@@ -1024,10 +1064,12 @@
 
         .actions a {
           font-size: 0.71rem;
-          padding: 8px;
+          min-height: 40px;
+          padding: 8px 8px;
         }
 
         .details-card {
+          min-height: 60px;
           padding: 8px;
         }
 
@@ -1084,7 +1126,7 @@
         }
 
         .hero {
-          height: 132px;
+          height: 154px;
         }
 
         .detail-body {
@@ -1098,6 +1140,7 @@
         }
 
         .details-card {
+          min-height: 56px;
           padding: 7px 8px;
         }
 
@@ -1117,7 +1160,7 @@
 
       @media (max-width: 980px) {
         .workspace {
-          grid-template-columns: minmax(0, 1fr);
+          flex-direction: column;
         }
 
         .filters-panel .filter-head,
@@ -1126,14 +1169,15 @@
         }
 
         .sidebar-right {
-          grid-column: 1 / -1;
+          width: 100%;
+          flex: 0 0 auto;
           max-height: none;
           position: relative;
           top: auto;
         }
 
         .hero {
-          height: 170px;
+          height: 188px;
         }
       }
 
@@ -1150,7 +1194,7 @@
         }
 
         .workspace {
-          grid-template-columns: 1fr;
+          flex-direction: column;
         }
 
         .sidebar-right {
@@ -3184,6 +3228,12 @@
         dialogTimer: null,
       };
 
+      const allCountriesByName = new Map(
+        overviewCountries
+          .filter((country) => Number.isFinite(Number(country.lat)) && Number.isFinite(Number(country.lng)))
+          .map((country) => [country.country, country])
+      );
+
       const detailPanel = document.getElementById("detail-panel");
       const detailDrawerToggle = document.getElementById("detail-drawer-toggle");
 
@@ -3642,13 +3692,57 @@
         );
       }
 
-      function coordinatePosition(shop) {
-        return { lat: Number(shop.lat), lng: Number(shop.lng) };
+      function stableSeed(value) {
+        let seed = 2166136261;
+        for (let index = 0; index < value.length; index += 1) {
+          seed ^= value.charCodeAt(index);
+          seed = Math.imul(seed, 16777619);
+        }
+        return seed >>> 0;
       }
 
-      function unresolvedHint(unresolvedCount) {
-        if (unresolvedCount <= 0) return "";
-        return ` ${unresolvedCount} shops have no verified coordinates and remain represented in country bubbles.`;
+      function stableUnitValue(value) {
+        return (stableSeed(value) % 10000) / 10000;
+      }
+
+      function clampLatitude(value) {
+        return Math.max(-84, Math.min(84, value));
+      }
+
+      function wrapLongitude(value) {
+        if (value > 180) return value - 360;
+        if (value < -180) return value + 360;
+        return value;
+      }
+
+      function centroidOffset(shop, axis) {
+        const base = stableUnitValue(`${shop.id}|${shop.rank}|${shop.country_normalized}|${axis}`) - 0.5;
+        const spread = axis === "lat" ? 1.1 : 1.8;
+        return base * spread;
+      }
+
+      function coordinatePosition(shop, countriesByName, fallbackCountriesByName = allCountriesByName) {
+        if (hasValidCoordinates(shop)) {
+          return { lat: Number(shop.lat), lng: Number(shop.lng), approximate: false };
+        }
+        const country =
+          countriesByName.get(shop.country_normalized) ||
+          fallbackCountriesByName.get(shop.country_normalized);
+        const countryLat = country ? Number(country.lat) : NaN;
+        const countryLng = country ? Number(country.lng) : NaN;
+        if (!Number.isFinite(countryLat) || !Number.isFinite(countryLng)) return null;
+        return {
+          lat: clampLatitude(countryLat + centroidOffset(shop, "lat")),
+          lng: wrapLongitude(countryLng + centroidOffset(shop, "lng")),
+          approximate: true,
+        };
+      }
+
+      function unresolvedHint(approximateCount, hiddenCount) {
+        const parts = [];
+        if (approximateCount > 0) parts.push(`${approximateCount} use country-centroid placement`);
+        if (hiddenCount > 0) parts.push(`${hiddenCount} could not be positioned`);
+        return parts.length ? ` ${parts.join("; ")}.` : "";
       }
 
       function renderCountryMarkers(
@@ -3699,40 +3793,46 @@
         });
       }
 
-      function renderShopMarkers(shops, countriesByName, maxCount) {
-        const resolvedShops = shops.filter((shop) => hasValidCoordinates(shop));
-        const unresolvedCount = shops.length - resolvedShops.length;
+      function renderShopMarkers(shops, countriesByName, fallbackCountriesByName = allCountriesByName) {
+        const positionedShops = shops
+          .map((shop) => ({
+            shop,
+            position: coordinatePosition(shop, countriesByName, fallbackCountriesByName),
+            exact: hasValidCoordinates(shop),
+          }))
+          .filter((entry) => Boolean(entry.position));
+        const approximateCount = positionedShops.filter((entry) => !entry.exact).length;
+        const hiddenCount = shops.length - positionedShops.length;
         setMapHint(
-          `Zoomed in: individual coffee shop pins with verified coordinates.${unresolvedHint(unresolvedCount)}`
+          `Zoomed in: individual coffee shop pins.${unresolvedHint(approximateCount, hiddenCount)}`
         );
 
-        if (!resolvedShops.length) {
+        if (!positionedShops.length) {
           hideMapMessage();
-          setMapHint("No verified coordinates for the current zoom; country bubbles stay active for exploration.");
+          setMapHint("No coordinates are available for the current filter set.");
           const fallbackShop = shops.find((shop) => shop.id === state.selectedShopId) || shops[0] || null;
           updateDetailPanel(fallbackShop);
           return;
         }
 
         hideMapMessage();
-        const preferredShop = shops.find((shop) => shop.id === state.selectedShopId) || null;
-        const selectedShop = preferredShop && hasValidCoordinates(preferredShop) ? preferredShop : resolvedShops[0];
-        if (preferredShop && !hasValidCoordinates(preferredShop)) {
-          updateDetailPanel(preferredShop);
-        } else if (selectedShop) {
+        const selectedEntry =
+          positionedShops.find((entry) => entry.shop.id === state.selectedShopId) || positionedShops[0];
+        const selectedShop = selectedEntry ? selectedEntry.shop : null;
+        if (selectedShop) {
           state.selectedShopId = selectedShop.id;
           state.selectedCountry = selectedShop.country_normalized;
           updateDetailPanel(selectedShop);
         }
 
-        resolvedShops.forEach((shop) => {
+        positionedShops.forEach(({ shop, position }) => {
           const active = Boolean(selectedShop && selectedShop.id === shop.id);
           const faded = Boolean(selectedShop && selectedShop.id !== shop.id);
           const baseColor = flagColorFor(shop.country_normalized, countriesByName.get(shop.country_normalized)?.marker_color || "#888899");
           const tooltipText = shopTooltipText(shop);
           const marker = new google.maps.Marker({
             map: state.map,
-            position: coordinatePosition(shop),
+            position,
             title: tooltipText,
             icon: shopMarkerIcon(shop, active, faded),
             label: {
@@ -3789,24 +3889,7 @@
           }
           return;
         }
-        if (!mapShops.some((shop) => hasValidCoordinates(shop))) {
-          const fallbackShop = mapShops.find((shop) => shop.id === state.selectedShopId) || mapShops[0] || null;
-          updateDetailPanel(fallbackShop);
-          const focusedCountries =
-            state.focusCountry && state.country === "All"
-              ? countries.filter((row) => row.country === state.focusCountry)
-              : countries;
-          const countriesForRender = focusedCountries.length ? focusedCountries : countries;
-          const renderMaxCount = Math.max(...countriesForRender.map((row) => row.shop_count), 1);
-          renderCountryMarkers(
-            countriesForRender,
-            shops,
-            renderMaxCount,
-            "No verified shop coordinates yet for this filtered zoom; country bubbles remain interactive."
-          );
-          return;
-        }
-        renderShopMarkers(mapShops, countriesByName, maxCount);
+        renderShopMarkers(mapShops, countriesByName, allCountriesByName);
       }
 
       const MAP_STYLE_BASE = [
