@@ -15,7 +15,7 @@ Whenever the coffee vibes hit, you can open ROAST. and instantly see if one of t
 
 ## Live Preview
 
-[![ROAST. Live Preview](https://raw.githubusercontent.com/YFC-ophey/Top-100-Best-CoffeeShops/main/docs/live-preview-image.png)]
+![ROAST. Live Preview](https://raw.githubusercontent.com/YFC-ophey/Top-100-Best-CoffeeShops/main/docs/live-preview-image.png)
 
 > **[→ Visit ROAST. Live](https://yfc-ophey.github.io/Top-100-Best-CoffeeShops/)**
 
