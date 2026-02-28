@@ -140,7 +140,7 @@ rank,name,city,country,category,lat,lng,place_id,formatted_address
 70,María Julio Coffee Shop,"the heart of Cartagena, on the Colombian Caribbean coast",Colombia,South America,10.4100715,-75.53251480000002,ChIJY32TTmMv9o4RcXpqyw_vnwI,"Cl. 29 #25-38, Manga, Cartagena de Indias, Bolívar, Colombia"
 70,The Golden Pig,,Honduras,Top 100,15.507472,-88.0440769,ChIJCxDm1HNbZo8RoTPNIwbOvww,"Boulevard Los Próceres, San Pedro Sula, Cortés, Honduras"
 71,Kaweh Coffee Shop,,Ecuador,South America,-4.0013035,-79.20147399999999,ChIJQ_eCDxk3y5ER9Tmv1o_JMdg,"XQXX+FCC, entre Bolivar &, Bernardo Valdivieso, Loja, Ecuador"
-71,Little Victories Coffee,,Canada,Top 100,,,,"44 Elgin St, Ottawa, Ontario K1P 1C7"
+71,Little Victories Coffee,,Canada,Top 100,45.4232453,-75.6954342,,"44 Elgin St, Ottawa, Ontario K1P 1C7"
 72,Puma Café,,Peru,South America,-12.07669,-77.0366619,ChIJxQoAWvLIBZERpt57O9t_pA4,"Sargento Enrique Villar 101, Lima 15074, Peru"
 72,Push x Pull,"Portland, Oregon",USA,Top 100,45.5194845,-122.6568709,ChIJ3cWqo6aglVQRfkxiVfBxrKQ,"821 SE Stark St, Portland, OR 97214, USA"
 73,Dagadá,"the south of Ecuador, in Loja",Ecuador,South America,-3.9989485,-79.1979398,ChIJA0jFRAA4y5ER9tzGY36RVhI,"24 de Mayo, Loja, Ecuador"
