@@ -917,10 +917,10 @@
     "category": "Top 100",
     "source_url": "https://theworlds100bestcoffeeshops.com/locales/little-victories-coffee/",
     "address": "44 Elgin St, Ottawa, Ontario K1P 1C7",
-    "lat": 15.507472,
-    "lng": -88.0440769,
-    "place_id": "ChIJCxDm1HNbZo8RoTPNIwbOvww",
-    "formatted_address": "Boulevard Los Próceres, San Pedro Sula, Cortés, Honduras"
+    "lat": null,
+    "lng": null,
+    "place_id": null,
+    "formatted_address": "44 Elgin St, Ottawa, Ontario K1P 1C7"
   },
   {
     "name": "Push x Pull",

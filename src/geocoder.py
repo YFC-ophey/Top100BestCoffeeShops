@@ -1,12 +1,15 @@
 from dataclasses import dataclass
 import html
 import json
+import re
 import time
 from typing import Callable
 from urllib.error import URLError
 from urllib.parse import urlencode
 import urllib.request
+import unicodedata
 
+from src.country_centroids import UNKNOWN_COUNTRY, normalize_country
 from src.models import CoffeeShop
 
 
@@ -130,7 +133,7 @@ class GooglePlacesGeocoder:
     def geocode_shop(self, shop: CoffeeShop) -> GeocodeResult | None:
         for query in self._shop_queries(shop):
             result = self.geocode_text(query)
-            if result:
+            if result and self._result_matches_shop(shop, result):
                 return result
         return None
 
@@ -172,3 +175,95 @@ class GooglePlacesGeocoder:
         if not value:
             return ""
         return " ".join(html.unescape(str(value)).split()).strip()
+
+    def _result_matches_shop(self, shop: CoffeeShop, result: GeocodeResult) -> bool:
+        formatted_address = self._clean_text(result.formatted_address)
+        if not formatted_address:
+            return True
+
+        if self._address_overlap_ok(shop.address, formatted_address):
+            return True
+
+        expected_country, unknown_country = normalize_country(shop.country)
+        if not unknown_country and expected_country != UNKNOWN_COUNTRY:
+            return self._country_matches_formatted(expected_country, formatted_address)
+
+        return True
+
+    def _address_overlap_ok(self, source_address: str | None, resolved_address: str) -> bool:
+        source_tokens = self._address_tokens(source_address)
+        resolved_tokens = self._address_tokens(resolved_address)
+        if not source_tokens or not resolved_tokens:
+            return False
+
+        overlap = source_tokens & resolved_tokens
+        if len(overlap) >= 2:
+            return True
+
+        union = source_tokens | resolved_tokens
+        if not union:
+            return False
+        return (len(overlap) / len(union)) >= 0.18
+
+    def _country_matches_formatted(self, expected_country: str, formatted_address: str) -> bool:
+        normalized_formatted = self._normalized_phrase(formatted_address)
+        if not normalized_formatted:
+            return False
+
+        expected_norm = self._normalized_phrase(expected_country)
+        if not expected_norm:
+            return False
+
+        aliases = _COUNTRY_TEXT_ALIASES.get(expected_norm, {expected_norm})
+        haystack = f" {normalized_formatted} "
+        return any(f" {alias} " in haystack for alias in aliases)
+
+    def _address_tokens(self, value: str | None) -> set[str]:
+        normalized = self._normalized_phrase(value)
+        if not normalized:
+            return set()
+        return {
+            token
+            for token in normalized.split()
+            if len(token) >= 3 and token not in _GENERIC_ADDRESS_TOKENS
+        }
+
+    @staticmethod
+    def _normalized_phrase(value: str | None) -> str:
+        text = GooglePlacesGeocoder._clean_text(value)
+        if not text:
+            return ""
+        normalized = unicodedata.normalize("NFKD", text.casefold())
+        normalized = "".join(char for char in normalized if not unicodedata.combining(char))
+        return re.sub(r"[^a-z0-9]+", " ", normalized).strip()
+
+
+_GENERIC_ADDRESS_TOKENS = {
+    "street",
+    "st",
+    "road",
+    "rd",
+    "avenue",
+    "ave",
+    "boulevard",
+    "blvd",
+    "city",
+    "region",
+    "state",
+    "building",
+    "unit",
+    "shop",
+    "coffee",
+    "cafe",
+    "specialty",
+}
+
+_COUNTRY_TEXT_ALIASES: dict[str, set[str]] = {
+    "usa": {"usa", "united states", "united states of america"},
+    "united kingdom": {"united kingdom", "uk", "great britain", "england", "scotland"},
+    "uae": {"uae", "united arab emirates"},
+    "mexico": {"mexico", "mexico"},
+    "turkey": {"turkey", "turkiye"},
+    "czech republic": {"czech republic", "czechia"},
+    "republic of korea": {"republic of korea", "south korea", "korea"},
+}

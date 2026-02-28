@@ -3,7 +3,7 @@ import json
 from urllib.error import URLError
 from unittest.mock import patch
 
-from src.geocoder import GooglePlacesGeocoder
+from src.geocoder import GeocodeResult, GooglePlacesGeocoder
 from src.models import CoffeeShop
 
 
@@ -76,7 +76,12 @@ def test_geocode_shop_prefers_address_queries_before_name_city_country() -> None
     def _geocode_text_side_effect(query: str):
         captured_queries.append(query)
         if "101 E Walnut Ave Rogers, AR 72756, USA" in query:
-            return object()
+            return GeocodeResult(
+                lat=36.3353,
+                lng=-94.1186,
+                place_id="onyx123",
+                formatted_address="101 E Walnut Ave, Rogers, AR 72756, USA",
+            )
         return None
 
     geocoder = GooglePlacesGeocoder(api_key="test-key")
@@ -196,3 +201,34 @@ def test_geocode_shop_returns_none_after_retry_exhaustion() -> None:
     assert sleeper_calls == [0.25]
     assert geocoder.last_status == "NETWORK_ERROR"
     assert "always down" in geocoder.last_error_message
+
+
+def test_geocode_shop_rejects_country_mismatch_and_uses_next_query() -> None:
+    geocoder = GooglePlacesGeocoder(api_key="test-key")
+    shop = CoffeeShop(
+        name="Little Victories Coffee",
+        city="",
+        country="Canada",
+        rank=71,
+        category="Top 100",
+        address="44 Elgin St, Ottawa, Ontario K1P 1C7",
+    )
+
+    wrong_result = GeocodeResult(
+        lat=15.507472,
+        lng=-88.0440769,
+        place_id="ChIJCxDm1HNbZo8RoTPNIwbOvww",
+        formatted_address="Boulevard Los Próceres, San Pedro Sula, Cortés, Honduras",
+    )
+    correct_result = GeocodeResult(
+        lat=45.4229,
+        lng=-75.6908,
+        place_id="ChIJfQxQ0G4FzkwR0tq6f_0f6f8",
+        formatted_address="44 Elgin St, Ottawa, ON K1P 1C7, Canada",
+    )
+
+    with patch.object(geocoder, "geocode_text", side_effect=[wrong_result, correct_result]) as mocked:
+        result = geocoder.geocode_shop(shop)
+
+    assert result == correct_result
+    assert mocked.call_count == 2
