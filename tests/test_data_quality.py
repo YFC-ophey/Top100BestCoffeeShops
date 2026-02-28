@@ -2,6 +2,8 @@ import json
 from pathlib import Path
 
 from src.country_centroids import UNKNOWN_COUNTRY, normalize_country
+from src.geocoder import GeocodeResult, GooglePlacesGeocoder
+from src.models import CoffeeShop
 
 
 def test_no_place_id_shared_across_different_countries() -> None:
@@ -49,3 +51,27 @@ def test_rank_71_little_victories_has_ottawa_coordinates() -> None:
     # Ottawa city bounds (approx): avoid regressions to western Canada fallback pins.
     assert 45.30 <= float(lat) <= 45.50
     assert -75.80 <= float(lng) <= -75.55
+
+
+def test_geocoded_rows_match_shop_identity_rules() -> None:
+    data_path = Path(__file__).resolve().parent.parent / "data" / "current_list.json"
+    rows = json.loads(data_path.read_text(encoding="utf-8"))
+
+    geocoder = GooglePlacesGeocoder("DUMMY")
+    offenders: list[tuple[int, str, str]] = []
+
+    for row in rows:
+        if row.get("lat") is None or row.get("lng") is None:
+            continue
+
+        shop = CoffeeShop(**row)
+        result = GeocodeResult(
+            lat=float(row["lat"]),
+            lng=float(row["lng"]),
+            place_id=str(row.get("place_id") or ""),
+            formatted_address=str(row.get("formatted_address") or ""),
+        )
+        if not geocoder._result_matches_shop(shop, result):
+            offenders.append((int(row.get("rank", 0)), str(row.get("category") or ""), str(row.get("name") or "")))
+
+    assert not offenders, f"Geocode identity mismatch rows: {offenders}"
