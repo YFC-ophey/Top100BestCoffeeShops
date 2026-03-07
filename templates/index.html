@@ -187,6 +187,55 @@
         background: rgba(255, 255, 255, 0.08);
       }
 
+      .map-tools {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .map-legend-mobile-wrap {
+        display: none;
+      }
+
+      .map-legend-mobile-btn {
+        border: 1px solid rgba(247, 198, 154, 0.22);
+        border-radius: 8px;
+        background: rgba(28, 16, 12, 0.56);
+        color: #f4d9c0;
+        font-size: 0.64rem;
+        font-weight: 700;
+        line-height: 1;
+        padding: 7px 8px;
+        cursor: pointer;
+      }
+
+      .map-legend-mobile-btn:hover {
+        border-color: rgba(247, 198, 154, 0.36);
+      }
+
+      .map-legend-mobile-popover {
+        position: absolute;
+        top: calc(100% + 6px);
+        right: 0;
+        z-index: 8;
+        border-radius: 8px;
+        padding: 6px 7px;
+        border: 1px solid rgba(247, 198, 154, 0.16);
+        font-size: 0.58rem;
+        line-height: 1.2;
+        color: #f2d8c2;
+        display: grid;
+        gap: 4px;
+        background: rgba(28, 16, 12, 0.92);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        min-width: 160px;
+      }
+
+      .map-legend-mobile-popover.hidden {
+        display: none;
+      }
+
       .workspace {
         min-height: 0;
         height: 100%;
@@ -1161,6 +1210,8 @@
       @media (max-width: 980px) {
         .workspace {
           flex-direction: column;
+          height: auto;
+          align-items: stretch;
         }
 
         .filters-panel .filter-head,
@@ -1168,12 +1219,21 @@
           max-width: none;
         }
 
+        .canvas {
+          width: 100%;
+          flex: 0 0 auto;
+          height: auto;
+          overflow: visible;
+        }
+
         .sidebar-right {
           width: 100%;
           flex: 0 0 auto;
+          height: auto;
           max-height: none;
           position: relative;
           top: auto;
+          overflow: visible;
         }
 
         .hero {
@@ -1195,10 +1255,15 @@
 
         .workspace {
           flex-direction: column;
+          height: auto;
+          align-items: stretch;
         }
 
         .sidebar-right {
           order: 2;
+          width: 100%;
+          flex: 0 0 auto;
+          height: auto;
           position: relative;
           left: auto;
           right: auto;
@@ -1216,18 +1281,95 @@
 
         .canvas {
           order: 1;
+          width: 100%;
+          flex: 0 0 auto;
+          height: auto;
+          overflow: visible;
         }
 
         .tabs-head {
           flex-wrap: wrap;
         }
 
+        .map-tools {
+          width: 100%;
+          justify-content: flex-end;
+        }
+
+        .map-legend-mobile-wrap {
+          display: block;
+          position: relative;
+        }
+
+        .overview-map-panel {
+          height: clamp(280px, 52vh, 420px);
+        }
+
         .map-meta-row {
+          margin-top: 6px;
+          align-items: center;
           gap: 8px;
+        }
+
+        .map-legend {
+          display: none;
         }
 
         .map-source {
           font-size: 0.62rem;
+          text-align: left;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .overview-list.active {
+          max-height: clamp(280px, 52vh, 420px);
+          overflow: auto;
+          padding-right: 0;
+        }
+
+        .overview-list table {
+          table-layout: fixed;
+        }
+
+        .overview-list th:nth-child(3),
+        .overview-list td:nth-child(3),
+        .overview-list th:nth-child(4),
+        .overview-list td:nth-child(4),
+        .overview-list th:nth-child(5),
+        .overview-list td:nth-child(5) {
+          display: none;
+        }
+
+        .overview-list th:nth-child(1),
+        .overview-list td:nth-child(1) {
+          width: 52px;
+        }
+
+        .overview-list th:nth-child(2),
+        .overview-list td:nth-child(2) {
+          width: 36%;
+        }
+
+        .overview-list th:nth-child(6),
+        .overview-list td:nth-child(6) {
+          width: auto;
+        }
+
+        .overview-list th,
+        .overview-list td {
+          font-size: 0.72rem;
+          line-height: 1.28;
+          overflow-wrap: anywhere;
+          word-break: normal;
+        }
+
+        .detail-body {
+          flex: 0 0 auto;
+          overflow: visible;
+          max-height: none;
+          min-height: 0;
         }
 
         .list-source {
@@ -1269,15 +1411,24 @@
             <div class="tabs" role="tablist" aria-label="Coffee views">
               <button class="tab-btn active" data-tab="overview">Overview</button>
             </div>
-            <div class="view-toggle glass-panel">
-              <button class="js-overview-mode active" data-mode="map">
-                <iconify-icon icon="ph:map-trifold-fill"></iconify-icon>
-                <span>Map</span>
-              </button>
-              <button class="js-overview-mode" data-mode="list">
-                <iconify-icon icon="ph:list-dashes-bold"></iconify-icon>
-                <span>List</span>
-              </button>
+            <div class="map-tools">
+              <div class="view-toggle glass-panel">
+                <button class="js-overview-mode active" data-mode="map">
+                  <iconify-icon icon="ph:map-trifold-fill"></iconify-icon>
+                  <span>Map</span>
+                </button>
+                <button class="js-overview-mode" data-mode="list">
+                  <iconify-icon icon="ph:list-dashes-bold"></iconify-icon>
+                  <span>List</span>
+                </button>
+              </div>
+              <div class="map-legend-mobile-wrap">
+                <button id="map-legend-mobile-btn" class="map-legend-mobile-btn" type="button" aria-expanded="false">Legend</button>
+                <div id="map-legend-mobile-popover" class="map-legend-mobile-popover hidden">
+                  <div class="legend-row"><span class="legend-dot country"></span><span>Country bubble (zoomed out)</span></div>
+                  <div class="legend-row"><span class="legend-dot shop"></span><span>Individual shop (zoomed in)</span></div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -1381,7 +1532,15 @@
             </section>
 
             <section class="actions">
-              <a class="primary" id="detail-directions" href="#" target="_blank" rel="noopener">Get Directions</a>
+              <a
+                class="primary"
+                id="detail-directions"
+                href="#"
+                data-mobile-href="#"
+                target="_blank"
+                rel="noopener"
+                >Get Directions</a
+              >
               <a id="detail-website" href="#" target="_blank" rel="noopener">Website</a>
             </section>
 
@@ -1445,17 +1604,64 @@
 
       const detailPanel = document.getElementById("detail-panel");
       const detailDrawerToggle = document.getElementById("detail-drawer-toggle");
+      const mapRegion = document.getElementById("overview-map-region");
+      const mapMetaRow = document.getElementById("overview-map-meta-row");
+      const listRegion = document.getElementById("overview-list-region");
+      const modeButtons = Array.from(document.querySelectorAll(".js-overview-mode"));
+      const mobileLegendButton = document.getElementById("map-legend-mobile-btn");
+      const mobileLegendPopover = document.getElementById("map-legend-mobile-popover");
+      let mapResizeTimer = null;
 
-      document.querySelectorAll(".js-overview-mode").forEach((button) => {
+      function setMobileLegendOpen(open) {
+        if (!mobileLegendButton || !mobileLegendPopover) return;
+        mobileLegendPopover.classList.toggle("hidden", !open);
+        mobileLegendButton.setAttribute("aria-expanded", String(open));
+      }
+
+      function scheduleMapResize() {
+        if (!state.map || !window.google || !window.google.maps) return;
+        if (mapResizeTimer) window.clearTimeout(mapResizeTimer);
+        mapResizeTimer = window.setTimeout(() => {
+          const center = state.map.getCenter();
+          window.google.maps.event.trigger(state.map, "resize");
+          if (center) state.map.setCenter(center);
+          renderMapMarkers();
+        }, 70);
+      }
+
+      function applyOverviewMode(mode) {
+        modeButtons.forEach((item) => item.classList.toggle("active", item.dataset.mode === mode));
+        mapRegion.classList.toggle("is-hidden", mode !== "map");
+        mapMetaRow.classList.toggle("is-hidden", mode !== "map");
+        listRegion.classList.toggle("active", mode === "list");
+        listRegion.classList.toggle("is-hidden", mode !== "list");
+        if (mode !== "map") setMobileLegendOpen(false);
+        if (mode === "map") scheduleMapResize();
+      }
+
+      modeButtons.forEach((button) => {
         button.addEventListener("click", () => {
-          const mode = button.dataset.mode;
-          document.querySelectorAll(".js-overview-mode").forEach((item) => item.classList.toggle("active", item === button));
-          document.getElementById("overview-map-region").classList.toggle("is-hidden", mode !== "map");
-          document.getElementById("overview-map-meta-row").classList.toggle("is-hidden", mode !== "map");
-          document.getElementById("overview-list-region").classList.toggle("active", mode === "list");
-          document.getElementById("overview-list-region").classList.toggle("is-hidden", mode !== "list");
+          applyOverviewMode(button.dataset.mode);
         });
       });
+
+      if (mobileLegendButton && mobileLegendPopover) {
+        mobileLegendButton.addEventListener("click", () => {
+          const isOpen = !mobileLegendPopover.classList.contains("hidden");
+          setMobileLegendOpen(!isOpen);
+        });
+
+        document.addEventListener("click", (event) => {
+          const target = event.target;
+          if (
+            target instanceof Node &&
+            !mobileLegendPopover.contains(target) &&
+            !mobileLegendButton.contains(target)
+          ) {
+            setMobileLegendOpen(false);
+          }
+        });
+      }
 
       function setDetailDrawerState(collapsed) {
         if (!detailPanel || !detailDrawerToggle) return;
@@ -1669,6 +1875,7 @@
           document.getElementById("detail-rank-value").textContent = "-";
           document.getElementById("detail-country-value").textContent = "-";
           document.getElementById("detail-city").textContent = "Not provided";
+          document.getElementById("detail-directions").dataset.mobileHref = "";
           document.getElementById("detail-directions").href = "#";
           document.getElementById("detail-website").href = "#";
           return;
@@ -1687,7 +1894,11 @@
         document.getElementById("detail-city").textContent = shop.city || "Not provided";
 
         const directions = document.getElementById("detail-directions");
-        directions.href = shop.google_maps_url;
+        const mobileDirections = shop.mobile_google_maps_url || shop.google_maps_url;
+        directions.dataset.mobileHref = mobileDirections;
+        directions.href = window.matchMedia && window.matchMedia("(pointer: coarse)").matches
+          ? mobileDirections
+          : shop.google_maps_url;
 
         const website = document.getElementById("detail-website");
         website.href = shop.source_url || shop.google_maps_url;
@@ -2223,7 +2434,12 @@
         });
       });
 
+      window.addEventListener("resize", () => {
+        if (!mapRegion.classList.contains("is-hidden")) scheduleMapResize();
+      });
+
       initDetailDrawer();
+      applyOverviewMode("map");
       renderFilterControls();
       renderListRows();
       updateDetailPanel(pickDefaultShop());

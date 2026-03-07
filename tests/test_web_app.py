@@ -6,7 +6,13 @@ from urllib.parse import parse_qs, urlparse
 from fastapi.testclient import TestClient
 
 from src.models import CoffeeShop
-from src.web_app import _best_map_query_text, _city_from_address, _google_maps_link, create_app
+from src.web_app import (
+    _best_map_query_text,
+    _city_from_address,
+    _google_maps_link,
+    _mobile_maps_link,
+    create_app,
+)
 
 
 def _write_state(path: Path) -> None:
@@ -98,7 +104,8 @@ def test_home_page_renders_roast_overview_with_south_america_label(tmp_path: Pat
     assert '<div id="overview-map-meta-row" class="map-meta-row">' in response.text
     assert "text-align: right;" in response.text
     assert 'id="overview-map-meta-row"' in response.text
-    assert 'document.getElementById("overview-map-meta-row").classList.toggle("is-hidden", mode !== "map");' in response.text
+    assert 'mapMetaRow.classList.toggle("is-hidden", mode !== "map");' in response.text
+    assert "function applyOverviewMode(mode)" in response.text
     assert 'id="overview-list-source"' in response.text
     assert "font-size: 0.58rem;" in response.text
     assert "function shopTooltipText(shop)" in response.text
@@ -412,6 +419,77 @@ def test_google_maps_link_uses_required_precedence_rules() -> None:
     assert coords_query["query"] == ["1.2955,103.852"]
 
 
+def test_mobile_maps_link_prefers_coordinates_when_available() -> None:
+    shop = CoffeeShop(
+        name="Apartment Coffee",
+        city="Singapore",
+        country="Singapore",
+        rank=11,
+        category="Top 100",
+        lat=1.2955,
+        lng=103.8520,
+        formatted_address=None,
+        place_id=None,
+    )
+
+    mobile_link = _mobile_maps_link(shop)
+    query = parse_qs(urlparse(mobile_link).query)
+    assert urlparse(mobile_link).path == "/maps/dir/"
+    assert query["api"] == ["1"]
+    assert query["destination"] == ["1.2955,103.852"]
+
+
+def test_mobile_maps_link_falls_back_to_text_query() -> None:
+    shop = CoffeeShop(
+        name="Little Victories Coffee",
+        city="Ottawa",
+        country="Canada",
+        rank=71,
+        category="Top 100",
+        lat=None,
+        lng=None,
+        formatted_address=None,
+        place_id="placeid-71",
+    )
+
+    mobile_link = _mobile_maps_link(shop)
+    query = parse_qs(urlparse(mobile_link).query)
+    assert urlparse(mobile_link).path == "/maps/dir/"
+    assert query["api"] == ["1"]
+    assert "Ottawa" in query["destination"][0]
+
+
+def test_home_page_includes_mobile_directions_url(tmp_path: Path) -> None:
+    data_file = tmp_path / "data" / "current_list.json"
+    payload = [
+        {
+            "name": "Little Victories Coffee",
+            "city": "Ottawa",
+            "country": "Canada",
+            "rank": 71,
+            "category": "Top 100",
+            "lat": 45.4242,
+            "lng": -75.6972,
+            "place_id": "abc71",
+            "formatted_address": "44 Elgin St, Ottawa, Ontario K1P 1C7, Canada",
+        }
+    ]
+    data_file.parent.mkdir(parents=True, exist_ok=True)
+    data_file.write_text(json.dumps(payload), encoding="utf-8")
+
+    app = create_app(
+        data_file=data_file,
+        csv_file=tmp_path / "output" / "coffee_shops.csv",
+        kml_file=tmp_path / "output" / "coffee_shops.kml",
+    )
+    client = TestClient(app)
+    response = client.get("/")
+
+    assert response.status_code == 200
+    assert '"google_maps_url":' in response.text
+    assert '"mobile_google_maps_url":' in response.text
+    assert "maps/dir/?api=1" in response.text
+    assert "destination=45.4242%2C-75.6972" in response.text
 def test_best_map_query_text_sanitizes_entities_and_duplicate_country_suffix() -> None:
     noisy = CoffeeShop(
         name="Azura &#8211; The Coffee Company",

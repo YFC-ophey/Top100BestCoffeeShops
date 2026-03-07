@@ -283,6 +283,7 @@ def _build_ordered_links(shops: list[CoffeeShop], category: str) -> list[dict[st
         {
             "label": f"{shop.rank}. {shop.name}",
             "url": _google_maps_link(shop),
+            "mobile_url": _mobile_maps_link(shop),
         }
         for shop in ordered
     ]
@@ -300,6 +301,15 @@ def _google_maps_link(shop: CoffeeShop) -> str:
     query = _best_map_query_text(shop)
     params: dict[str, str] = {"api": "1", "query": query}
     return f"https://www.google.com/maps/search/?{urlencode(params)}"
+
+
+def _mobile_maps_link(shop: CoffeeShop) -> str:
+    params: dict[str, str] = {"api": "1"}
+    if shop.lat is not None and shop.lng is not None:
+        params["destination"] = f"{_format_coordinate(shop.lat)},{_format_coordinate(shop.lng)}"
+    else:
+        params["destination"] = _best_map_query_text(shop)
+    return f"https://www.google.com/maps/dir/?{urlencode(params)}"
 
 
 def _format_coordinate(value: float) -> str:
@@ -581,6 +591,7 @@ def _build_overview_shops(shops: list[CoffeeShop]) -> tuple[list[dict[str, objec
             "address": _normalize_shop_text(shop.address),
             "source_url": _normalize_shop_text(shop.source_url),
             "google_maps_url": _google_maps_link(shop),
+            "mobile_google_maps_url": _mobile_maps_link(shop),
             "rank_band": _rank_band(shop.rank),
             "formatted_address": _normalize_shop_text(shop.formatted_address),
             "place_id": _normalize_shop_text(shop.place_id),
