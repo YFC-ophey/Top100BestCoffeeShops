@@ -568,6 +568,10 @@
         padding-right: 2px;
       }
 
+      .overview-list th {
+        white-space: nowrap;
+      }
+
       table {
         width: 100%;
         table-layout: fixed;
@@ -583,6 +587,7 @@
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         text-align: left;
         font-size: 0.73rem;
+        line-height: 1.28;
         overflow-wrap: anywhere;
         word-break: break-word;
       }
@@ -593,6 +598,37 @@
         font-size: 0.66rem;
         text-transform: uppercase;
         letter-spacing: 0.06em;
+      }
+
+      .overview-list th:nth-child(1),
+      .overview-list td:nth-child(1) {
+        width: 42px;
+        text-align: center;
+      }
+
+      .overview-list th:nth-child(2),
+      .overview-list td:nth-child(2) {
+        width: 27%;
+      }
+
+      .overview-list th:nth-child(3),
+      .overview-list td:nth-child(3) {
+        width: 16%;
+      }
+
+      .overview-list th:nth-child(4),
+      .overview-list td:nth-child(4) {
+        width: 15%;
+      }
+
+      .overview-list th:nth-child(5),
+      .overview-list td:nth-child(5) {
+        width: 14%;
+      }
+
+      .overview-list th:nth-child(6),
+      .overview-list td:nth-child(6) {
+        width: 31%;
       }
 
       .sidebar-right {
@@ -1226,12 +1262,66 @@
           gap: 8px;
         }
 
-        .map-source {
+      .map-source {
           font-size: 0.62rem;
         }
 
         .list-source {
           font-size: 0.62rem;
+        }
+
+        .overview-list th,
+        .overview-list td {
+          padding: 7px 6px;
+          font-size: 0.66rem;
+          line-height: 1.16;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .overview-list th:nth-child(1),
+        .overview-list td:nth-child(1) {
+          width: 36px;
+        }
+
+        .overview-list th:nth-child(2),
+        .overview-list td:nth-child(2) {
+          width: 25%;
+        }
+
+        .overview-list th:nth-child(3),
+        .overview-list td:nth-child(3) {
+          width: 15%;
+          white-space: nowrap;
+        }
+
+        .overview-list th:nth-child(4),
+        .overview-list td:nth-child(4) {
+          width: 14%;
+          white-space: nowrap;
+        }
+
+        .overview-list th:nth-child(5),
+        .overview-list td:nth-child(5) {
+          width: 14%;
+          white-space: nowrap;
+        }
+
+        .overview-list th:nth-child(6),
+        .overview-list td:nth-child(6) {
+          width: 32%;
+        }
+
+        .overview-list th:nth-child(2),
+        .overview-list td:nth-child(2),
+        .overview-list th:nth-child(3),
+        .overview-list td:nth-child(3),
+        .overview-list th:nth-child(4),
+        .overview-list td:nth-child(4),
+        .overview-list th:nth-child(5),
+        .overview-list td:nth-child(5) {
+          max-width: 0;
         }
       }
 
@@ -1687,10 +1777,46 @@
         document.getElementById("detail-city").textContent = shop.city || "Not provided";
 
         const directions = document.getElementById("detail-directions");
-        directions.href = shop.google_maps_url;
+        const mobileHref = String(shop.mobile_google_maps_url || "").trim();
+        const desktopHref = String(shop.google_maps_url || "").trim();
+        const useMobileDirections = isCoarsePointerDevice();
+        directions.dataset.mobileHref = mobileHref || desktopHref || "#";
+        directions.href = useMobileDirections ? directions.dataset.mobileHref : desktopHref || "#";
+        directions.dataset.mobileActive = useMobileDirections ? "1" : "0";
 
         const website = document.getElementById("detail-website");
         website.href = shop.source_url || shop.google_maps_url;
+      }
+
+      function applyDirectionsClickBehavior() {
+        const directions = document.getElementById("detail-directions");
+        if (!directions) return;
+
+        if (!window.matchMedia) {
+          return;
+        }
+
+        const handleDirectionsNavigation = (event) => {
+          if (!isCoarsePointerDevice()) return;
+          const mobileHref = String(directions.dataset.mobileHref || "").trim();
+          if (!mobileHref || mobileHref === "#") return;
+          event.preventDefault();
+          window.open(mobileHref, "_blank", "noopener");
+        };
+
+        directions.addEventListener("click", handleDirectionsNavigation);
+        directions.addEventListener("touchstart", handleDirectionsNavigation, { passive: false });
+      }
+
+      function isCoarsePointerDevice() {
+        if (!window.matchMedia) {
+          return "ontouchstart" in window || (navigator && navigator.maxTouchPoints > 0);
+        }
+        return (
+          window.matchMedia("(pointer: coarse)").matches ||
+          window.matchMedia("(pointer: none)").matches ||
+          ("ontouchstart" in window && navigator.maxTouchPoints > 0)
+        );
       }
 
       function showMapMessage(message) {
@@ -2227,6 +2353,7 @@
       renderFilterControls();
       renderListRows();
       updateDetailPanel(pickDefaultShop());
+      applyDirectionsClickBehavior();
       loadGoogleMaps();
     </script>
   </body>
