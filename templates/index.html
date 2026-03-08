@@ -1159,13 +1159,35 @@
       }
 
       @media (max-width: 980px) {
+        .app-shell {
+          grid-template-rows: auto auto auto;
+          min-height: 100vh;
+          min-height: 100dvh;
+        }
+
         .workspace {
           flex-direction: column;
+          align-items: stretch;
+          gap: 10px;
+          height: auto !important;
+          min-height: 0;
         }
 
         .filters-panel .filter-head,
         .filters-panel section {
           max-width: none;
+        }
+
+        .canvas,
+        .sidebar-right {
+          width: 100%;
+          max-width: 100%;
+          height: auto !important;
+        }
+
+        .canvas {
+          flex: 0 0 auto;
+          min-height: 0;
         }
 
         .sidebar-right {
@@ -1174,6 +1196,15 @@
           max-height: none;
           position: relative;
           top: auto;
+          min-height: 0;
+        }
+
+        .overview-map-panel {
+          height: clamp(320px, 52vh, 460px);
+        }
+
+        .overview-list.active {
+          max-height: clamp(320px, 52vh, 460px);
         }
 
         .hero {
@@ -1195,6 +1226,7 @@
 
         .workspace {
           flex-direction: column;
+          align-items: stretch;
         }
 
         .sidebar-right {
@@ -1216,10 +1248,17 @@
 
         .canvas {
           order: 1;
+          width: 100%;
+          height: auto;
         }
 
         .tabs-head {
           flex-wrap: wrap;
+        }
+
+        .detail-body {
+          overflow: visible;
+          flex: 0 0 auto;
         }
 
         .map-meta-row {
@@ -1520,6 +1559,7 @@
           state.focusCountry = state.country === "All" ? null : state.country;
           state.selectedCountry = state.country === "All" ? null : state.country;
           state.selectedShopId = null;
+          normalizeCountryRankBand();
           refreshView();
         };
 
@@ -1530,6 +1570,7 @@
         allRank.classList.toggle("active", state.rankBand === "All");
         allRank.addEventListener("click", () => {
           state.rankBand = "All";
+          normalizeCountryRankBand();
           refreshView();
         });
         rankWrap.appendChild(allRank);
@@ -1540,6 +1581,7 @@
           button.classList.toggle("active", state.rankBand === band.key);
           button.addEventListener("click", () => {
             state.rankBand = band.key;
+            normalizeCountryRankBand();
             refreshView();
           });
           rankWrap.appendChild(button);
@@ -1560,7 +1602,27 @@
           node.classList.toggle("active", state.activeCategories.has(categoryKey));
         });
         state.selectedShopId = null;
+        normalizeCountryRankBand();
         refreshView();
+      }
+
+      function normalizeCountryRankBand() {
+        if (state.country === "All" || state.rankBand === "All") return;
+
+        const hasCountryShops = overviewShops.some((shop) => {
+          if (!state.activeCategories.has(shop.category)) return false;
+          return shop.country_normalized === state.country;
+        });
+        if (!hasCountryShops) return;
+
+        const hasCountryShopsInBand = overviewShops.some((shop) => {
+          if (!state.activeCategories.has(shop.category)) return false;
+          if (shop.country_normalized !== state.country) return false;
+          return shop.rank_band === state.rankBand;
+        });
+        if (!hasCountryShopsInBand) {
+          state.rankBand = "All";
+        }
       }
 
       function resetFilters() {
