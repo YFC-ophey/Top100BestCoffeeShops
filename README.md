@@ -103,6 +103,27 @@ pytest
 
 ---
 
+## Development Framework
+
+Use the standardized delivery framework in:
+
+- `docs/development-framework.md`
+
+Use the helper command for repeatable gates:
+
+```bash
+# Verify targeted + full tests
+scripts/dev-framework.sh verify
+
+# Full pre-push gate (tests + build-site + diff review)
+scripts/dev-framework.sh prepush
+
+# Trigger deployment workflow after merge
+scripts/dev-framework.sh workflow update_map.yml main
+```
+
+---
+
 ## CI/CD Workflow
 
 On every push to `main`, GitHub Actions will:
