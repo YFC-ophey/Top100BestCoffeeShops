@@ -231,7 +231,7 @@ def test_mobile_maps_link_prefers_coordinates_and_fallback_query() -> None:
     )
     coords_link = _mobile_maps_link(with_coordinates)
     coords_query = parse_qs(urlparse(coords_link).query)
-    assert coords_query["destination"] == ["1.2955,103.852"]
+    assert coords_query["destination"] == ["Apartment Coffee, A fallback address"]
 
     fallback_shop = CoffeeShop(
         name="Onyx Coffee LAB",
@@ -278,7 +278,11 @@ def test_home_page_includes_mobile_map_urls_in_overview_payload(tmp_path: Path) 
 
     assert response.status_code == 200
     assert '"google_maps_url": "https://www.google.com/maps/place/?q=place_id%3Apid1"' in response.text
-    assert '"mobile_google_maps_url": "https://www.google.com/maps/dir/?api=1\\u0026destination=38.711%2C-9.138"' in response.text
+    assert (
+        '"mobile_google_maps_url": '
+        '"https://www.google.com/maps/dir/?api=1\\u0026destination=The+Folks%2C+R.+dos+Sapateiros+111%2C+1100-051+Lisboa%2C+Portugal"'
+        in response.text
+    )
 
 
 def test_overview_table_uses_address_column_per_row(tmp_path: Path) -> None:

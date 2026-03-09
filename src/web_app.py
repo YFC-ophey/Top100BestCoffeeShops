@@ -303,15 +303,27 @@ def _google_maps_link(shop: CoffeeShop) -> str:
 
 
 def _mobile_maps_link(shop: CoffeeShop) -> str:
-    if shop.lat is not None and shop.lng is not None:
-        destination = f"{_format_coordinate(shop.lat)},{_format_coordinate(shop.lng)}"
-    else:
-        destination = _best_map_query_text(shop)
+    destination = _mobile_destination_text(shop)
     return f"https://www.google.com/maps/dir/?{urlencode({'api': '1', 'destination': destination})}"
 
 
 def _format_coordinate(value: float) -> str:
     return f"{float(value):.6f}".rstrip("0").rstrip(".")
+
+
+def _mobile_destination_text(shop: CoffeeShop) -> str:
+    name = _normalize_shop_text(shop.name)
+    formatted_address = _sanitize_map_query((shop.formatted_address or "").strip(), shop.country)
+    address = _sanitize_map_query((shop.address or "").strip(), shop.country)
+    location = formatted_address or address or _best_map_query_text(shop)
+
+    if not name:
+        return location
+    if location.casefold() == name.casefold():
+        return name
+    if location.casefold().startswith(f"{name.casefold()},"):
+        return location
+    return f"{name}, {location}"
 
 
 def _best_map_query_text(shop: CoffeeShop) -> str:

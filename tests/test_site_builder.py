@@ -70,12 +70,16 @@ def test_build_static_site_includes_mobile_directions_and_phone_table_rules(tmp_
     build_static_site(data_file=data_file, site_dir=site_dir, csv_file=output_csv, kml_file=output_kml)
 
     index = (site_dir / "index.html").read_text(encoding="utf-8")
-    assert '"mobile_google_maps_url": "https://www.google.com/maps/dir/?api=1\\u0026destination=38.711%2C-9.138"' in index
+    assert (
+        '"mobile_google_maps_url": '
+        '"https://www.google.com/maps/dir/?api=1\\u0026destination=The+Folks%2C+R.+dos+Sapateiros+111%2C+1100-051+Lisboa%2C+Portugal"'
+        in index
+    )
     assert "const mobileHref = String(shop.mobile_google_maps_url || \"\").trim();" in index
     assert "window.open(mobileHref, \"_blank\", \"noopener\");" in index
-    assert "width: 10%;" in index
-    assert "width: 12%;" in index
-    assert "width: 36%;" in index
+    assert "overflow-x: auto;" in index
+    assert "white-space: normal;" in index
+    assert "text-overflow: clip;" in index
 
 
 def test_build_static_site_does_not_embed_env_api_key(tmp_path: Path, monkeypatch) -> None:

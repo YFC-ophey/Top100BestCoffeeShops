@@ -1273,58 +1273,66 @@
           font-size: 0.62rem;
         }
 
+        .overview-list.active {
+          overflow-x: auto;
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        .overview-list table {
+          width: auto;
+          min-width: 760px;
+          table-layout: auto;
+        }
+
         .overview-list th,
         .overview-list td {
           padding: 7px 6px;
-          font-size: 0.66rem;
-          line-height: 1.16;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+          font-size: 0.68rem;
+          line-height: 1.28;
+          white-space: normal;
+          overflow: visible;
+          text-overflow: clip;
+          word-break: normal;
+          overflow-wrap: anywhere;
+          vertical-align: top;
         }
 
         .overview-list th:nth-child(1),
         .overview-list td:nth-child(1) {
-          width: 10%;
+          width: 56px;
+          min-width: 56px;
           text-align: center;
         }
 
         .overview-list th:nth-child(2),
         .overview-list td:nth-child(2) {
-          width: 18%;
+          width: 170px;
+          min-width: 170px;
         }
 
         .overview-list th:nth-child(3),
         .overview-list td:nth-child(3) {
-          width: 12%;
+          width: 120px;
+          min-width: 120px;
         }
 
         .overview-list th:nth-child(4),
         .overview-list td:nth-child(4) {
-          width: 12%;
+          width: 120px;
+          min-width: 120px;
         }
 
         .overview-list th:nth-child(5),
         .overview-list td:nth-child(5) {
-          width: 12%;
+          width: 120px;
+          min-width: 120px;
         }
 
         .overview-list th:nth-child(6),
         .overview-list td:nth-child(6) {
-          width: 36%;
-        }
-
-        .overview-list th:nth-child(2),
-        .overview-list td:nth-child(2),
-        .overview-list th:nth-child(3),
-        .overview-list td:nth-child(3),
-        .overview-list th:nth-child(4),
-        .overview-list td:nth-child(4),
-        .overview-list th:nth-child(5),
-        .overview-list td:nth-child(5),
-        .overview-list th:nth-child(6),
-        .overview-list td:nth-child(6) {
-          max-width: 0;
+          width: 290px;
+          min-width: 290px;
         }
       }
 
@@ -1821,7 +1829,8 @@
         if (!directions || !window.matchMedia) return;
 
         const handleDirectionsNavigation = (event) => {
-          if (!isCoarsePointerDevice()) return;
+          const isTouchEvent = event.type === "touchstart";
+          if (!isTouchEvent && !isCoarsePointerDevice()) return;
           const mobileHref = String(directions.dataset.mobileHref || "").trim();
           if (!mobileHref || mobileHref === "#") return;
           event.preventDefault();
