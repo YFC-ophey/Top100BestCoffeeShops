@@ -43,6 +43,41 @@ def test_build_static_site_generates_index_and_styles(tmp_path: Path) -> None:
     assert "styles are inlined in templates/index.html" in style
 
 
+def test_build_static_site_includes_mobile_directions_and_phone_table_rules(tmp_path: Path) -> None:
+    data_file = tmp_path / "data" / "current_list.json"
+    output_csv = tmp_path / "output" / "coffee_shops.csv"
+    output_kml = tmp_path / "output" / "coffee_shops.kml"
+    site_dir = tmp_path / "site"
+    payload = [
+        {
+            "name": "The Folks",
+            "city": "Lisbon",
+            "country": "Portugal",
+            "rank": 88,
+            "category": "Top 100",
+            "place_id": "pid1",
+            "lat": 38.711,
+            "lng": -9.138,
+            "formatted_address": "R. dos Sapateiros 111, 1100-051 Lisboa, Portugal",
+        }
+    ]
+    data_file.parent.mkdir(parents=True, exist_ok=True)
+    data_file.write_text(json.dumps(payload), encoding="utf-8")
+    output_csv.parent.mkdir(parents=True, exist_ok=True)
+    output_csv.write_text("rank,name\n88,The Folks\n", encoding="utf-8")
+    output_kml.write_text("<kml></kml>", encoding="utf-8")
+
+    build_static_site(data_file=data_file, site_dir=site_dir, csv_file=output_csv, kml_file=output_kml)
+
+    index = (site_dir / "index.html").read_text(encoding="utf-8")
+    assert '"mobile_google_maps_url": "https://www.google.com/maps/dir/?api=1\\u0026destination=38.711%2C-9.138"' in index
+    assert "const mobileHref = String(shop.mobile_google_maps_url || \"\").trim();" in index
+    assert "window.open(mobileHref, \"_blank\", \"noopener\");" in index
+    assert "width: 10%;" in index
+    assert "width: 12%;" in index
+    assert "width: 36%;" in index
+
+
 def test_build_static_site_does_not_embed_env_api_key(tmp_path: Path, monkeypatch) -> None:
     data_file = tmp_path / "data" / "current_list.json"
     output_csv = tmp_path / "output" / "coffee_shops.csv"

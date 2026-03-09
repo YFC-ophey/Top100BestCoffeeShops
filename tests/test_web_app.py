@@ -6,7 +6,7 @@ from urllib.parse import parse_qs, urlparse
 from fastapi.testclient import TestClient
 
 from src.models import CoffeeShop
-from src.web_app import _best_map_query_text, _city_from_address, _google_maps_link, create_app
+from src.web_app import _best_map_query_text, _city_from_address, _google_maps_link, _mobile_maps_link, create_app
 
 
 def _write_state(path: Path) -> None:
@@ -215,6 +215,70 @@ def test_home_page_renders_map_links_and_legacy_south_normalization(tmp_path: Pa
     assert ">Map</a>" not in response.text
     assert "shopPosition(" not in response.text
     assert "hashString(" not in response.text
+
+
+def test_mobile_maps_link_prefers_coordinates_and_fallback_query() -> None:
+    with_coordinates = CoffeeShop(
+        name="Apartment Coffee",
+        city="Singapore",
+        country="Singapore",
+        rank=11,
+        category="Top 100",
+        lat=1.2955,
+        lng=103.8520,
+        formatted_address="A fallback address",
+        place_id="place-id-ignored-on-mobile",
+    )
+    coords_link = _mobile_maps_link(with_coordinates)
+    coords_query = parse_qs(urlparse(coords_link).query)
+    assert coords_query["destination"] == ["1.2955,103.852"]
+
+    fallback_shop = CoffeeShop(
+        name="Onyx Coffee LAB",
+        city="Rogers, Arkansas",
+        country="USA",
+        rank=1,
+        category="Top 100",
+        formatted_address=None,
+        place_id="place-id-ignored-on-mobile",
+        lat=None,
+        lng=None,
+    )
+    fallback_link = _mobile_maps_link(fallback_shop)
+    fallback_query = parse_qs(urlparse(fallback_link).query)
+    assert fallback_query["destination"] == ["Onyx Coffee LAB, Rogers, Arkansas, USA"]
+
+
+def test_home_page_includes_mobile_map_urls_in_overview_payload(tmp_path: Path) -> None:
+    data_file = tmp_path / "data" / "current_list.json"
+    payload = [
+        {
+            "name": "The Folks",
+            "city": "Lisbon",
+            "country": "Portugal",
+            "rank": 88,
+            "category": "Top 100",
+            "place_id": "pid1",
+            "lat": 38.711,
+            "lng": -9.138,
+            "formatted_address": "R. dos Sapateiros 111, 1100-051 Lisboa, Portugal",
+        }
+    ]
+    data_file.parent.mkdir(parents=True, exist_ok=True)
+    data_file.write_text(json.dumps(payload), encoding="utf-8")
+
+    app = create_app(
+        data_file=data_file,
+        csv_file=tmp_path / "output" / "coffee_shops.csv",
+        kml_file=tmp_path / "output" / "coffee_shops.kml",
+    )
+    client = TestClient(app)
+
+    response = client.get("/")
+
+    assert response.status_code == 200
+    assert '"google_maps_url": "https://www.google.com/maps/place/?q=place_id%3Apid1"' in response.text
+    assert '"mobile_google_maps_url": "https://www.google.com/maps/dir/?api=1\\u0026destination=38.711%2C-9.138"' in response.text
 
 
 def test_overview_table_uses_address_column_per_row(tmp_path: Path) -> None:

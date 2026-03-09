@@ -302,6 +302,14 @@ def _google_maps_link(shop: CoffeeShop) -> str:
     return f"https://www.google.com/maps/search/?{urlencode(params)}"
 
 
+def _mobile_maps_link(shop: CoffeeShop) -> str:
+    if shop.lat is not None and shop.lng is not None:
+        destination = f"{_format_coordinate(shop.lat)},{_format_coordinate(shop.lng)}"
+    else:
+        destination = _best_map_query_text(shop)
+    return f"https://www.google.com/maps/dir/?{urlencode({'api': '1', 'destination': destination})}"
+
+
 def _format_coordinate(value: float) -> str:
     return f"{float(value):.6f}".rstrip("0").rstrip(".")
 
@@ -581,6 +589,7 @@ def _build_overview_shops(shops: list[CoffeeShop]) -> tuple[list[dict[str, objec
             "address": _normalize_shop_text(shop.address),
             "source_url": _normalize_shop_text(shop.source_url),
             "google_maps_url": _google_maps_link(shop),
+            "mobile_google_maps_url": _mobile_maps_link(shop),
             "rank_band": _rank_band(shop.rank),
             "formatted_address": _normalize_shop_text(shop.formatted_address),
             "place_id": _normalize_shop_text(shop.place_id),
