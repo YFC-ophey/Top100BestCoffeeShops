@@ -352,7 +352,7 @@
   },
   {
     "name": "Koffee Mameya Kakeru",
-    "city": "Tokyo, Japan",
+    "city": "",
     "country": "Japan",
     "rank": 28,
     "category": "Top 100",
@@ -456,7 +456,7 @@
   },
   {
     "name": "Coffee Sind",
-    "city": "",
+    "city": "Taipei, Coffee Sind is devoted to serving high-quality coffee in a lifestyle-inspired way",
     "country": "Taiwan",
     "rank": 36,
     "category": "Top 100",
@@ -677,7 +677,7 @@
   },
   {
     "name": "Single O",
-    "city": "",
+    "city": "the heart of Surry Hills, Sydney",
     "country": "Australia",
     "rank": 53,
     "category": "Top 100",
@@ -923,7 +923,7 @@
     "formatted_address": "44 Elgin St, Ottawa, Ontario K1P 1C7"
   },
   {
-    "name": "Push x Pull",
+    "name": "Push Pull",
     "city": "Portland, Oregon",
     "country": "USA",
     "rank": 72,
