@@ -1079,6 +1079,19 @@
     "formatted_address": "Carrer de Casp, 48, Eixample, 08010 Barcelona, Spain"
   },
   {
+    "name": "Café San Rafael",
+    "city": "Copan Ruinas, Copan",
+    "country": "Honduras",
+    "rank": 84,
+    "category": "Top 100",
+    "source_url": "https://theworlds100bestcoffeeshops.com/locales/cafe-san-rafael/",
+    "address": "Edificio San Rafael Ave. Centro America, 41041 Copan Ruinas, Copan, Honduras",
+    "lat": null,
+    "lng": null,
+    "place_id": null,
+    "formatted_address": null
+  },
+  {
     "name": "Coffee Stain",
     "city": "",
     "country": "Malaysia",
@@ -1285,19 +1298,6 @@
     "lng": -58.4312759,
     "place_id": "ChIJqU4u0pe1vJURXATY3_gGrqQ",
     "formatted_address": "Arévalo 2877, C1426DJC Cdad. Autónoma de Buenos Aires, Argentina"
-  },
-  {
-    "name": "Vacation Coffee",
-    "city": "",
-    "country": "Australia",
-    "rank": 100,
-    "category": "Top 100",
-    "source_url": "https://theworlds100bestcoffeeshops.com/locales/vacation-coffee/",
-    "address": "1 Exhibition St, Melbourne VIC 3000, Australia",
-    "lat": -37.8157952,
-    "lng": 144.9720338,
-    "place_id": "ChIJv1on_7dC1moRDAYeaq0BIGs",
-    "formatted_address": "1 Exhibition St, Melbourne VIC 3000, Australia"
   },
   {
     "name": "Tropicalia Coffee",
