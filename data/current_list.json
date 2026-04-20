@@ -1079,19 +1079,6 @@
     "formatted_address": "Carrer de Casp, 48, Eixample, 08010 Barcelona, Spain"
   },
   {
-    "name": "Café San Rafael",
-    "city": "Copan Ruinas, Copan",
-    "country": "Honduras",
-    "rank": 84,
-    "category": "Top 100",
-    "source_url": "https://theworlds100bestcoffeeshops.com/locales/cafe-san-rafael/",
-    "address": "Edificio San Rafael Ave. Centro America, 41041 Copan Ruinas, Copan, Honduras",
-    "lat": null,
-    "lng": null,
-    "place_id": null,
-    "formatted_address": null
-  },
-  {
     "name": "Coffee Stain",
     "city": "",
     "country": "Malaysia",
@@ -1103,6 +1090,19 @@
     "lng": 101.6664314,
     "place_id": "ChIJ5e6wBV5IzDERXANPx1NBcVM",
     "formatted_address": "D4-G3-01, Jln Dutamas 1, Solaris Dutamas, 50480 Kuala Lumpur, Federal Territory of Kuala Lumpur, Malaysia"
+  },
+  {
+    "name": "Café San Rafael",
+    "city": "Copan Ruinas, Copan",
+    "country": "Honduras",
+    "rank": 84,
+    "category": "Top 100",
+    "source_url": "https://theworlds100bestcoffeeshops.com/locales/cafe-san-rafael/",
+    "address": "Edificio San Rafael Ave. Centro America, 41041 Copan Ruinas, Copan, Honduras",
+    "lat": null,
+    "lng": null,
+    "place_id": null,
+    "formatted_address": null
   },
   {
     "name": "The Dude Specialty Coffee",
