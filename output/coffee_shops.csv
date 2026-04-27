@@ -166,7 +166,6 @@ rank,name,city,country,category,lat,lng,place_id,formatted_address
 83,Laurino Coffee,,Colombia,South America,4.5476746,-75.66401189999999,ChIJO4q0Tvz0OI4RPwzMSE4K71s,"Cl. 3 Nte. # 17-34, Armenia, Quindío, Colombia"
 83,D·Origen Coffee Roasters Barcelona,,Spain,Top 100,41.3908624,2.1731053,ChIJ8T0QH_CipBIR6Zr1g9aKad4,"Carrer de Casp, 48, Eixample, 08010 Barcelona, Spain"
 84,Cafe Nexos,,Venezuela,South America,8.5629745,-71.1935134,ChIJnyU8hBx9ZI4RWzF06Q2GEcI,"entre calles 16 y 17 Avenida 3, Mérida 5101, Mérida, Venezuela"
-84,Café San Rafael,"Copan Ruinas, Copan",Honduras,Top 100,,,,
 84,Coffee Stain,,Malaysia,Top 100,3.1715266,101.6664314,ChIJ5e6wBV5IzDERXANPx1NBcVM,"D4-G3-01, Jln Dutamas 1, Solaris Dutamas, 50480 Kuala Lumpur, Federal Territory of Kuala Lumpur, Malaysia"
 85,9 Gramos Café,,Colombia,South America,4.8042492,-75.68796619999999,ChIJRQpGtD-HOI4RwGRAj0JJ9SA,"Cra. 17 #10-07, Pereira, Risaralda, Colombia"
 85,The Dude Specialty Coffee,"a restored house, where each room has a unique atmosphere",Macedonia,Top 100,41.9978065,21.4198181,ChIJETlcOUkUVBMRtcm2yJn0VBE,"Apostle Guslarot 16, Skopje 1000, North Macedonia"
@@ -199,3 +198,4 @@ rank,name,city,country,category,lat,lng,place_id,formatted_address
 99,Café Bauda,,Chile,South America,-42.4767972,-73.760192,ChIJAwvrMOMZIpYRV9KZKt9zZkA,"Pedro Montt 431, 5700000 Castro, Los Lagos, Chile"
 99,Surry Hills Coffee,,Argentina,Top 100,-34.5722912,-58.4312759,ChIJqU4u0pe1vJURXATY3_gGrqQ,"Arévalo 2877, C1426DJC Cdad. Autónoma de Buenos Aires, Argentina"
 100,Calu&#8217;s,,Argentina,South America,-34.5508173,-58.4742451,ChIJ5yLTdZq2vJURFH6u_oQ0pvw,"Conesa 3705, C1429 Cdad. Autónoma de Buenos Aires, Argentina"
+100,Vacation Coffee,,Australia,Top 100,,,,
